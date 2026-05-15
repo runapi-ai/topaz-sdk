@@ -23,8 +23,8 @@ jobs:
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: '3.3'
-      - run: ruby -c $(find lib -name '*.rb' | tr '
-' ' ')
+      - run: |
+          find lib -name '*.rb' -print0 | xargs -0 ruby -c
         working-directory: ruby
   go:
     runs-on: ubuntu-latest
