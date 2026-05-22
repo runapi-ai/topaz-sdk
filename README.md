@@ -1,4 +1,24 @@
-# Topaz API SDK for RunAPI
+<p align="center">
+  <a href="https://runapi.ai"><img src="https://runapi.ai/icon.svg" height="56" alt="RunAPI"></a>
+</p>
+
+<h3 align="center">
+  <a href="https://github.com/runapi-ai/topaz-sdk">Topaz API SDK for RunAPI</a>
+</h3>
+
+<p align="center">
+  Topaz API SDKs for JavaScript, Ruby, and Go on RunAPI.
+</p>
+
+<div align="center">
+
+[![npm](https://img.shields.io/npm/v/@runapi.ai/topaz)](https://www.npmjs.com/package/@runapi.ai/topaz)
+[![RubyGems](https://img.shields.io/gem/v/runapi-topaz)](https://rubygems.org/gems/runapi-topaz)
+[![Go Reference](https://pkg.go.dev/badge/github.com/runapi-ai/topaz-sdk/go.svg)](https://pkg.go.dev/github.com/runapi-ai/topaz-sdk/go)
+[![License](https://img.shields.io/github/license/runapi-ai/topaz-sdk)](https://github.com/runapi-ai/topaz-sdk/blob/main/LICENSE)
+
+</div>
+<br/>
 
 The topaz api SDK packages JavaScript, Ruby, and Go clients for Topaz on RunAPI. Use this topaz api SDK for image upscale, video upscale, restoration, and production cleanup workflows that need typed installs, JSON request bodies, task polling, and consistent RunAPI errors across services.
 
