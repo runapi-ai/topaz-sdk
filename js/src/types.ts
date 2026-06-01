@@ -1,20 +1,20 @@
 import type { AsyncTaskStatus } from '@runapi.ai/core';
 
-export type TopazUpscaleImageModel = 'topaz-image-upscale';
-export type TopazUpscaleVideoModel = 'topaz-video-upscale';
-export type UpscaleImageFactor = '1' | '2' | '4' | '8';
-export type UpscaleVideoFactor = '1' | '2' | '4';
+export type TopazUpscaleImageModel = 'topaz-upscale-image';
+export type TopazUpscaleVideoModel = 'topaz-upscale-video';
+export type UpscaleImageFactor = 1 | 2 | 4 | 8;
+export type UpscaleVideoFactor = 1 | 2 | 4;
 
 export interface UpscaleImageParams {
   model: TopazUpscaleImageModel;
-  image_url: string;
+  source_image_url: string;
   upscale_factor: UpscaleImageFactor;
   callback_url?: string;
 }
 
 export interface UpscaleVideoParams {
   model: TopazUpscaleVideoModel;
-  video_url: string;
+  source_video_url: string;
   upscale_factor?: UpscaleVideoFactor;
   callback_url?: string;
 }

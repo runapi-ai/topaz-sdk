@@ -3,17 +3,17 @@ package topaz
 type TaskStatus string
 
 type UpscaleImageParams struct {
-	Model         string `json:"model" help:"required; topaz-image-upscale"`
-	ImageURL      string `json:"image_url" help:"required; public input image URL"`
-	UpscaleFactor string `json:"upscale_factor" help:"required; 1, 2, 4, or 8"`
-	CallbackURL   string `json:"callback_url,omitempty" help:"optional; webhook URL"`
+	Model          string `json:"model" help:"required; model slug"`
+	SourceImageURL string `json:"source_image_url" help:"required; public input image URL"`
+	UpscaleFactor  int    `json:"upscale_factor" help:"required; upscale factor"`
+	CallbackURL    string `json:"callback_url,omitempty" help:"optional; webhook URL"`
 }
 
 type UpscaleVideoParams struct {
-	Model         string `json:"model" help:"required; topaz-video-upscale"`
-	VideoURL      string `json:"video_url" help:"required; public input video URL"`
-	UpscaleFactor string `json:"upscale_factor,omitempty" help:"optional; 1, 2, or 4"`
-	CallbackURL   string `json:"callback_url,omitempty" help:"optional; webhook URL"`
+	Model          string `json:"model" help:"required; model slug"`
+	SourceVideoURL string `json:"source_video_url" help:"required; public input video URL"`
+	UpscaleFactor  int    `json:"upscale_factor,omitempty" help:"optional; upscale factor"`
+	CallbackURL    string `json:"callback_url,omitempty" help:"optional; webhook URL"`
 }
 
 type AsyncTaskResponse struct {

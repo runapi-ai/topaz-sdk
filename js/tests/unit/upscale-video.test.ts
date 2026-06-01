@@ -18,14 +18,14 @@ describe('UpscaleVideo', () => {
 
     const resource = new UpscaleVideo(mockHttp);
     const result = await resource.create({
-      model: 'topaz-video-upscale',
-      video_url: 'https://file.aiquickdraw.com/custom-page/akr/section-images/1758166466095hvbwkrpw.mp4',
+      model: 'topaz-upscale-video',
+      source_video_url: 'https://cdn.runapi.ai/public/samples/video-lowres.mp4',
     });
 
     expect(mockHttp.request).toHaveBeenCalledWith('POST', '/api/v1/topaz/upscale_video', {
       body: {
-        model: 'topaz-video-upscale',
-        video_url: 'https://file.aiquickdraw.com/custom-page/akr/section-images/1758166466095hvbwkrpw.mp4',
+        model: 'topaz-upscale-video',
+        source_video_url: 'https://cdn.runapi.ai/public/samples/video-lowres.mp4',
       },
     });
     expect(result).toEqual(mockResponse);

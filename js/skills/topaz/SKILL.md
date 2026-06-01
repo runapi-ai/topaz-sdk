@@ -18,7 +18,7 @@ metadata:
     envVars:
     - name: RUNAPI_API_KEY
       required: false
-      description: Optional RunAPI API key; agents should prefer environment auth or saved CLI config. Browser login is interactive fallback only.
+      description: Optional RunAPI API key; agents should prefer environment auth or saved CLI config. Browser login is interactive only.
 ---
 
 # Topaz on RunAPI
@@ -34,7 +34,7 @@ Upscale and enhance media with Topaz through RunAPI. The default path for one-of
 
 The `runapi` binary is the runtime dependency. Run `runapi auth status` first. For agents and headless runs, prefer `RUNAPI_API_KEY` or import it into saved config with `printf '%s' "$RUNAPI_API_KEY" | runapi auth import-token --token -`. Use `runapi login` only when the user explicitly wants interactive browser auth.
 
-Inspect the available actions and request fields with CLI help:
+Inspect the available commands and request fields with CLI help:
 
 ```shell
 runapi topaz --help
@@ -54,7 +54,7 @@ runapi topaz upscale-image --async --input-file request.json
 runapi wait <task-id> --service topaz --action upscale-image
 ```
 
-Available actions: `upscale-image`, `upscale-video`.
+Available commands: `upscale-image`, `upscale-video`.
 
 ## SDK integration path
 
@@ -72,6 +72,5 @@ When integrating Topaz into an app, backend, worker, or library — not for one-
 
 ## Variants
 
-- [Image upscale](https://runapi.ai/models/topaz/image-upscale.md)
-- [Video upscale](https://runapi.ai/models/topaz/video-upscale.md)
-
+- [Image upscale](https://runapi.ai/models/topaz/upscale-image.md)
+- [Video upscale](https://runapi.ai/models/topaz/upscale-video.md)

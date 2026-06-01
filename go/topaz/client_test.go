@@ -28,9 +28,9 @@ func TestUpscaleImageCreate(t *testing.T) {
 	stub := &stubHTTPClient{response: json.RawMessage(`{"id":"img-task-123","status":"processing"}`)}
 	client := NewClientWithHTTP(stub)
 	resp, err := client.UpscaleImage.Create(context.Background(), UpscaleImageParams{
-		Model:         "topaz-image-upscale",
-		ImageURL:      "https://static.aiquickdraw.com/tools/example/1762752805607_mErUj1KR.png",
-		UpscaleFactor: "4",
+		Model:          "topaz-upscale-image",
+		SourceImageURL: "https://cdn.runapi.ai/public/samples/upscale.jpg",
+		UpscaleFactor:  4,
 	})
 	if err != nil {
 		t.Fatal(err)
@@ -39,7 +39,10 @@ func TestUpscaleImageCreate(t *testing.T) {
 		t.Fatalf("unexpected request: %s %s", stub.method, stub.path)
 	}
 	body := stub.body.(map[string]any)
-	if body["model"] != "topaz-image-upscale" || body["upscale_factor"] != "4" {
+	if body["model"] != "topaz-upscale-image" || body["source_image_url"] != "https://cdn.runapi.ai/public/samples/upscale.jpg" || body["upscale_factor"] != float64(4) {
+		t.Fatalf("unexpected body: %#v", body)
+	}
+	if _, ok := body["image_url"]; ok {
 		t.Fatalf("unexpected body: %#v", body)
 	}
 	if resp.ID != "img-task-123" {
@@ -66,8 +69,8 @@ func TestUpscaleVideoCreate(t *testing.T) {
 	stub := &stubHTTPClient{response: json.RawMessage(`{"id":"vid-task-123","status":"processing"}`)}
 	client := NewClientWithHTTP(stub)
 	resp, err := client.UpscaleVideo.Create(context.Background(), UpscaleVideoParams{
-		Model:    "topaz-video-upscale",
-		VideoURL: "https://file.aiquickdraw.com/custom-page/akr/section-images/1758166466095hvbwkrpw.mp4",
+		Model:          "topaz-upscale-video",
+		SourceVideoURL: "https://cdn.runapi.ai/public/samples/video-lowres.mp4",
 	})
 	if err != nil {
 		t.Fatal(err)
@@ -76,7 +79,10 @@ func TestUpscaleVideoCreate(t *testing.T) {
 		t.Fatalf("unexpected request: %s %s", stub.method, stub.path)
 	}
 	body := stub.body.(map[string]any)
-	if body["model"] != "topaz-video-upscale" {
+	if body["model"] != "topaz-upscale-video" || body["source_video_url"] != "https://cdn.runapi.ai/public/samples/video-lowres.mp4" {
+		t.Fatalf("unexpected body: %#v", body)
+	}
+	if _, ok := body["video_url"]; ok {
 		t.Fatalf("unexpected body: %#v", body)
 	}
 	if resp.ID != "vid-task-123" {

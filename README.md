@@ -37,7 +37,7 @@ go get github.com/runapi-ai/topaz-sdk/go@latest
 - Build asset finishing, ecommerce media cleanup, video enhancement, and batch automation with the topaz api SDK.
 - Keep one model-specific repository while installing only the language package your app needs.
 - Use `create` for submit-only jobs, `get` for status lookup, and `run` for submit-and-poll scripts.
-- Handle authentication, validation, rate limits, insufficient credits, task failures, and polling timeouts through RunAPI SDK errors.
+- Handle authentication, validation, rate limits, billing errors, task failures, and polling timeouts through RunAPI SDK errors.
 
 The JavaScript client exposes image upscales, video upscales resources, and the Ruby and Go packages mirror the same RunAPI task lifecycle.
 
@@ -76,10 +76,10 @@ For short scripts, use `run` with the same JSON body to create the task and wait
 ## Pricing and variants
 
 Use the most specific topaz api variant page for pricing, rate limits, and commercial usage:
-- [Image upscale](https://runapi.ai/models/topaz/image-upscale)
-- [Video upscale](https://runapi.ai/models/topaz/video-upscale)
+- [Image upscale](https://runapi.ai/models/topaz/upscale-image)
+- [Video upscale](https://runapi.ai/models/topaz/upscale-video)
 
-Default pricing link for the topaz api SDK: https://runapi.ai/models/topaz/image-upscale
+Default pricing link for the topaz api SDK: https://runapi.ai/models/topaz/upscale-image
 
 ## FAQ
 
@@ -89,7 +89,7 @@ Install the model package for your language: `@runapi.ai/topaz`, `runapi-topaz`,
 
 ### Where should public links point?
 
-Primary topaz api links point to https://runapi.ai/models/topaz. Pricing and usage-policy links point to variant pages such as https://runapi.ai/models/topaz/image-upscale. Provider comparisons point to https://runapi.ai/providers/topaz, and broad browsing points to https://runapi.ai/models.
+Primary topaz api links point to https://runapi.ai/models/topaz. Pricing and usage-policy links point to variant pages such as https://runapi.ai/models/topaz/upscale-image. Provider comparisons point to https://runapi.ai/providers/topaz, and broad browsing points to https://runapi.ai/models.
 
 ## License
 

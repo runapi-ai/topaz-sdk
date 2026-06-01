@@ -51,8 +51,9 @@ import { TopazClient } from '@runapi.ai/topaz';
 
 const client = new TopazClient();
 const result = await client.upscaleImage.run({
-  model: 'topaz-image-upscale',
-  image_url: 'https://cdn.example.com/photo.jpg',
+  model: 'topaz-upscale-image',
+  source_image_url: 'https://cdn.runapi.ai/public/samples/image.jpg',
+  upscale_factor: 4,
 });
 ```
 
@@ -62,14 +63,14 @@ const result = await client.upscaleImage.run({
 - Product docs: https://runapi.ai/docs#topaz
 - SDK docs: https://runapi.ai/docs#sdk-topaz
 - SDK repository: https://github.com/runapi-ai/topaz-sdk
-- Pricing and rate limits: https://runapi.ai/models/topaz/image-upscale
+- Pricing and rate limits: https://runapi.ai/models/topaz/upscale-image
 - Provider comparison: https://runapi.ai/providers/topaz
 - Browse all RunAPI models and skills: https://runapi.ai/models
 
 ## Variants
 
-- [Image upscale](https://runapi.ai/models/topaz/image-upscale)
-- [Video upscale](https://runapi.ai/models/topaz/video-upscale)
+- [Image upscale](https://runapi.ai/models/topaz/upscale-image)
+- [Video upscale](https://runapi.ai/models/topaz/upscale-video)
 
 ## Agent rules
 

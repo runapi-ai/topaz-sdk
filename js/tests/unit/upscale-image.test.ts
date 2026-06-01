@@ -18,16 +18,16 @@ describe('UpscaleImage', () => {
 
     const resource = new UpscaleImage(mockHttp);
     const result = await resource.create({
-      model: 'topaz-image-upscale',
-      image_url: 'https://static.aiquickdraw.com/tools/example/1762752805607_mErUj1KR.png',
-      upscale_factor: '4',
+      model: 'topaz-upscale-image',
+      source_image_url: 'https://cdn.runapi.ai/public/samples/upscale.jpg',
+      upscale_factor: 4,
     });
 
     expect(mockHttp.request).toHaveBeenCalledWith('POST', '/api/v1/topaz/upscale_image', {
       body: {
-        model: 'topaz-image-upscale',
-        image_url: 'https://static.aiquickdraw.com/tools/example/1762752805607_mErUj1KR.png',
-        upscale_factor: '4',
+        model: 'topaz-upscale-image',
+        source_image_url: 'https://cdn.runapi.ai/public/samples/upscale.jpg',
+        upscale_factor: 4,
       },
     });
     expect(result).toEqual(mockResponse);

@@ -37,7 +37,7 @@ Use the public Go module with `github.com/runapi-ai/core-sdk/go` options when bu
 - Model page: https://runapi.ai/models/topaz
 - SDK docs: https://runapi.ai/docs#sdk-topaz
 - Product docs: https://runapi.ai/docs#topaz
-- Pricing and rate limits: https://runapi.ai/models/topaz/image-upscale
+- Pricing and rate limits: https://runapi.ai/models/topaz/upscale-image
 - Provider comparison: https://runapi.ai/providers/topaz
 - Full catalog: https://runapi.ai/models
 - Repository: https://github.com/runapi-ai/topaz-sdk

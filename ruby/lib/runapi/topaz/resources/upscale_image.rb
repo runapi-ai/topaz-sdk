@@ -34,11 +34,11 @@ module RunApi
 
         def validate_params!(params)
           raise Core::ValidationError, "model is required" unless param(params, :model) == Types::UPSCALE_IMAGE_MODEL
-          raise Core::ValidationError, "image_url is required" unless param(params, :image_url)
+          raise Core::ValidationError, "source_image_url is required" unless param(params, :source_image_url)
 
           factor = param(params, :upscale_factor)
           raise Core::ValidationError, "upscale_factor is required" unless factor
-          return if Types::UPSCALE_IMAGE_FACTORS.include?(factor.to_s)
+          return if Types::UPSCALE_IMAGE_FACTORS.include?(factor)
 
           raise Core::ValidationError, "upscale_factor must be one of: #{Types::UPSCALE_IMAGE_FACTORS.join(", ")}"
         end

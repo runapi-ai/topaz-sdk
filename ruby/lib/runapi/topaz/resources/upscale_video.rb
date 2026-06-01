@@ -34,10 +34,10 @@ module RunApi
 
         def validate_params!(params)
           raise Core::ValidationError, "model is required" unless param(params, :model) == Types::UPSCALE_VIDEO_MODEL
-          raise Core::ValidationError, "video_url is required" unless param(params, :video_url)
+          raise Core::ValidationError, "source_video_url is required" unless param(params, :source_video_url)
 
           factor = param(params, :upscale_factor)
-          return unless factor && !Types::UPSCALE_VIDEO_FACTORS.include?(factor.to_s)
+          return unless factor && !Types::UPSCALE_VIDEO_FACTORS.include?(factor)
 
           raise Core::ValidationError, "upscale_factor must be one of: #{Types::UPSCALE_VIDEO_FACTORS.join(", ")}"
         end
