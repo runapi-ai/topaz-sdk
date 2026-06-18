@@ -3,6 +3,8 @@
 module RunApi
   module Topaz
     module Resources
+      # AI-powered image upscaling resource.
+      # Supports upscale factors of 1x, 2x, 4x, and 8x.
       class UpscaleImage
         include RunApi::Core::ResourceHelpers
 

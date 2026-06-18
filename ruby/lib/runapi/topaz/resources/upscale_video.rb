@@ -3,6 +3,8 @@
 module RunApi
   module Topaz
     module Resources
+      # AI-powered video upscaling resource.
+      # Supports upscale factors of 1x, 2x, and 4x.
       class UpscaleVideo
         include RunApi::Core::ResourceHelpers
 

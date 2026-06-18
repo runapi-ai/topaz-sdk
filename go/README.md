@@ -28,6 +28,8 @@ status, err := client.ImageUpscales.Get(context.Background(), task.ID)
 
 Use `create` when you want to submit a task and return quickly, `get` when you need the latest task state, and `run` when a script should create and poll until completion. In web request handlers, prefer `create` plus webhook or later `get` polling so a worker is not held open.
 
+RunAPI-generated file URLs are temporary. Download and store generated images, videos, audio, or other files in your own durable storage within 7 days; do not treat returned URLs as long-term assets.
+
 ## Language notes
 
 Use the public Go module with `github.com/runapi-ai/core-sdk/go` options when building upscaling services, CLIs, or workers. The available resources include image upscales, and video upscales. Keep `RUNAPI_API_KEY` in the environment or your secret manager; never commit API keys or callback secrets.

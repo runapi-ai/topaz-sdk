@@ -4,7 +4,7 @@ Dir.chdir(__dir__) do
 
   Gem::Specification.new do |spec|
     spec.name = "runapi-topaz"
-    spec.version = "0.2.5"
+    spec.version = "0.2.6"
     spec.authors = ["RunAPI"]
     spec.email = ["contact@runapi.ai"]
 
@@ -24,6 +24,6 @@ Dir.chdir(__dir__) do
     spec.extra_rdoc_files = ["README.md"]
         spec.require_paths = ["lib"]
 
-    spec.add_dependency "runapi-core", "~> 0.2.5"
+    spec.add_dependency "runapi-core", "~> 0.2.6"
   end
 end

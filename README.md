@@ -81,6 +81,10 @@ Use the most specific topaz api variant page for pricing, rate limits, and comme
 
 Default pricing link for the topaz api SDK: https://runapi.ai/models/topaz/upscale-image
 
+## Generated file storage
+
+RunAPI-generated file URLs are temporary. Download and store generated images, videos, audio, or other files in your own durable storage within 7 days; do not treat returned URLs as long-term assets.
+
 ## FAQ
 
 ### Which package should I install for topaz api work?

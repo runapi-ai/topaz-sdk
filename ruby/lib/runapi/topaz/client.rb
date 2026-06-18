@@ -2,14 +2,24 @@
 
 module RunApi
   module Topaz
-    class Client
-      attr_reader :upscale_image, :upscale_video
+    # Topaz AI upscaling client for increasing image and video resolution.
+    #
+    # @example
+    #   client = RunApi::Topaz::Client.new(api_key: "sk-...")
+    #   result = client.upscale_image.run(
+    #     model: "topaz-upscale-image",
+    #     source_image_url: "https://example.com/photo.jpg",
+    #     upscale_factor: 2
+    #   )
+    #   puts result.images.first.url
+    class Client < RunApi::Core::Client
+      # @return [Resources::UpscaleImage] AI-powered image upscaling (1x, 2x, 4x, 8x).
+      attr_reader :upscale_image
+      # @return [Resources::UpscaleVideo] AI-powered video upscaling (1x, 2x, 4x).
+      attr_reader :upscale_video
 
       def initialize(api_key: nil, **options)
-        @api_key = Core::Auth.resolve_api_key(api_key)
-
-        client_options = Core::ClientOptions.new(api_key: @api_key, **options)
-        http = client_options.http_client || Core::HttpClient.new(client_options)
+        super
         @upscale_image = Resources::UpscaleImage.new(http)
         @upscale_video = Resources::UpscaleVideo.new(http)
       end

@@ -1,6 +1,6 @@
 {
   "name": "@runapi.ai/topaz",
-  "version": "0.2.5",
+  "version": "0.2.6",
   "description": "RunAPI Topaz SDK for JavaScript, Ruby, and Go",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
@@ -27,7 +27,7 @@
     "clean": "rm -rf dist"
   },
   "dependencies": {
-    "@runapi.ai/core": "^0.2.5"
+    "@runapi.ai/core": "^0.2.6"
   },
   "devDependencies": {
     "@types/node": "^20.0.0",
