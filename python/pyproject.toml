@@ -24,7 +24,10 @@ packages = ["src/runapi"]
 package = true
 
 [tool.uv.sources]
-runapi-core = { path = "../runapi-core", editable = true }
+runapi-core = { workspace = true }
 
 [dependency-groups]
 dev = ["pytest>=8"]
+
+[tool.runapi]
+slug = "topaz"

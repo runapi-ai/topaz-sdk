@@ -148,7 +148,7 @@ def test_run_narrows_completed_video_type():
 
 def test_image_requires_model():
     client = TopazClient(api_key="k", http_client=FakeHttp())
-    with pytest.raises(ValidationError, match="model is required"):
+    with pytest.raises(ValidationError, match="model must be one of: topaz-upscale-image"):
         client.upscale_image.create(source_image_url="https://x/y.jpg", upscale_factor=4)
 
 
@@ -174,7 +174,7 @@ def test_image_rejects_bad_factor():
 
 def test_video_requires_model():
     client = TopazClient(api_key="k", http_client=FakeHttp())
-    with pytest.raises(ValidationError, match="model is required"):
+    with pytest.raises(ValidationError, match="model must be one of: topaz-upscale-video"):
         client.upscale_video.create(source_video_url="https://x/y.mp4")
 
 
@@ -184,13 +184,14 @@ def test_video_requires_source_video_url():
         client.upscale_video.create(model="topaz-upscale-video")
 
 
-def test_video_upscale_factor_optional():
+def test_video_allows_default_upscale_factor():
     fake = FakeHttp({"id": "t1", "status": "pending"})
     client = TopazClient(api_key="k", http_client=fake)
-    client.upscale_video.create(model="topaz-upscale-video", source_video_url="https://x/y.mp4")
-    assert fake.calls == [
-        ("post", "/api/v1/topaz/upscale_video", {"model": "topaz-upscale-video", "source_video_url": "https://x/y.mp4"}),
-    ]
+    client.upscale_video.create(
+        model="topaz-upscale-video", source_video_url="https://x/y.mp4"
+    )
+    _, _, body = fake.calls[0]
+    assert "upscale_factor" not in body
 
 
 def test_video_rejects_bad_factor():

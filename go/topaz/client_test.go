@@ -82,6 +82,9 @@ func TestUpscaleVideoCreate(t *testing.T) {
 	if body["model"] != "topaz-upscale-video" || body["source_video_url"] != "https://cdn.runapi.ai/public/samples/video-lowres.mp4" {
 		t.Fatalf("unexpected body: %#v", body)
 	}
+	if _, ok := body["upscale_factor"]; ok {
+		t.Fatalf("expected request body to omit upscale_factor key: %#v", body)
+	}
 	if _, ok := body["video_url"]; ok {
 		t.Fatalf("unexpected body: %#v", body)
 	}

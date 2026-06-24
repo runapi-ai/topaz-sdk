@@ -24,25 +24,12 @@ module RunApi
 
         def create(**params)
           params = compact_params(params)
-          validate_params!(params)
+          validate_contract!(CONTRACT["upscale-image"], params)
           request(:post, ENDPOINT, body: params)
         end
 
         def get(id)
           request(:get, "#{ENDPOINT}/#{id}")
-        end
-
-        private
-
-        def validate_params!(params)
-          raise Core::ValidationError, "model is required" unless param(params, :model) == Types::UPSCALE_IMAGE_MODEL
-          raise Core::ValidationError, "source_image_url is required" unless param(params, :source_image_url)
-
-          factor = param(params, :upscale_factor)
-          raise Core::ValidationError, "upscale_factor is required" unless factor
-          return if Types::UPSCALE_IMAGE_FACTORS.include?(factor)
-
-          raise Core::ValidationError, "upscale_factor must be one of: #{Types::UPSCALE_IMAGE_FACTORS.join(", ")}"
         end
       end
     end

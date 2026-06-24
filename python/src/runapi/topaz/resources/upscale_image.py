@@ -2,13 +2,12 @@
 
 from __future__ import annotations
 
-from typing import Any, Dict
+from typing import Any
 
-from runapi.core import Resource, ValidationError
+from runapi.core import Resource
 
+from ..contract_gen import CONTRACT
 from ..types import (
-    UPSCALE_IMAGE_FACTORS,
-    UPSCALE_IMAGE_MODEL,
     CompletedUpscaleImageResponse,
     UpscaleImageResponse,
 )
@@ -44,7 +43,7 @@ class UpscaleImage(Resource):
             The task creation result with an id.
         """
         compacted = self._compact_params(params)
-        self._validate_params(compacted)
+        self._validate_contract(CONTRACT["upscale-image"], compacted)
         return self._request("post", self.ENDPOINT, body=compacted)
 
     def get(self, id: str) -> Any:
@@ -57,19 +56,3 @@ class UpscaleImage(Resource):
             The current task status.
         """
         return self._request("get", f"{self.ENDPOINT}/{id}")
-
-    def _validate_params(self, params: Dict[str, Any]) -> None:
-        if params.get("model") != UPSCALE_IMAGE_MODEL:
-            raise ValidationError("model is required")
-        if not params.get("source_image_url"):
-            raise ValidationError("source_image_url is required")
-
-        factor = params.get("upscale_factor")
-        if not factor:
-            raise ValidationError("upscale_factor is required")
-        if factor in UPSCALE_IMAGE_FACTORS:
-            return
-
-        raise ValidationError(
-            f"upscale_factor must be one of: {', '.join(str(f) for f in UPSCALE_IMAGE_FACTORS)}"
-        )

@@ -2,13 +2,12 @@
 
 from __future__ import annotations
 
-from typing import Any, Dict
+from typing import Any
 
-from runapi.core import Resource, ValidationError
+from runapi.core import Resource
 
+from ..contract_gen import CONTRACT
 from ..types import (
-    UPSCALE_VIDEO_FACTORS,
-    UPSCALE_VIDEO_MODEL,
     CompletedUpscaleVideoResponse,
     UpscaleVideoResponse,
 )
@@ -44,7 +43,7 @@ class UpscaleVideo(Resource):
             The task creation result with an id.
         """
         compacted = self._compact_params(params)
-        self._validate_params(compacted)
+        self._validate_contract(CONTRACT["upscale-video"], compacted)
         return self._request("post", self.ENDPOINT, body=compacted)
 
     def get(self, id: str) -> Any:
@@ -57,17 +56,3 @@ class UpscaleVideo(Resource):
             The current task status.
         """
         return self._request("get", f"{self.ENDPOINT}/{id}")
-
-    def _validate_params(self, params: Dict[str, Any]) -> None:
-        if params.get("model") != UPSCALE_VIDEO_MODEL:
-            raise ValidationError("model is required")
-        if not params.get("source_video_url"):
-            raise ValidationError("source_video_url is required")
-
-        factor = params.get("upscale_factor")
-        if not factor or factor in UPSCALE_VIDEO_FACTORS:
-            return
-
-        raise ValidationError(
-            f"upscale_factor must be one of: {', '.join(str(f) for f in UPSCALE_VIDEO_FACTORS)}"
-        )

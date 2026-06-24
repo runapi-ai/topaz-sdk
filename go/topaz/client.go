@@ -55,7 +55,11 @@ type UpscaleImage struct{ http core.HTTPClient }
 // Create submits an image-upscale task and returns immediately with a task id.
 func (r *UpscaleImage) Create(ctx context.Context, params UpscaleImageParams, opts ...option.RequestOption) (*core.TaskCreateResponse, error) {
 	requestOptions, _ := option.ResolveRequestOptions(opts...)
-	return core.PostJSON[core.TaskCreateResponse](ctx, r.http, upscaleImagePath, core.CompactParams(params), requestOptions)
+	body := core.CompactParams(params)
+	if err := core.ValidateParams(contractSchema["upscale-image"], body); err != nil {
+		return nil, err
+	}
+	return core.PostJSON[core.TaskCreateResponse](ctx, r.http, upscaleImagePath, body, requestOptions)
 }
 
 // Get fetches the current status of an image-upscale task by id.
@@ -77,7 +81,11 @@ type UpscaleVideo struct{ http core.HTTPClient }
 // Create submits a video-upscale task and returns immediately with a task id.
 func (r *UpscaleVideo) Create(ctx context.Context, params UpscaleVideoParams, opts ...option.RequestOption) (*core.TaskCreateResponse, error) {
 	requestOptions, _ := option.ResolveRequestOptions(opts...)
-	return core.PostJSON[core.TaskCreateResponse](ctx, r.http, upscaleVideoPath, core.CompactParams(params), requestOptions)
+	body := core.CompactParams(params)
+	if err := core.ValidateParams(contractSchema["upscale-video"], body); err != nil {
+		return nil, err
+	}
+	return core.PostJSON[core.TaskCreateResponse](ctx, r.http, upscaleVideoPath, body, requestOptions)
 }
 
 // Get fetches the current status of a video-upscale task by id.

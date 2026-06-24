@@ -7,61 +7,103 @@
 </h3>
 
 <p align="center">
-  Topaz API SDKs for JavaScript, Ruby, and Go on RunAPI.
+  Topaz API SDKs for JavaScript, Python, Ruby, Go, and Java on RunAPI.
 </p>
 
 <div align="center">
 
 [![npm](https://img.shields.io/npm/v/@runapi.ai/topaz)](https://www.npmjs.com/package/@runapi.ai/topaz)
+[![PyPI](https://img.shields.io/pypi/v/runapi-topaz)](https://pypi.org/project/runapi-topaz/)
 [![RubyGems](https://img.shields.io/gem/v/runapi-topaz)](https://rubygems.org/gems/runapi-topaz)
 [![Go Reference](https://pkg.go.dev/badge/github.com/runapi-ai/topaz-sdk/go.svg)](https://pkg.go.dev/github.com/runapi-ai/topaz-sdk/go)
+[![Maven Central](https://img.shields.io/maven-central/v/ai.runapi/runapi-topaz)](https://central.sonatype.com/artifact/ai.runapi/runapi-topaz)
 [![License](https://img.shields.io/github/license/runapi-ai/topaz-sdk)](https://github.com/runapi-ai/topaz-sdk/blob/main/LICENSE)
 
 </div>
 <br/>
 
-The topaz api SDK packages JavaScript, Ruby, and Go clients for Topaz on RunAPI. Use this topaz api SDK for image upscale, video upscale, restoration, and production cleanup workflows that need typed installs, JSON request bodies, task polling, and consistent RunAPI errors across services.
+The Topaz API SDK packages JavaScript, Python, Ruby, Go, and Java clients for Topaz on RunAPI. Use it for image and video upscaling workflows when your app needs typed request builders, predictable task polling, file upload helpers, account helpers, and consistent RunAPI errors.
 
-Topaz belongs to the Topaz catalog on RunAPI. The public model page is https://runapi.ai/models/topaz; variant pages below carry pricing, rate-limit, and commercial-usage details. The public `topaz-sdk` repository groups the JavaScript, Ruby, and Go packages for this model.
+Topaz is listed in the RunAPI model catalog at https://runapi.ai/models/topaz. Variant pages below carry pricing, rate-limit, and commercial-usage details. The public `topaz-sdk` repository groups the language packages, examples, CI, and release tags for this model.
 
 ## Install
 
 ```bash
 npm install @runapi.ai/topaz
+pip install runapi-topaz
 gem install runapi-topaz
 go get github.com/runapi-ai/topaz-sdk/go@latest
 ```
 
-## What you can build
+Gradle:
 
-- Build asset finishing, ecommerce media cleanup, video enhancement, and batch automation with the topaz api SDK.
-- Keep one model-specific repository while installing only the language package your app needs.
-- Use `create` for submit-only jobs, `get` for status lookup, and `run` for submit-and-poll scripts.
-- Handle authentication, validation, rate limits, billing errors, task failures, and polling timeouts through RunAPI SDK errors.
-
-The JavaScript client exposes image upscales, video upscales resources, and the Ruby and Go packages mirror the same RunAPI task lifecycle.
-
-## JavaScript quick start
-
-```typescript
-import { TopazClient } from '@runapi.ai/topaz';
-
-const client = new TopazClient();
-
-const task = await client.imageUpscales.create({
-  // Pass the Topaz request body documented at https://runapi.ai/docs#topaz.
-});
-
-const status = await client.imageUpscales.get(task.id);
+```kotlin
+dependencies {
+  implementation("ai.runapi:runapi-topaz:0.1.0")
+}
 ```
 
-For short scripts, use `run` with the same JSON body to create the task and wait for completion. For web request handlers, prefer `create` plus webhook or later `get` polling so the server does not hold a worker open.
+Maven:
+
+```xml
+<dependency>
+  <groupId>ai.runapi</groupId>
+  <artifactId>runapi-topaz</artifactId>
+  <version>0.1.0</version>
+</dependency>
+```
+
+Use the Java BOM when installing multiple RunAPI Java modules:
+
+```kotlin
+dependencies {
+  implementation(platform("ai.runapi:runapi-bom:0.1.0"))
+  implementation("ai.runapi:runapi-topaz")
+}
+```
+
+## What you can build
+
+- Build apps, agent workflows, batch jobs, and production services around Topaz requests.
+- Install only the language package your app needs while keeping one model-specific repository for docs and releases.
+- Use `create` for submit-only jobs, `get` for status lookup, and `run` for submit-and-poll scripts.
+- Upload local files, URL files, or base64 files through shared RunAPI file helpers.
+- Handle validation, authentication, rate limits, insufficient credits, task failures, and polling timeouts through RunAPI SDK errors.
+
+## Java quick start
+
+```java
+import ai.runapi.topaz.TopazClient;
+import ai.runapi.topaz.types.UpscaleImageParams;
+import ai.runapi.topaz.types.CompletedUpscaleImageResponse;
+import ai.runapi.topaz.types.UpscaleImageModel;
+
+TopazClient client = TopazClient.builder()
+    .apiKey(System.getenv("RUNAPI_API_KEY"))
+    .build();
+
+CompletedUpscaleImageResponse result = client.upscaleImage().run(
+    UpscaleImageParams.builder()
+        .model(UpscaleImageModel.TOPAZ_UPSCALE_IMAGE)
+        .sourceImageUrl("https://cdn.runapi.ai/public/samples/image.jpg")
+        .upscaleFactor(2)
+        .build()
+);
+```
+
+Java packages target Java 8 bytecode and are tested on Java 8, 11, 17, and 21. Each model artifact depends on `ai.runapi:runapi-core`, so application code normally installs only `ai.runapi:runapi-topaz`.
+
+## Task lifecycle
+
+Most media endpoints are asynchronous. `create()` submits a task and returns its id, `get(id)` fetches the latest task state, and `run(params)` creates the task and polls until it reaches a terminal state. In web request handlers, prefer `create()` plus webhook or later `get()` polling so the server does not hold a worker open.
 
 ## Repository layout
 
 - `js/` publishes `@runapi.ai/topaz`.
-- `ruby/` publishes `runapi-topaz` when RubyGems publishing resumes.
-- `go/` publishes `github.com/runapi-ai/topaz-sdk/go` and depends on `github.com/runapi-ai/core-sdk/go`.
+- `python/` publishes `runapi-topaz`.
+- `ruby/` publishes `runapi-topaz`.
+- `go/` publishes `github.com/runapi-ai/topaz-sdk/go`.
+- `java/` publishes `ai.runapi:runapi-topaz` and uses `ai.runapi:runapi-core`.
 
 ## Public links
 
@@ -75,25 +117,25 @@ For short scripts, use `run` with the same JSON body to create the task and wait
 
 ## Pricing and variants
 
-Use the most specific topaz api variant page for pricing, rate limits, and commercial usage:
+Use the most specific Topaz variant page for pricing, rate limits, and commercial usage:
 - [Image upscale](https://runapi.ai/models/topaz/upscale-image)
 - [Video upscale](https://runapi.ai/models/topaz/upscale-video)
 
-Default pricing link for the topaz api SDK: https://runapi.ai/models/topaz/upscale-image
+Default pricing link for the Topaz SDK: https://runapi.ai/models/topaz/upscale-image
 
-## Generated file storage
+## File storage
 
 RunAPI-generated file URLs are temporary. Download and store generated images, videos, audio, or other files in your own durable storage within 7 days; do not treat returned URLs as long-term assets.
 
 ## FAQ
 
-### Which package should I install for topaz api work?
+### Which package should I install for Topaz work?
 
-Install the model package for your language: `@runapi.ai/topaz`, `runapi-topaz`, or `github.com/runapi-ai/topaz-sdk/go`. Install core SDK packages only when you are building shared SDK infrastructure.
+Install the model package for your language: `@runapi.ai/topaz` on npm, `runapi-topaz` on PyPI, `runapi-topaz` on RubyGems, `github.com/runapi-ai/topaz-sdk/go`, or `ai.runapi:runapi-topaz`. Install core SDK packages only when you are building shared SDK infrastructure.
 
 ### Where should public links point?
 
-Primary topaz api links point to https://runapi.ai/models/topaz. Pricing and usage-policy links point to variant pages such as https://runapi.ai/models/topaz/upscale-image. Provider comparisons point to https://runapi.ai/providers/topaz, and broad browsing points to https://runapi.ai/models.
+Primary Topaz links point to https://runapi.ai/models/topaz. Pricing and usage-policy links point to variant pages such as https://runapi.ai/models/topaz/upscale-image. Provider comparisons point to https://runapi.ai/providers/topaz, and broad browsing points to https://runapi.ai/models.
 
 ## License
 

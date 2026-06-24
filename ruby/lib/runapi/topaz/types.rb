@@ -2,17 +2,8 @@
 
 module RunApi
   module Topaz
-    # Type definitions and constants for the Topaz upscaling API.
+    # Response models for the Topaz upscaling API.
     module Types
-      # Image upscaling model slug.
-      UPSCALE_IMAGE_MODEL = "topaz-upscale-image"
-      # Video upscaling model slug.
-      UPSCALE_VIDEO_MODEL = "topaz-upscale-video"
-      # Allowed image upscale factors. Higher factors produce larger output but take longer.
-      UPSCALE_IMAGE_FACTORS = [1, 2, 4, 8].freeze
-      # Allowed video upscale factors. Max 4x (8x is not supported for video).
-      UPSCALE_VIDEO_FACTORS = [1, 2, 4].freeze
-
       # URL to an upscaled image.
       class Image < RunApi::Core::BaseModel
         optional :url, String
