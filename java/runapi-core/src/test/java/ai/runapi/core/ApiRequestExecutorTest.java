@@ -65,7 +65,7 @@ class ApiRequestExecutorTest {
   }
 
   @Test
-  void retryAfterHonoredUpToRetryMaxDelay() {
+  void retryAfterHonoredVerbatim() {
     ApiRequestExecutor executor =
         new ApiRequestExecutor(
             new StubTransport() {
@@ -82,26 +82,25 @@ class ApiRequestExecutorTest {
   }
 
   @Test
-  void retryAfterBeyondRetryMaxDelayStopsRetrying() {
+  void retryAfterBeyondRetryMaxDelayStillRetries() {
     AtomicInteger calls = new AtomicInteger();
     HttpTransport transport =
         new StubTransport() {
           @Override
           public HttpResponse send(HttpRequest request) {
-            calls.incrementAndGet();
-            throw new RateLimitException("slow down", 429, null, null, Duration.ofSeconds(120), null);
+            if (calls.incrementAndGet() == 1) {
+              throw new RateLimitException("slow down", 429, null, null, Duration.ofMillis(2), null);
+            }
+            return json("{\"ok\":true}");
           }
         };
     ClientOptions options =
-        ClientOptions.builder().apiKey("sk-test").retryMaxDelay(Duration.ofSeconds(5)).build();
+        ClientOptions.builder().apiKey("sk-test").retryMaxDelay(Duration.ofMillis(1)).build();
     ApiRequestExecutor executor = new ApiRequestExecutor(transport, options);
 
-    // Retry-After (120s) exceeds retryMaxDelay (5s): give up immediately instead of
-    // shortening the wait and re-hitting the rate limit on every retry.
-    assertThrows(
-        RateLimitException.class,
-        () -> executor.send(HttpRequest.builder(HttpMethod.GET, "/rate-limited").build()));
-    assertEquals(1, calls.get());
+    executor.send(HttpRequest.builder(HttpMethod.GET, "/rate-limited").build());
+
+    assertEquals(2, calls.get());
   }
 
   private static HttpResponse json(String body) {

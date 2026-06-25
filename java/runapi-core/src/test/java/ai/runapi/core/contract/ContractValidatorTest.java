@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import ai.runapi.core.errors.ValidationException;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import org.junit.jupiter.api.Test;
@@ -137,6 +138,52 @@ class ContractValidatorTest {
             () -> ContractValidator.validate("suno/text-to-music", params));
 
     assertTrue(error.getMessage().contains("lyrics is not allowed when vocal_mode is auto_lyrics"));
+  }
+
+  @Test
+  void appliesModelGatedRulesOnlyToTheMatchingModel() {
+    Map<String, Object> multilingualParams = new HashMap<String, Object>();
+    multilingualParams.put("model", "text-to-speech-multilingual-v2");
+    multilingualParams.put("text", "hello");
+
+    ValidationException error =
+        assertThrows(
+            ValidationException.class,
+            () -> ContractValidator.validate("elevenlabs/text-to-speech", multilingualParams));
+
+    assertTrue(error.getMessage().contains("voice is required when model is text-to-speech-multilingual-v2"));
+
+    Map<String, Object> turboParams = new HashMap<String, Object>();
+    turboParams.put("model", "text-to-speech-turbo-v2.5");
+    turboParams.put("text", "hello");
+
+    ContractValidator.validate("elevenlabs/text-to-speech", turboParams);
+  }
+
+  @Test
+  void evaluatesModelConditionsAgainstAutoSelectedSingleModel() {
+    ContractAction contract =
+        new ContractAction(
+            ContractBuilders.list("single-model"),
+            ContractBuilders.fieldsByModel(
+                new Object[][] {{"single-model", ContractBuilders.fields(new Object[][] {})}}),
+            ContractBuilders.rulesByModel(
+                new Object[][] {
+                  {
+                    "single-model",
+                    ContractBuilders.rules(
+                        ContractBuilders.rule(
+                            ContractBuilders.conditions(new Object[][] {{"model", "single-model"}}),
+                            ContractBuilders.list("required_field"),
+                            Collections.<String>emptyList()))
+                  }
+                }));
+    Map<String, Object> params = new HashMap<String, Object>();
+
+    ValidationException error =
+        assertThrows(ValidationException.class, () -> ContractValidator.validate(contract, params));
+
+    assertTrue(error.getMessage().contains("required_field is required when model is single-model"));
   }
 
   private static String repeat(String value, int count) {

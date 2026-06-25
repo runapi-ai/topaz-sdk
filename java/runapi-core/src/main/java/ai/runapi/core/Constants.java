@@ -8,7 +8,7 @@ public final class Constants {
   public static final String DEFAULT_BASE_URL = "https://runapi.ai";
 
   /** SDK User-Agent header value. */
-  public static final String SDK_USER_AGENT = "runapi-sdk-java/0.1.0";
+  public static final String SDK_USER_AGENT = "runapi-sdk-java/0.1.1";
 
   /** Default HTTP request timeout. */
   public static final Duration DEFAULT_REQUEST_TIMEOUT = Duration.ofMinutes(15);

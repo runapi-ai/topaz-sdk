@@ -87,7 +87,7 @@ class ApacheHttpTransportTest {
       assertEquals(200, response.getStatusCode());
       assertEquals("Bearer sk-test", captured.header("Authorization"));
       assertEquals("application/json", captured.header("Accept"));
-      assertEquals("runapi-sdk-java/0.1.0", captured.header("User-Agent"));
+      assertEquals("runapi-sdk-java/0.1.1", captured.header("User-Agent"));
       assertTrue(captured.header("Content-Type").startsWith("application/json"));
       assertEquals("request", captured.header("X-Custom"));
       assertEquals("{\"prompt\":\"hello\"}", captured.body);

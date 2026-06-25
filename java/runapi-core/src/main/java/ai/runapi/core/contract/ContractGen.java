@@ -96,7 +96,6 @@ contract.put("elevenlabs/text-to-speech", new ContractAction(
           }),
           rulesByModel(new Object[][] {
 {"text-to-speech-multilingual-v2", rules(rule(conditions(new Object[][] {{"model", "text-to-speech-multilingual-v2"}}), list("voice"), list()))},
-{"text-to-speech-turbo-v2.5", rules(rule(conditions(new Object[][] {{"model", "text-to-speech-multilingual-v2"}}), list("voice"), list()))},
           })));
 contract.put("flux-2/remix-image", new ContractAction(
     list("flux-2-flex-remix-image", "flux-2-pro-remix-image"),

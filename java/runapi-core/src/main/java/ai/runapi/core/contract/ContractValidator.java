@@ -16,6 +16,10 @@ public final class ContractValidator {
     if (contract == null) {
       throw new ValidationException("Unknown action: " + action);
     }
+    validate(contract, params);
+  }
+
+  static void validate(ContractAction contract, Map<String, Object> params) {
     String selectedModel = null;
     Map<String, ContractField> fields;
     if (contract.getModels().isEmpty()) {
@@ -43,7 +47,7 @@ public final class ContractValidator {
       }
     }
     if (selectedModel != null) {
-      validateRules(contract.getRulesByModel().get(selectedModel), params);
+      validateRules(contract.getRulesByModel().get(selectedModel), params, selectedModel);
     }
   }
 
@@ -94,12 +98,13 @@ public final class ContractValidator {
     return name + " must be at most " + formatNumber(max) + suffix;
   }
 
-  private static void validateRules(List<ContractRule> rules, Map<String, Object> params) {
+  private static void validateRules(
+      List<ContractRule> rules, Map<String, Object> params, String selectedModel) {
     if (rules == null || rules.isEmpty()) {
       return;
     }
     for (ContractRule rule : rules) {
-      if (!conditionsMet(rule.getConditions(), params)) {
+      if (!conditionsMet(rule.getConditions(), params, selectedModel)) {
         continue;
       }
       String context = conditionDescription(rule.getConditions());
@@ -116,9 +121,13 @@ public final class ContractValidator {
     }
   }
 
-  private static boolean conditionsMet(Map<String, Object> conditions, Map<String, Object> params) {
+  private static boolean conditionsMet(
+      Map<String, Object> conditions, Map<String, Object> params, String selectedModel) {
     for (Map.Entry<String, Object> entry : conditions.entrySet()) {
       Object value = params.get(entry.getKey());
+      if (value == null && "model".equals(entry.getKey())) {
+        value = selectedModel;
+      }
       if (value == null || !String.valueOf(value).equals(String.valueOf(entry.getValue()))) {
         return false;
       }
