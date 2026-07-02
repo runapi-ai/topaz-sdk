@@ -123,7 +123,7 @@ URL and base64 sources use the same entry point:
 
 ```java
 FileUploadResponse fromUrl = client.files().create(
-    FileCreateParams.fromUrl("https://example.com/input.png")
+    FileCreateParams.fromUrl("https://cdn.runapi.ai/public/samples/input.png")
         .fileName("input.png")
         .build()
 );

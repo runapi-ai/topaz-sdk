@@ -18,7 +18,7 @@ class TopazClient:
         client = TopazClient(api_key="sk-...")
         result = client.upscale_image.run(
             model="topaz-upscale-image",
-            source_image_url="https://example.com/in.jpg",
+            source_image_url="https://runapi.ai/in.jpg",
             upscale_factor=4,
         )
     """

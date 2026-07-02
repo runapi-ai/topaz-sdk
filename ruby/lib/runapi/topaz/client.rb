@@ -8,7 +8,7 @@ module RunApi
     #   client = RunApi::Topaz::Client.new(api_key: "sk-...")
     #   result = client.upscale_image.run(
     #     model: "topaz-upscale-image",
-    #     source_image_url: "https://example.com/photo.jpg",
+    #     source_image_url: "https://cdn.runapi.ai/public/samples/image.jpg",
     #     upscale_factor: 2
     #   )
     #   puts result.images.first.url

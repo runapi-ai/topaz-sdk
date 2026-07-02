@@ -2,7 +2,7 @@
 //
 //	client, err := topaz.NewClient(option.WithAPIKey("sk-your-api-key"))
 //	result, err := client.UpscaleImage.Run(ctx, topaz.UpscaleImageParams{
-//	    Model: "topaz-upscale-image", SourceImageURL: "https://example.com/photo.jpg", UpscaleFactor: 2,
+//	    Model: "topaz-upscale-image", SourceImageURL: "https://cdn.runapi.ai/public/samples/image.jpg", UpscaleFactor: 2,
 //	})
 package topaz
 

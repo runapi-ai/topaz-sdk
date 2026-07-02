@@ -11,7 +11,7 @@ import { UpscaleVideo } from './resources/upscale-video';
  * const client = new TopazClient({ apiKey: 'sk-...' });
  * const result = await client.upscaleImage.run({
  *   model: 'topaz-upscale-image',
- *   source_image_url: 'https://example.com/photo.jpg',
+ *   source_image_url: 'https://cdn.runapi.ai/public/samples/image.jpg',
  *   upscale_factor: 2,
  * });
  * console.log(result.images![0].url);

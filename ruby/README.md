@@ -1,8 +1,8 @@
-# Topaz API Ruby SDK for RunAPI
+# Topaz Ruby SDK for RunAPI
 
-The topaz api Ruby SDK is the language-specific package for Topaz on RunAPI. Use this topaz api package for image upscale, video upscale, restoration, and production cleanup flows when your application needs JSON request bodies, task status lookup, and consistent RunAPI errors in Ruby.
+The Topaz Ruby SDK is the language-specific package for Topaz on RunAPI. Use this package for image upscale, video upscale, restoration, and production cleanup workflows when your application needs request bodies, task status lookup, and consistent RunAPI errors in Ruby.
 
-This topaz api README is the Ruby package guide inside the public `topaz-sdk` repository. For the repository overview, start at `../README.md`; for model details, use https://runapi.ai/models/topaz; for API reference, use https://runapi.ai/docs#topaz; for SDK docs, use https://runapi.ai/docs#sdk-topaz.
+This README is the Ruby package guide inside the public `topaz-sdk` repository. For the repository overview, start at `../README.md`; for model details, use https://runapi.ai/models/topaz; for API reference, use https://runapi.ai/docs#topaz; for SDK docs, use https://runapi.ai/docs#sdk-topaz.
 
 ## Install
 
@@ -16,10 +16,10 @@ gem install runapi-topaz
 require "runapi-topaz"
 
 client = RunApi::Topaz::Client.new
-task = client.image_upscales.create(
+task = client.upscale_image.create(
   # Pass the Topaz JSON request body from https://runapi.ai/docs#topaz.
 )
-status = client.image_upscales.get(task.id)
+status = client.upscale_image.get(task.id)
 ```
 
 Use `create` when you want to submit a task and return quickly, `get` when you need the latest task state, and `run` when a script should create and poll until completion. In web request handlers, prefer `create` plus webhook or later `get` polling so a worker is not held open.
@@ -28,7 +28,7 @@ RunAPI-generated file URLs are temporary. Download and store generated images, v
 
 ## Language notes
 
-Use Ruby keyword arguments and the `RunApi::Topaz` error classes when building upscaling jobs, Rails workers, or scripts. The available resources include image upscales, and video upscales. Keep `RUNAPI_API_KEY` in the environment or your secret manager; never commit API keys or callback secrets.
+Use Ruby keyword arguments and the `RunApi::Topaz` error classes when building upscaling jobs, Rails workers, or scripts. The available resources are `upscale_image` and `upscale_video`. Keep `RUNAPI_API_KEY` in the environment or your secret manager; never commit API keys or callback secrets.
 
 ## Links
 

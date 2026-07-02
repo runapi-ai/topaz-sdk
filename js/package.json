@@ -3,7 +3,7 @@
   "runapi": {
     "slug": "topaz"
   },
-  "version": "0.2.6",
+  "version": "0.2.7",
   "description": "RunAPI Topaz SDK for image and video upscaling workflows in JavaScript, Python, Ruby, Go, and Java",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
@@ -30,7 +30,7 @@
     "clean": "rm -rf dist"
   },
   "dependencies": {
-    "@runapi.ai/core": "^0.2.6"
+    "@runapi.ai/core": "^0.2.7"
   },
   "devDependencies": {
     "@types/node": "^20.0.0",
@@ -49,10 +49,10 @@
     "api",
     "sdk",
     "typescript",
+    "python",
     "ruby",
     "golang",
     "java",
-    "python",
     "maven",
     "gradle",
     "upscaling",
@@ -66,5 +66,8 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/runapi-ai/topaz-sdk.git"
+  },
+  "bugs": {
+    "url": "https://github.com/runapi-ai/topaz-sdk/issues"
   }
 }

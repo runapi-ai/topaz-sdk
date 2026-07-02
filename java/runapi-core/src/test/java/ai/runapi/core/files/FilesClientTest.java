@@ -34,7 +34,7 @@ class FilesClientTest {
 
     FileUploadResponse response =
         client.create(
-            FileCreateParams.fromUrl("https://example.com/image.png").fileName("image.png").build(),
+            FileCreateParams.fromUrl("https://cdn.runapi.ai/public/samples/image.png").fileName("image.png").build(),
             RequestOptions.builder().header("X-Test", "yes").build());
 
     assertEquals(HttpMethod.POST, transport.request.getMethod());
@@ -43,7 +43,7 @@ class FilesClientTest {
     JsonRequestBody body = assertInstanceOf(JsonRequestBody.class, transport.request.getBody());
     JsonNode json = bodyJson(body);
     assertEquals("url", json.get("source").get("type").asText());
-    assertEquals("https://example.com/image.png", json.get("source").get("url").asText());
+    assertEquals("https://cdn.runapi.ai/public/samples/image.png", json.get("source").get("url").asText());
     assertEquals("image.png", json.get("file_name").asText());
     assertEquals("image.png", response.getFileName());
     assertEquals(Instant.parse("2026-06-08T10:30:00Z"), response.getCreatedAt());
@@ -55,7 +55,7 @@ class FilesClientTest {
     CapturingTransport transport = new CapturingTransport();
     FilesClient client = new FilesClient(transport, options(), false);
 
-    client.create(FileCreateParams.fromUrl("https://example.com/image.png").fileName("image.png").build());
+    client.create(FileCreateParams.fromUrl("https://cdn.runapi.ai/public/samples/image.png").fileName("image.png").build());
 
     JsonNode json = bodyJson(assertInstanceOf(JsonRequestBody.class, transport.request.getBody()));
     assertEquals("image.png", json.get("file_name").asText());

@@ -271,7 +271,7 @@ contract.put("grok-imagine/edit-image", new ContractAction(
                     {"enable_safety_checker", field()},
                     {"model", field()},
                     {"prompt", field()},
-                    {"source_image_url", field()},
+                    {"source_image_url", field(required())},
             })},
           })));
 contract.put("grok-imagine/extend", new ContractAction(
@@ -461,11 +461,11 @@ contract.put("ideogram-v3/edit-image", new ContractAction(
             {"ideogram-v3-character-edit", fields(new Object[][] {
                     {"callback_url", field()},
                     {"enable_prompt_expansion", field()},
-                    {"mask_url", field()},
+                    {"mask_url", field(required())},
                     {"model", field()},
                     {"output_count", field(enumValues(Integer.valueOf(1), Integer.valueOf(2), Integer.valueOf(3), Integer.valueOf(4)))},
                     {"prompt", field()},
-                    {"reference_image_urls", field()},
+                    {"reference_image_urls", field(required())},
                     {"rendering_speed", field(enumValues("turbo", "balanced", "quality"))},
                     {"seed", field()},
                     {"source_image_url", field(required())},
@@ -474,7 +474,7 @@ contract.put("ideogram-v3/edit-image", new ContractAction(
             {"ideogram-v3-edit", fields(new Object[][] {
                     {"callback_url", field()},
                     {"enable_prompt_expansion", field()},
-                    {"mask_url", field()},
+                    {"mask_url", field(required())},
                     {"model", field()},
                     {"output_count", field(enumValues(Integer.valueOf(1), Integer.valueOf(2), Integer.valueOf(3), Integer.valueOf(4)))},
                     {"prompt", field()},
@@ -510,7 +510,7 @@ contract.put("ideogram-v3/remix-image", new ContractAction(
                     {"negative_prompt", field()},
                     {"output_count", field(enumValues(Integer.valueOf(1), Integer.valueOf(2), Integer.valueOf(3), Integer.valueOf(4)))},
                     {"prompt", field()},
-                    {"reference_image_urls", field()},
+                    {"reference_image_urls", field(required())},
                     {"reference_mask_urls", field()},
                     {"rendering_speed", field(enumValues("turbo", "balanced", "quality"))},
                     {"seed", field()},
@@ -548,7 +548,7 @@ contract.put("ideogram-v3/text-to-image", new ContractAction(
                     {"negative_prompt", field()},
                     {"output_count", field(enumValues(Integer.valueOf(1), Integer.valueOf(2), Integer.valueOf(3), Integer.valueOf(4)))},
                     {"prompt", field()},
-                    {"reference_image_urls", field()},
+                    {"reference_image_urls", field(required())},
                     {"rendering_speed", field(enumValues("turbo", "balanced", "quality"))},
                     {"seed", field()},
                     {"style", field(enumValues("auto", "realistic", "fiction"))},
@@ -790,7 +790,7 @@ contract.put("nano-banana/edit-image", new ContractAction(
                     {"model", field()},
                     {"output_format", field(enumValues("png", "jpeg"))},
                     {"prompt", field()},
-                    {"source_image_urls", field()},
+                    {"source_image_urls", field(required())},
             })},
           })));
 contract.put("nano-banana/text-to-image", new ContractAction(

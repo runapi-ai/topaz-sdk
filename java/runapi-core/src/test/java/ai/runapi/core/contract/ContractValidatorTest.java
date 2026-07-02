@@ -67,7 +67,7 @@ class ContractValidatorTest {
   void acceptsSingleModelActionsWithoutModelParam() {
     Map<String, Object> params = new HashMap<String, Object>();
     params.put("descriptions", "Sample character");
-    params.put("reference_image_url", "https://example.com/character.png");
+    params.put("reference_image_url", "https://cdn.runapi.ai/public/samples/character.png");
 
     ContractValidator.validate("gemini-omni/create-character", params);
   }
