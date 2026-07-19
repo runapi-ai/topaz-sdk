@@ -7,7 +7,7 @@
 </h3>
 
 <p align="center">
-  Topaz API SDKs for JavaScript, Python, Ruby, Go, and Java on RunAPI.
+  Topaz API SDKs for JavaScript, Python, Ruby, Go, Java, and PHP on RunAPI.
 </p>
 
 <div align="center">
@@ -22,9 +22,9 @@
 </div>
 <br/>
 
-The Topaz API SDK packages JavaScript, Python, Ruby, Go, and Java clients for Topaz on RunAPI. Use it for image and video upscaling workflows when your app needs typed request builders, predictable task polling, file upload helpers, account helpers, and consistent RunAPI errors.
+The Topaz API SDK packages JavaScript, Python, Ruby, Go, Java, and PHP clients for Topaz on RunAPI. Use it for image and video upscaling workflows when your app needs typed request builders, predictable task polling, file upload helpers, account helpers, and consistent RunAPI errors.
 
-Topaz is listed in the RunAPI model catalog at https://runapi.ai/models/topaz. Variant pages below carry pricing, rate-limit, and commercial-usage details. The public `topaz-sdk` repository groups the language packages, examples, CI, and release tags for this model.
+Topaz is listed in the RunAPI model catalog at https://runapi.ai/models/topaz. Variant pages below carry pricing, rate-limit, and commercial-usage details. The public `topaz-sdk` repository groups the non-PHP language packages, examples, CI, and release tags for this model. The PHP package is released from a split Composer repository.
 
 ## Install
 
@@ -39,7 +39,7 @@ Gradle:
 
 ```kotlin
 dependencies {
-  implementation("ai.runapi:runapi-topaz:0.1.0")
+  implementation("ai.runapi:runapi-topaz:0.1.1")
 }
 ```
 
@@ -49,7 +49,7 @@ Maven:
 <dependency>
   <groupId>ai.runapi</groupId>
   <artifactId>runapi-topaz</artifactId>
-  <version>0.1.0</version>
+  <version>0.1.1</version>
 </dependency>
 ```
 
@@ -57,10 +57,12 @@ Use the Java BOM when installing multiple RunAPI Java modules:
 
 ```kotlin
 dependencies {
-  implementation(platform("ai.runapi:runapi-bom:0.1.0"))
+  implementation(platform("ai.runapi:runapi-bom:0.1.7"))
   implementation("ai.runapi:runapi-topaz")
 }
 ```
+
+The PHP package is published from the split Composer repository as `runapi-ai/topaz`; see https://github.com/runapi-ai/topaz-php for PHP install and examples.
 
 ## What you can build
 
@@ -111,6 +113,7 @@ Most media endpoints are asynchronous. `create()` submits a task and returns its
 - SDK docs: https://runapi.ai/docs#sdk-topaz
 - Product docs: https://runapi.ai/docs#topaz
 - SDK repository: https://github.com/runapi-ai/topaz-sdk
+- PHP package repository: https://github.com/runapi-ai/topaz-php
 - Skill repository: https://github.com/runapi-ai/topaz
 - Provider comparison: https://runapi.ai/providers/topaz
 - Full catalog: https://runapi.ai/models
@@ -131,7 +134,7 @@ RunAPI-generated file URLs are temporary. Download and store generated images, v
 
 ### Which package should I install for Topaz work?
 
-Install the model package for your language: `@runapi.ai/topaz` on npm, `runapi-topaz` on PyPI, `runapi-topaz` on RubyGems, `github.com/runapi-ai/topaz-sdk/go`, or `ai.runapi:runapi-topaz`. Install core SDK packages only when you are building shared SDK infrastructure.
+Install the model package for your language: `@runapi.ai/topaz` on npm, `runapi-topaz` on PyPI, `runapi-topaz` on RubyGems, `github.com/runapi-ai/topaz-sdk/go`, `ai.runapi:runapi-topaz` on Maven Central, or `runapi-ai/topaz` on Packagist. Install core SDK packages only when you are building shared SDK infrastructure.
 
 ### Where should public links point?
 
