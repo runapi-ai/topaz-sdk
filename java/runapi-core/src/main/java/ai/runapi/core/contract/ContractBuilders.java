@@ -16,28 +16,43 @@ final class ContractBuilders {
   }
 
   static FieldPart required() {
-    return field -> new ContractField(true, field.getEnumValues(), field.getMin(), field.getMax(), field.isLength());
+    return field -> new ContractField(
+        true, field.getEnumValues(), field.getMin(), field.getMax(), field.isLength(), field.getMinItems(), field.getMaxItems());
   }
 
   static FieldPart enumValues(Object... values) {
     final List<Object> enumValues = Collections.unmodifiableList(Arrays.asList(values));
-    return field -> new ContractField(field.isRequired(), enumValues, field.getMin(), field.getMax(), field.isLength());
+    return field -> new ContractField(
+        field.isRequired(), enumValues, field.getMin(), field.getMax(), field.isLength(), field.getMinItems(), field.getMaxItems());
   }
 
   static FieldPart min(final Double value) {
-    return field -> new ContractField(field.isRequired(), field.getEnumValues(), value, field.getMax(), field.isLength());
+    return field -> new ContractField(
+        field.isRequired(), field.getEnumValues(), value, field.getMax(), field.isLength(), field.getMinItems(), field.getMaxItems());
   }
 
   static FieldPart max(final Double value) {
-    return field -> new ContractField(field.isRequired(), field.getEnumValues(), field.getMin(), value, field.isLength());
+    return field -> new ContractField(
+        field.isRequired(), field.getEnumValues(), field.getMin(), value, field.isLength(), field.getMinItems(), field.getMaxItems());
   }
 
   static FieldPart length() {
-    return field -> new ContractField(field.isRequired(), field.getEnumValues(), field.getMin(), field.getMax(), true);
+    return field -> new ContractField(
+        field.isRequired(), field.getEnumValues(), field.getMin(), field.getMax(), true, field.getMinItems(), field.getMaxItems());
+  }
+
+  static FieldPart minItems(final int value) {
+    return field -> new ContractField(
+        field.isRequired(), field.getEnumValues(), field.getMin(), field.getMax(), field.isLength(), value, field.getMaxItems());
+  }
+
+  static FieldPart maxItems(final int value) {
+    return field -> new ContractField(
+        field.isRequired(), field.getEnumValues(), field.getMin(), field.getMax(), field.isLength(), field.getMinItems(), value);
   }
 
   static ContractField field(FieldPart... parts) {
-    ContractField field = new ContractField(false, Collections.emptyList(), null, null, false);
+    ContractField field = new ContractField(false, Collections.emptyList(), null, null, false, null, null);
     for (FieldPart part : parts) {
       field = part.apply(field);
     }

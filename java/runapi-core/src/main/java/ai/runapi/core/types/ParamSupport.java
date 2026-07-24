@@ -1,11 +1,13 @@
 package ai.runapi.core.types;
 
+import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * Shared parameter-normalization helpers for SDK parameter types. The
@@ -43,7 +45,17 @@ public final class ParamSupport {
         compacted.put(entry.getKey(), value);
       }
     }
-    return Collections.unmodifiableMap(compacted);
+    return new CompactedParams(
+        Collections.unmodifiableMap(compacted),
+        Collections.unmodifiableMap(new LinkedHashMap<String, Object>(raw)));
+  }
+
+  /** Returns the pre-compaction values when params were produced by {@link #compact(Map)}. */
+  public static Map<String, Object> validationInput(Map<String, Object> params) {
+    if (params instanceof CompactedParams) {
+      return ((CompactedParams) params).validationInput;
+    }
+    return params;
   }
 
   public static List<String> strings(List<String> values) {
@@ -117,5 +129,35 @@ public final class ParamSupport {
       return null;
     }
     return value;
+  }
+
+  private static final class CompactedParams extends AbstractMap<String, Object> {
+    private final Map<String, Object> compacted;
+    private final Map<String, Object> validationInput;
+
+    private CompactedParams(Map<String, Object> compacted, Map<String, Object> validationInput) {
+      this.compacted = compacted;
+      this.validationInput = validationInput;
+    }
+
+    @Override
+    public Set<Map.Entry<String, Object>> entrySet() {
+      return compacted.entrySet();
+    }
+
+    @Override
+    public Object get(Object key) {
+      return compacted.get(key);
+    }
+
+    @Override
+    public boolean containsKey(Object key) {
+      return compacted.containsKey(key);
+    }
+
+    @Override
+    public int size() {
+      return compacted.size();
+    }
   }
 }

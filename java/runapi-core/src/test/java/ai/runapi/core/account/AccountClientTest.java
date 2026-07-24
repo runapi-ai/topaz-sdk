@@ -59,7 +59,7 @@ class AccountClientTest {
     AccountClient client =
         AccountClient.builder()
             .apiKey("sk-test")
-            .baseUrl(URI.create("https://api.runapi.ai"))
+            .baseUrl(URI.create("https://runapi.ai"))
             .timeout(Duration.ofSeconds(10))
             .maxRetries(1)
             .retryBaseDelay(Duration.ofMillis(10))

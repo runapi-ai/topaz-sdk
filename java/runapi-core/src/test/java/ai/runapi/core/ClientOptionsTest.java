@@ -40,7 +40,7 @@ class ClientOptionsTest {
     ClientOptions options =
         BaseClient.builder()
             .apiKey("sk-test")
-            .baseUrl(URI.create("https://api.runapi.ai"))
+            .baseUrl(URI.create("https://runapi.ai"))
             .timeout(Duration.ofSeconds(10))
             .maxRetries(4)
             .retryBaseDelay(Duration.ofMillis(100))
@@ -52,7 +52,7 @@ class ClientOptionsTest {
             .build()
             .options();
 
-    assertEquals(URI.create("https://api.runapi.ai"), options.getBaseUrl());
+    assertEquals(URI.create("https://runapi.ai"), options.getBaseUrl());
     assertEquals(Duration.ofSeconds(10), options.getTimeout());
     assertEquals(4, options.getMaxRetries());
     assertEquals(Duration.ofMillis(100), options.getRetryBaseDelay());

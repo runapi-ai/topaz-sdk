@@ -11,14 +11,24 @@ public final class ContractField {
   private final @Nullable Double min;
   private final @Nullable Double max;
   private final boolean length;
+  private final @Nullable Integer minItems;
+  private final @Nullable Integer maxItems;
 
   ContractField(
-      boolean required, List<Object> enumValues, @Nullable Double min, @Nullable Double max, boolean length) {
+      boolean required,
+      List<Object> enumValues,
+      @Nullable Double min,
+      @Nullable Double max,
+      boolean length,
+      @Nullable Integer minItems,
+      @Nullable Integer maxItems) {
     this.required = required;
     this.enumValues = Collections.unmodifiableList(enumValues);
     this.min = min;
     this.max = max;
     this.length = length;
+    this.minItems = minItems;
+    this.maxItems = maxItems;
   }
 
   /** Whether this field is required for the selected model. */
@@ -44,5 +54,15 @@ public final class ContractField {
   /** Whether min/max constrain string length instead of numeric value. */
   public boolean isLength() {
     return length;
+  }
+
+  /** Minimum array item count, if set. */
+  public @Nullable Integer getMinItems() {
+    return minItems;
+  }
+
+  /** Maximum array item count, if set. */
+  public @Nullable Integer getMaxItems() {
+    return maxItems;
   }
 }

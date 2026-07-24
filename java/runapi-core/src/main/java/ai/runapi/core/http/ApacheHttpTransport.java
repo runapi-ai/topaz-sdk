@@ -36,6 +36,7 @@ import org.apache.hc.core5.http.ContentType;
 import org.apache.hc.core5.http.Header;
 import org.apache.hc.core5.http.HttpEntity;
 import org.apache.hc.core5.http.io.entity.AbstractHttpEntity;
+import org.apache.hc.core5.http.io.entity.ByteArrayEntity;
 import org.apache.hc.core5.util.Timeout;
 import org.jspecify.annotations.Nullable;
 
@@ -88,6 +89,33 @@ public final class ApacheHttpTransport implements HttpTransport {
       throw new TimeoutException("Request timed out", e);
     } catch (IOException e) {
       throw new NetworkException("Network error", e);
+    }
+  }
+
+  /** PUTs bytes to a pre-authorized absolute URL with the given headers (no auth). */
+  @Override
+  public void upload(String url, Map<String, String> headers, byte[] body) {
+    HttpUriRequestBase request = new HttpUriRequestBase("PUT", URI.create(url));
+    request.setConfig(requestConfig(options.getTimeout()));
+    for (Map.Entry<String, String> header : headers.entrySet()) {
+      request.setHeader(header.getKey(), header.getValue());
+    }
+    request.setEntity(new ByteArrayEntity(body, null));
+
+    try {
+      client.execute(
+          request,
+          response -> {
+            if (response.getCode() < 200 || response.getCode() >= 300) {
+              throw ErrorMapper.fromResponse(
+                  response.getCode(), name -> firstHeader(response, name), readEntity(response), null);
+            }
+            return null;
+          });
+    } catch (java.net.SocketTimeoutException e) {
+      throw new TimeoutException("Direct upload timed out", e);
+    } catch (IOException e) {
+      throw new NetworkException("Direct upload network error", e);
     }
   }
 

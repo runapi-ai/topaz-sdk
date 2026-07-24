@@ -1,5 +1,11 @@
 # Changelog
 
+## [python/v0.2.0](https://github.com/runapi-ai/topaz-sdk/releases/tag/python%2Fv0.2.0) - 2026-07-24
+
+### Added
+- Expose shared Files, Account, and Pricing resources plus typed Task Billing Facts through the Provider Client.
+
+
 ## [js/v0.2.7](https://github.com/runapi-ai/topaz-sdk/releases/tag/js%2Fv0.2.7), [ruby/v0.2.7](https://github.com/runapi-ai/topaz-sdk/releases/tag/ruby%2Fv0.2.7), [go/v0.2.7](https://github.com/runapi-ai/topaz-sdk/releases/tag/go%2Fv0.2.7) - 2026-07-02
 
 ### Fixed

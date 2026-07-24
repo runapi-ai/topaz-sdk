@@ -1,6 +1,7 @@
 package ai.runapi.core.contract;
 
 import ai.runapi.core.errors.ValidationException;
+import ai.runapi.core.types.ParamSupport;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -10,7 +11,10 @@ import java.util.Map;
 public final class ContractValidator {
   private ContractValidator() {}
 
-  /** Validates compact wire-shape params for the given action. */
+  /**
+   * Validates params for the given action. Params built by an SDK retain their
+   * pre-compaction values for validation while exposing only the compact wire shape.
+   */
   public static void validate(String action, Map<String, Object> params) {
     ContractAction contract = ContractGen.contract().get(action);
     if (contract == null) {
@@ -20,6 +24,7 @@ public final class ContractValidator {
   }
 
   static void validate(ContractAction contract, Map<String, Object> params) {
+    params = ParamSupport.validationInput(params);
     String selectedModel = null;
     Map<String, ContractField> fields;
     if (contract.getModels().isEmpty()) {
@@ -41,17 +46,20 @@ public final class ContractValidator {
         fields = contract.getFieldsByModel().get(model);
       }
     }
+    if (selectedModel != null) {
+      validateRules(contract.getRulesByModel().get(selectedModel), params, selectedModel);
+    }
     if (fields != null) {
       for (Map.Entry<String, ContractField> entry : fields.entrySet()) {
         validateField(entry.getKey(), entry.getValue(), params.get(entry.getKey()));
       }
     }
-    if (selectedModel != null) {
-      validateRules(contract.getRulesByModel().get(selectedModel), params, selectedModel);
-    }
   }
 
   private static void validateField(String name, ContractField field, Object value) {
+    if (value != null && (field.getMinItems() != null || field.getMaxItems() != null)) {
+      validateItemCount(name, value, field);
+    }
     if (field.isRequired() && isBlank(value)) {
       throw new ValidationException(name + " is required");
     }
@@ -72,6 +80,30 @@ public final class ContractValidator {
       }
       checkRange(name, ((Number) value).doubleValue(), field, "");
     }
+  }
+
+  private static void validateItemCount(String name, Object value, ContractField field) {
+    if (!(value instanceof List)) {
+      throw new ValidationException(name + " must be an array");
+    }
+
+    int count = ((List<?>) value).size();
+    Integer min = field.getMinItems();
+    Integer max = field.getMaxItems();
+    if ((min == null || count >= min) && (max == null || count <= max)) {
+      return;
+    }
+    throw new ValidationException(itemCountMessage(name, min, max));
+  }
+
+  private static String itemCountMessage(String name, Integer min, Integer max) {
+    if (min != null && max != null) {
+      return name + " must contain between " + min + " and " + max + " items";
+    }
+    if (min != null) {
+      return name + " must contain at least " + min + " items";
+    }
+    return name + " must contain at most " + max + " items";
   }
 
   private static void checkRange(String name, double measured, ContractField field, String unit) {

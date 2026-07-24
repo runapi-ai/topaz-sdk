@@ -4,14 +4,14 @@ import org.jspecify.annotations.Nullable;
 
 /** Base exception for all RunAPI Java SDK errors. */
 public class RunApiException extends RuntimeException {
-  private final String code;
+  private final @Nullable String code;
   private final int statusCode;
   private final @Nullable String requestId;
   private final @Nullable String responseBody;
 
   public RunApiException(
       String message,
-      String code,
+      @Nullable String code,
       int statusCode,
       @Nullable String requestId,
       @Nullable String responseBody,
@@ -23,8 +23,8 @@ public class RunApiException extends RuntimeException {
     this.responseBody = responseBody;
   }
 
-  /** Error code category. */
-  public String getCode() {
+  /** Explicit machine-readable reason, if one was provided. */
+  public @Nullable String getCode() {
     return code;
   }
 

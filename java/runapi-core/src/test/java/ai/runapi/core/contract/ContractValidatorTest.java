@@ -1,16 +1,65 @@
 package ai.runapi.core.contract;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import ai.runapi.core.errors.ValidationException;
+import ai.runapi.core.types.ParamSupport;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import org.junit.jupiter.api.Test;
 
 class ContractValidatorTest {
+  @Test
+  void validatesArrayItemCountConstraints() {
+    ContractAction contract =
+        new ContractAction(
+            ContractBuilders.list("m"),
+            ContractBuilders.fieldsByModel(
+                new Object[][] {
+                  {
+                    "m",
+                    ContractBuilders.fields(
+                        new Object[][] {
+                          {
+                            "reference_image_urls",
+                            ContractBuilders.field(
+                                ContractBuilders.minItems(1), ContractBuilders.maxItems(3))
+                          }
+                        })
+                  }
+                }),
+            Collections.<String, java.util.List<ContractRule>>emptyMap());
+
+    Map<String, Object> params = new HashMap<String, Object>();
+    params.put("model", "m");
+    params.put("reference_image_urls", "image.png");
+    ValidationException error =
+        assertThrows(ValidationException.class, () -> ContractValidator.validate(contract, params));
+    assertEquals("reference_image_urls must be an array", error.getMessage());
+
+    params.put("reference_image_urls", Collections.emptyList());
+    error = assertThrows(ValidationException.class, () -> ContractValidator.validate(contract, params));
+    assertEquals("reference_image_urls must contain between 1 and 3 items", error.getMessage());
+
+    params.put("reference_image_urls", Arrays.asList("a", "b", "c", "d"));
+    error = assertThrows(ValidationException.class, () -> ContractValidator.validate(contract, params));
+    assertEquals("reference_image_urls must contain between 1 and 3 items", error.getMessage());
+
+    params.put("reference_image_urls", Arrays.asList("a", "b", "c"));
+    ContractValidator.validate(contract, params);
+
+    params.put("reference_image_urls", Collections.emptyList());
+    Map<String, Object> compacted = ParamSupport.compact(params);
+    assertFalse(compacted.containsKey("reference_image_urls"));
+    error = assertThrows(ValidationException.class, () -> ContractValidator.validate(contract, compacted));
+    assertEquals("reference_image_urls must contain between 1 and 3 items", error.getMessage());
+  }
+
   @Test
   void generatedContractContainsWanActions() {
     assertTrue(ContractGen.contract().containsKey("wan/text-to-image"));
@@ -138,6 +187,40 @@ class ContractValidatorTest {
             () -> ContractValidator.validate("suno/text-to-music", params));
 
     assertTrue(error.getMessage().contains("lyrics is not allowed when vocal_mode is auto_lyrics"));
+  }
+
+  @Test
+  void reportsForbiddenRuleBeforeMissingRequiredField() {
+    ContractAction contract =
+        new ContractAction(
+            ContractBuilders.list("m"),
+            ContractBuilders.fieldsByModel(
+                new Object[][] {
+                  {
+                    "m",
+                    ContractBuilders.fields(
+                        new Object[][] {{"source_image_urls", ContractBuilders.field(ContractBuilders.required())}})
+                  }
+                }),
+            ContractBuilders.rulesByModel(
+                new Object[][] {
+                  {
+                    "m",
+                    ContractBuilders.rules(
+                        ContractBuilders.rule(
+                            ContractBuilders.conditions(new Object[][] {{"model", "m"}}),
+                            Collections.<String>emptyList(),
+                            ContractBuilders.list("source_task_id")))
+                  }
+                }));
+    Map<String, Object> params = new HashMap<String, Object>();
+    params.put("model", "m");
+    params.put("source_task_id", "src_1");
+
+    ValidationException error =
+        assertThrows(ValidationException.class, () -> ContractValidator.validate(contract, params));
+
+    assertTrue(error.getMessage().contains("source_task_id is not allowed when model is m"));
   }
 
   @Test

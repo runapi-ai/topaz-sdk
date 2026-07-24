@@ -18,6 +18,18 @@ public class RateLimitException extends RunApiException {
     this.retryAfter = retryAfter;
   }
 
+  public RateLimitException(
+      String message,
+      String code,
+      int statusCode,
+      String requestId,
+      String responseBody,
+      @Nullable Duration retryAfter,
+      Throwable cause) {
+    super(message, code, statusCode, requestId, responseBody, cause);
+    this.retryAfter = retryAfter;
+  }
+
   /** Server-suggested retry delay, if provided. */
   public @Nullable Duration getRetryAfter() {
     return retryAfter;

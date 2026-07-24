@@ -13,7 +13,7 @@ gem install runapi-topaz
 ## Quick start
 
 ```ruby
-require "runapi-topaz"
+require "runapi/topaz"
 
 client = RunApi::Topaz::Client.new
 task = client.upscale_image.create(

@@ -4,27 +4,28 @@ build-backend = "hatchling.build"
 
 [project]
 name = "runapi-topaz"
-version = "0.1.0"
-description = "Topaz image and video upscale client for RunAPI"
+version = "0.2.0"
+description = "RunAPI Topaz SDK for image and video upscaling workflows in JavaScript, Python, Ruby, Go, Java, and PHP"
 readme = "README.md"
 requires-python = ">=3.9"
 license = "Apache-2.0"
 authors = [{ name = "RunAPI", email = "contact@runapi.ai" }]
-keywords = ["runapi", "topaz", "upscale-image", "upscale-video", "ai", "sdk"]
-dependencies = ["runapi-core"]
+keywords = ["runapi", "runapi-ai", "topaz", "api", "sdk", "typescript", "python", "ruby", "golang", "java", "maven", "gradle", "upscaling", "image-upscaling", "video-upscaling", "topaz-api"]
+dependencies = ["runapi-core>=0.3.0"]
 
 [project.urls]
 Homepage = "https://runapi.ai/models/topaz"
 Documentation = "https://runapi.ai/docs#sdk-topaz"
+Source = "https://github.com/runapi-ai/topaz-sdk"
+Issues = "https://github.com/runapi-ai/topaz-sdk/issues"
+Changelog = "https://github.com/runapi-ai/topaz-sdk/blob/main/CHANGELOG.md"
+"Release Notes" = "https://github.com/runapi-ai/topaz-sdk/releases/tag/python%2Fv0.2.0"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/runapi"]
 
 [tool.uv]
 package = true
-
-[tool.uv.sources]
-runapi-core = { workspace = true }
 
 [dependency-groups]
 dev = ["pytest>=8"]

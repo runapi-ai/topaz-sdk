@@ -10,4 +10,9 @@ public class AuthenticationException extends RunApiException {
       String message, int statusCode, String requestId, String responseBody, Throwable cause) {
     super(message, "authentication", statusCode, requestId, responseBody, cause);
   }
+
+  public AuthenticationException(
+      String message, String code, int statusCode, String requestId, String responseBody, Throwable cause) {
+    super(message, code, statusCode, requestId, responseBody, cause);
+  }
 }

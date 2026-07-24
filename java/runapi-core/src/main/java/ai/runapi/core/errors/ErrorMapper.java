@@ -17,41 +17,41 @@ public final class ErrorMapper {
       int statusCode, Headers headers, String responseBody, Throwable cause) {
     String requestId = headers.firstValue("x-request-id");
     String message = extractMessage(responseBody);
+    String code = extractCode(responseBody);
     if (message == null || message.trim().isEmpty()) {
       message = defaultMessageForStatus(statusCode);
     }
 
     if (statusCode == 401) {
-      return new AuthenticationException(message, statusCode, requestId, responseBody, cause);
+      return new AuthenticationException(message, code, statusCode, requestId, responseBody, cause);
     }
     if (statusCode == 400 || statusCode == 422) {
-      return new ValidationException(message, statusCode, requestId, responseBody, cause);
+      return new ValidationException(message, code, statusCode, requestId, responseBody, cause);
     }
     if (statusCode == 429) {
       return new RateLimitException(
-          message, statusCode, requestId, responseBody, parseRetryAfter(headers.firstValue("retry-after")), cause);
+          message, code, statusCode, requestId, responseBody, parseRetryAfter(headers.firstValue("retry-after")), cause);
     }
     return new RunApiException(
-        message, codeForStatus(statusCode), statusCode, requestId, responseBody, cause);
+        message, code, statusCode, requestId, responseBody, cause);
   }
 
-  private static String codeForStatus(int statusCode) {
-    if (statusCode == 402) {
-      return "insufficient_credits";
+  private static String extractCode(String responseBody) {
+    if (responseBody == null || responseBody.trim().isEmpty() || looksLikeHtml(responseBody)) {
+      return null;
     }
-    if (statusCode == 404) {
-      return "not_found";
+    try {
+      JsonNode error = MAPPER.readTree(responseBody).get("error");
+      if (error != null && error.isObject()) {
+        JsonNode code = error.get("code");
+        if (code != null && code.isTextual() && !code.asText().trim().isEmpty()) {
+          return code.asText();
+        }
+      }
+    } catch (Exception ignored) {
+      return null;
     }
-    if (statusCode == 409) {
-      return "conflict";
-    }
-    if (statusCode == 503) {
-      return "service_unavailable";
-    }
-    if (statusCode >= 500) {
-      return "server";
-    }
-    return "runapi_error";
+    return null;
   }
 
   private static String defaultMessageForStatus(int statusCode) {

@@ -10,4 +10,9 @@ public class ValidationException extends RunApiException {
       String message, int statusCode, String requestId, String responseBody, Throwable cause) {
     super(message, "validation", statusCode, requestId, responseBody, cause);
   }
+
+  public ValidationException(
+      String message, String code, int statusCode, String requestId, String responseBody, Throwable cause) {
+    super(message, code, statusCode, requestId, responseBody, cause);
+  }
 }

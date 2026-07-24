@@ -3,6 +3,8 @@ plugins {
   `maven-publish`
 }
 
+extra["runapiSlug"] = "core"
+
 description = "Shared authentication, HTTP, retry, polling, file, account, and error primitives for RunAPI Java SDKs."
 
 java {
