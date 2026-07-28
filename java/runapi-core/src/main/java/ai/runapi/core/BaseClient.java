@@ -2,6 +2,7 @@ package ai.runapi.core;
 
 import ai.runapi.core.account.AccountClient;
 import ai.runapi.core.files.FilesClient;
+import ai.runapi.core.pricing.PricingResource;
 import ai.runapi.core.http.ApacheHttpTransport;
 import ai.runapi.core.http.HttpTransport;
 import java.net.URI;
@@ -16,6 +17,7 @@ public class BaseClient implements AutoCloseable {
   private final boolean ownsTransport;
   private final FilesClient files;
   private final AccountClient account;
+  private final PricingResource pricing;
 
   /** Creates a base client from resolved options. */
   protected BaseClient(ClientOptions options) {
@@ -31,6 +33,7 @@ public class BaseClient implements AutoCloseable {
     }
     this.files = new FilesClient(transport, options, false);
     this.account = new AccountClient(transport, options, false);
+    this.pricing = new PricingResource(transport, options);
   }
 
   /** Creates a base client with default builder options. */
@@ -52,6 +55,9 @@ public class BaseClient implements AutoCloseable {
   public final AccountClient account() {
     return account;
   }
+
+  /** Live Price Schedule and Price Quote operations. */
+  public final PricingResource pricing() { return pricing; }
 
   /** Shared HTTP transport for subclasses. */
   protected final HttpTransport transport() {

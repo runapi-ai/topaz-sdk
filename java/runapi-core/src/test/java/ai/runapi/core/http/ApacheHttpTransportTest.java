@@ -8,6 +8,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 import ai.runapi.core.ClientOptions;
 import ai.runapi.core.RequestOptions;
 import ai.runapi.core.errors.ValidationException;
+import ai.runapi.core.pricing.PricingResource;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpServer;
 import java.io.IOException;
@@ -55,6 +56,12 @@ class ApacheHttpTransportTest {
           try (OutputStream out = exchange.getResponseBody()) {
             out.write(bytes);
           }
+        });
+    server.createContext(
+        "/api/v1/price_schedules",
+        exchange -> {
+          captured = CapturedRequest.from(exchange);
+          write(exchange, 200, "{\"as_of\":\"2026-07-23T12:00:00.000000Z\",\"price_schedules\":[]}");
         });
     server.start();
   }
@@ -129,6 +136,19 @@ class ApacheHttpTransportTest {
       assertEquals(200, response.getStatusCode());
       // "café" must round-trip; a hardcoded UTF-8 decode would yield a replacement char.
       assertTrue(response.getBody().contains("caf" + new String(Character.toChars(0x00E9))));
+    }
+  }
+
+  @Test
+  void scheduleAllowsUnauthenticatedRequests() {
+    ClientOptions options =
+        ClientOptions.builder().baseUrl("http://127.0.0.1:" + server.getAddress().getPort()).build();
+
+    try (ApacheHttpTransport transport = new ApacheHttpTransport(options)) {
+      new PricingResource(transport, options)
+          .list(PricingResource.PriceScheduleListParams.builder().service("flux").build());
+
+      assertEquals(null, captured.header("Authorization"));
     }
   }
 

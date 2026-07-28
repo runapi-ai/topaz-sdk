@@ -1,6 +1,5 @@
 package ai.runapi.core;
 
-import ai.runapi.core.errors.AuthenticationException;
 import ai.runapi.core.http.HttpTransport;
 import java.net.URI;
 import java.time.Duration;
@@ -15,7 +14,7 @@ public final class ClientOptions {
   private static final String API_KEY_ENV = "RUNAPI_API_KEY";
   private static final String BASE_URL_ENV = "RUNAPI_BASE_URL";
 
-  private final String apiKey;
+  private final @Nullable String apiKey;
   private final URI baseUrl;
   private final Duration timeout;
   private final int maxRetries;
@@ -49,7 +48,7 @@ public final class ClientOptions {
   }
 
   /** Resolved API key. */
-  public String getApiKey() {
+  public @Nullable String getApiKey() {
     return apiKey;
   }
 
@@ -199,7 +198,7 @@ public final class ClientOptions {
     }
   }
 
-  private static String resolveApiKey(@Nullable String explicit) {
+  private static @Nullable String resolveApiKey(@Nullable String explicit) {
     if (explicit != null && !explicit.trim().isEmpty()) {
       return explicit.trim();
     }
@@ -207,8 +206,7 @@ public final class ClientOptions {
     if (fromEnv != null && !fromEnv.trim().isEmpty()) {
       return fromEnv.trim();
     }
-    throw new AuthenticationException(
-        "API key is required. Pass apiKey or set the RUNAPI_API_KEY environment variable.");
+    return null;
   }
 
   private static URI resolveBaseUrl(@Nullable URI explicit) {

@@ -3,7 +3,6 @@ package ai.runapi.core;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import ai.runapi.core.errors.AuthenticationException;
 import ai.runapi.core.http.HttpResponse;
 import ai.runapi.core.http.HttpTransport;
 import java.net.URI;
@@ -23,8 +22,8 @@ class ClientOptionsTest {
   }
 
   @Test
-  void rejectsMissingApiKeyAtBuildTime() {
-    assertThrows(AuthenticationException.class, () -> ClientOptions.builder().build());
+  void permitsMissingApiKeyForPublicResources() {
+    assertEquals(null, ClientOptions.builder().build().getApiKey());
   }
 
   @Test
