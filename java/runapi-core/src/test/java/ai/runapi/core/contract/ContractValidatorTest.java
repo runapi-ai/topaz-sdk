@@ -107,6 +107,8 @@ class ContractValidatorTest {
   void acceptsActionsWithoutModelVariants() {
     Map<String, Object> params = new HashMap<String, Object>();
     params.put("source_task_id", "task_123");
+    params.put("prompt", "Continue the camera movement.");
+    params.put("start_seconds", 0);
     params.put("extension_duration_seconds", 6);
 
     ContractValidator.validate("grok-imagine/extend", params);

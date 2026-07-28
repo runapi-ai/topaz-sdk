@@ -4,7 +4,7 @@ Dir.chdir(__dir__) do
 
   Gem::Specification.new do |spec|
     spec.name = "runapi-topaz"
-    spec.version = "0.2.8"
+    spec.version = "0.2.9"
     spec.metadata["runapi_slug"] = "topaz"
     spec.authors = ["RunAPI"]
     spec.email = ["contact@runapi.ai"]

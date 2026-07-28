@@ -5,6 +5,9 @@ export const contract = {
     ],
     "fields_by_model": {
       "topaz-upscale-image": {
+        "model": {
+          "required": true
+        },
         "source_image_url": {
           "required": true
         },
@@ -27,6 +30,9 @@ export const contract = {
     ],
     "fields_by_model": {
       "topaz-upscale-video": {
+        "model": {
+          "required": true
+        },
         "source_video_url": {
           "required": true
         },

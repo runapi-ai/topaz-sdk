@@ -7,6 +7,9 @@ module RunApi
         "models" => ["topaz-upscale-image"],
         "fields_by_model" => {
           "topaz-upscale-image" => {
+            "model" => {
+              "required" => true
+            },
             "source_image_url" => {
               "required" => true
             },
@@ -22,6 +25,9 @@ module RunApi
         "models" => ["topaz-upscale-video"],
         "fields_by_model" => {
           "topaz-upscale-video" => {
+            "model" => {
+              "required" => true
+            },
             "source_video_url" => {
               "required" => true
             },

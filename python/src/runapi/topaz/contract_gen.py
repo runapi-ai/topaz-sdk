@@ -3,6 +3,9 @@ CONTRACT = {
         "models": ["topaz-upscale-image"],
         "fields_by_model": {
             "topaz-upscale-image": {
+                "model": {
+                    "required": True
+                },
                 "source_image_url": {
                     "required": True
                 },
@@ -18,6 +21,9 @@ CONTRACT = {
         "models": ["topaz-upscale-video"],
         "fields_by_model": {
             "topaz-upscale-video": {
+                "model": {
+                    "required": True
+                },
                 "source_video_url": {
                     "required": True
                 },
