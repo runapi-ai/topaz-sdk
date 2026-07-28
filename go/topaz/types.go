@@ -1,5 +1,7 @@
 package topaz
 
+import "github.com/runapi-ai/core-sdk/go/core"
+
 // TaskStatus is the async task lifecycle state (e.g. "processing", "completed", "failed").
 type TaskStatus string
 
@@ -23,6 +25,7 @@ type UpscaleVideoParams struct {
 
 // AsyncTaskResponse carries the task ID, lifecycle status, and error for all Topaz async operations.
 type AsyncTaskResponse struct {
+	core.TaskBillingFacts
 	ID     string     `json:"id"`
 	Status TaskStatus `json:"status"`
 	Error  string     `json:"error,omitempty"`

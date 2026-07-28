@@ -15,6 +15,7 @@ public final class HttpRequest {
   private final Map<String, String> headers;
   private final @Nullable RequestBody body;
   private final RequestOptions options;
+  private final boolean allowNotModified;
 
   private HttpRequest(Builder builder) {
     this.method = Objects.requireNonNull(builder.method, "method");
@@ -23,6 +24,7 @@ public final class HttpRequest {
     this.headers = Collections.unmodifiableMap(new LinkedHashMap<String, String>(builder.headers));
     this.body = builder.body;
     this.options = builder.options;
+    this.allowNotModified = builder.allowNotModified;
   }
 
   /** Creates a new request builder. */
@@ -60,6 +62,9 @@ public final class HttpRequest {
     return options;
   }
 
+  /** Whether this request treats HTTP 304 as a successful response. */
+  public boolean allowsNotModified() { return allowNotModified; }
+
   /** Builder for {@link HttpRequest}. */
   public static final class Builder {
     private final HttpMethod method;
@@ -68,6 +73,7 @@ public final class HttpRequest {
     private final Map<String, String> headers = new LinkedHashMap<String, String>();
     private @Nullable RequestBody body;
     private RequestOptions options = RequestOptions.none();
+    private boolean allowNotModified;
 
     private Builder(HttpMethod method, String path) {
       this.method = method;
@@ -97,6 +103,9 @@ public final class HttpRequest {
       this.options = Objects.requireNonNull(value, "value");
       return this;
     }
+
+    /** Allows a conditional request to return HTTP 304 without error mapping. */
+    public Builder allowNotModified() { this.allowNotModified = true; return this; }
 
     /** Builds an immutable HTTP request. */
     public HttpRequest build() {

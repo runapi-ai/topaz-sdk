@@ -79,7 +79,8 @@ public final class ApacheHttpTransport implements HttpTransport {
           apacheRequest,
           response -> {
             String responseBody = readEntity(response);
-            if (response.getCode() < 200 || response.getCode() >= 300) {
+            if ((response.getCode() < 200 || response.getCode() >= 300)
+                && !(response.getCode() == 304 && request.allowsNotModified())) {
               throw ErrorMapper.fromResponse(
                   response.getCode(), name -> firstHeader(response, name), responseBody, null);
             }
@@ -190,7 +191,9 @@ public final class ApacheHttpTransport implements HttpTransport {
     mergeCustom(headers, request.getHeaders());
     mergeCustom(headers, request.getOptions().getHeaders());
     RequestBody body = request.getBody();
-    setManaged(headers, "Authorization", "Bearer " + options.getApiKey());
+    if (options.getApiKey() != null) {
+      setManaged(headers, "Authorization", "Bearer " + options.getApiKey());
+    }
     setManaged(headers, "Accept", "application/json");
     setManaged(headers, "User-Agent", Constants.SDK_USER_AGENT);
     if (body != null && body.contentType() != null) {
