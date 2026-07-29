@@ -31,7 +31,7 @@ publishing {
       pom {
         name = "RunAPI Core Java SDK"
         description = "Shared authentication, HTTP, retry, polling, error, and resource primitives for RunAPI Java SDKs."
-        url = "https://runapi.ai/docs#runapi-sdks"
+        url = "https://runapi.ai/docs/resources/sdks"
         licenses {
           license {
             name = "Apache License, Version 2.0"

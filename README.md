@@ -110,8 +110,8 @@ Most media endpoints are asynchronous. `create()` submits a task and returns its
 ## Public links
 
 - Model page: https://runapi.ai/models/topaz
-- SDK docs: https://runapi.ai/docs#sdk-topaz
-- Product docs: https://runapi.ai/docs#topaz
+- SDK docs: https://runapi.ai/docs/resources/sdks
+- Product docs: https://runapi.ai/docs/api/topaz/upscale-image
 - SDK repository: https://github.com/runapi-ai/topaz-sdk
 - PHP package repository: https://github.com/runapi-ai/topaz-php
 - Skill repository: https://github.com/runapi-ai/topaz

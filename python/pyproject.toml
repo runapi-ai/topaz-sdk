@@ -15,7 +15,7 @@ dependencies = ["runapi-core>=0.3.2"]
 
 [project.urls]
 Homepage = "https://runapi.ai/models/topaz"
-Documentation = "https://runapi.ai/docs#sdk-topaz"
+Documentation = "https://runapi.ai/docs/resources/sdks"
 Source = "https://github.com/runapi-ai/topaz-sdk"
 Issues = "https://github.com/runapi-ai/topaz-sdk/issues"
 Changelog = "https://github.com/runapi-ai/topaz-sdk/blob/main/CHANGELOG.md"
