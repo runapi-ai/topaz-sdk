@@ -60,8 +60,8 @@ const result = await client.upscaleImage.run({
 ## Routing
 
 - Model page: https://runapi.ai/models/topaz
-- Product docs: https://runapi.ai/docs#topaz
-- SDK docs: https://runapi.ai/docs#sdk-topaz
+- Product docs: https://runapi.ai/docs/api/topaz/upscale-image
+- SDK docs: https://runapi.ai/docs/resources/sdks
 - SDK repository: https://github.com/runapi-ai/topaz-sdk
 - Pricing and rate limits: https://runapi.ai/models/topaz/upscale-image
 - Provider comparison: https://runapi.ai/providers/topaz

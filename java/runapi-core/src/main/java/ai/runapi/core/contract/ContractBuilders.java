@@ -11,6 +11,10 @@ import org.jspecify.annotations.Nullable;
 final class ContractBuilders {
   private ContractBuilders() {}
 
+  static List<Object> values(Object... values) {
+    return Collections.unmodifiableList(Arrays.asList(values));
+  }
+
   static List<String> list(String... values) {
     return Collections.unmodifiableList(Arrays.asList(values));
   }
@@ -86,6 +90,31 @@ final class ContractBuilders {
 
   static ContractRule rule(Map<String, Object> conditions, List<String> required, List<String> forbidden) {
     return new ContractRule(conditions, required, forbidden);
+  }
+
+  static ContractRule rule(
+      Map<String, Object> conditions,
+      List<String> required,
+      List<String> requiredAny,
+      List<String> forbidden,
+      Map<String, List<Object>> narrowedEnums) {
+    return new ContractRule(conditions, required, requiredAny, forbidden, narrowedEnums);
+  }
+
+  /** A `when` entry branching on whether the caller supplied the field. */
+  static Map<String, Object> presence(boolean present) {
+    Map<String, Object> condition = new LinkedHashMap<String, Object>();
+    condition.put("present", Boolean.valueOf(present));
+    return Collections.unmodifiableMap(condition);
+  }
+
+  @SuppressWarnings("unchecked")
+  static Map<String, List<Object>> narrowedEnums(Object[][] entries) {
+    Map<String, List<Object>> narrowed = new LinkedHashMap<String, List<Object>>();
+    for (Object[] entry : entries) {
+      narrowed.put((String) entry[0], (List<Object>) entry[1]);
+    }
+    return Collections.unmodifiableMap(narrowed);
   }
 
   static List<ContractRule> rules(ContractRule... values) {

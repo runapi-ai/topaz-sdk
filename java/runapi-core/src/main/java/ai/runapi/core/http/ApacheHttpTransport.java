@@ -19,6 +19,7 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
@@ -78,13 +79,15 @@ public final class ApacheHttpTransport implements HttpTransport {
       return client.execute(
           apacheRequest,
           response -> {
-            String responseBody = readEntity(response);
+            byte[] responseBytes = readEntityBytes(response);
             if ((response.getCode() < 200 || response.getCode() >= 300)
                 && !(response.getCode() == 304 && request.allowsNotModified())) {
+              String responseBody = decodeEntity(response, responseBytes);
               throw ErrorMapper.fromResponse(
                   response.getCode(), name -> firstHeader(response, name), responseBody, null);
             }
-            return new HttpResponse(response.getCode(), responseBody, headersFrom(response));
+            return HttpResponse.fromOwnedBytes(
+                response.getCode(), responseBytes, charsetFor(response), headersFrom(response));
           });
     } catch (java.net.SocketTimeoutException e) {
       throw new TimeoutException("Request timed out", e);
@@ -229,13 +232,53 @@ public final class ApacheHttpTransport implements HttpTransport {
   }
 
   private static String readEntity(ClassicHttpResponse response) throws IOException {
+    byte[] bytes = readEntityBytes(response);
+    return decodeEntity(response, bytes);
+  }
+
+  private static byte[] readEntityBytes(ClassicHttpResponse response) throws IOException {
     HttpEntity entity = response.getEntity();
     if (entity == null) {
-      return "";
+      return new byte[0];
+    }
+    long contentLength = entity.getContentLength();
+    if (contentLength >= 0 && contentLength <= Integer.MAX_VALUE) {
+      byte[] bytes = new byte[(int) contentLength];
+      try (InputStream input = entity.getContent()) {
+        int offset = 0;
+        while (offset < bytes.length) {
+          int count = input.read(bytes, offset, bytes.length - offset);
+          if (count == -1) break;
+          offset += count;
+        }
+        if (offset < bytes.length) return Arrays.copyOf(bytes, offset);
+
+        int extra = input.read();
+        if (extra == -1) return bytes;
+
+        ByteArrayOutputStream out = new ByteArrayOutputStream(bytes.length + 1);
+        out.write(bytes);
+        out.write(extra);
+        byte[] buffer = new byte[8192];
+        int count;
+        while ((count = input.read(buffer)) != -1) {
+          out.write(buffer, 0, count);
+        }
+        return out.toByteArray();
+      }
     }
     ByteArrayOutputStream out = new ByteArrayOutputStream();
     entity.writeTo(out);
-    return new String(out.toByteArray(), charsetFor(entity));
+    return out.toByteArray();
+  }
+
+  private static String decodeEntity(ClassicHttpResponse response, byte[] bytes) {
+    return new String(bytes, charsetFor(response));
+  }
+
+  private static Charset charsetFor(ClassicHttpResponse response) {
+    HttpEntity entity = response.getEntity();
+    return entity == null ? StandardCharsets.UTF_8 : charsetFor(entity);
   }
 
   private static Charset charsetFor(HttpEntity entity) {

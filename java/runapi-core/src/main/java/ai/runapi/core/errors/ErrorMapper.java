@@ -93,13 +93,6 @@ public final class ErrorMapper {
       if (fromError != null) {
         return fromError;
       }
-      JsonNode errors = root.get("errors");
-      if (errors != null && errors.isArray() && errors.size() > 0) {
-        String fromErrors = extract(errors.get(0));
-        if (fromErrors != null) {
-          return fromErrors;
-        }
-      }
       for (String key : new String[] {"message", "detail", "errorMessage", "msg"}) {
         String value = extract(root.get(key));
         if (value != null) {

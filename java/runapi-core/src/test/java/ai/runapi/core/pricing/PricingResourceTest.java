@@ -46,7 +46,7 @@ class PricingResourceTest {
   }
   @Test void decodesAmountsAboveIntegerRange() {
     long amount = (long) Integer.MAX_VALUE + 1L;
-    String scheduleBody = "{\"as_of\":\"2026-07-23T12:00:00.000000Z\",\"price_schedules\":[{\"unit_price_cents\":" + amount + ",\"input_price_per_1m_cents\":" + amount + ",\"output_price_per_1m_cents\":" + amount + ",\"cache_read_price_per_1m_cents\":" + amount + ",\"cache_write_5m_price_per_1m_cents\":" + amount + ",\"cache_write_1h_price_per_1m_cents\":" + amount + "}]}";
+    String scheduleBody = "{\"as_of\":\"2026-07-23T12:00:00.000000Z\",\"price_schedules\":[{\"unit_price_cents\":" + amount + ",\"input_price_per_1m_cents\":" + amount + ",\"output_price_per_1m_cents\":" + amount + ",\"cache_read_price_per_1m_cents\":" + amount + ",\"cache_write_price_per_1m_cents\":" + amount + ",\"cache_write_5m_price_per_1m_cents\":" + amount + ",\"cache_write_1h_price_per_1m_cents\":" + amount + "}]}";
     String quoteBody = "{\"price_quote\":{\"service\":\"flux\",\"action\":\"text_to_image\",\"pricing_status\":\"available\",\"currency\":\"USD\",\"reservation_amount_cents\":" + amount + ",\"estimate_basis\":\"exact\"}}";
     PricingResource pricing = new PricingResource(new CapturingTransport(scheduleBody, quoteBody), ClientOptions.builder().build());
 
@@ -57,6 +57,7 @@ class PricingResourceTest {
     assertEquals(Long.valueOf(amount), schedule.getInputPricePer1mCents());
     assertEquals(Long.valueOf(amount), schedule.getOutputPricePer1mCents());
     assertEquals(Long.valueOf(amount), schedule.getCacheReadPricePer1mCents());
+    assertEquals(Long.valueOf(amount), schedule.getCacheWritePricePer1mCents());
     assertEquals(Long.valueOf(amount), schedule.getCacheWrite5mPricePer1mCents());
     assertEquals(Long.valueOf(amount), schedule.getCacheWrite1hPricePer1mCents());
     assertEquals(Long.valueOf(amount), quote.getReservationAmountCents());

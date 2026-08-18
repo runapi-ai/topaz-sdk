@@ -3,6 +3,7 @@ package ai.runapi.core;
 import ai.runapi.core.account.AccountClient;
 import ai.runapi.core.files.FilesClient;
 import ai.runapi.core.pricing.PricingResource;
+import ai.runapi.core.uploads.UploadsClient;
 import ai.runapi.core.http.ApacheHttpTransport;
 import ai.runapi.core.http.HttpTransport;
 import java.net.URI;
@@ -18,6 +19,7 @@ public class BaseClient implements AutoCloseable {
   private final FilesClient files;
   private final AccountClient account;
   private final PricingResource pricing;
+  private final UploadsClient uploads;
 
   /** Creates a base client from resolved options. */
   protected BaseClient(ClientOptions options) {
@@ -34,6 +36,7 @@ public class BaseClient implements AutoCloseable {
     this.files = new FilesClient(transport, options, false);
     this.account = new AccountClient(transport, options, false);
     this.pricing = new PricingResource(transport, options);
+    this.uploads = new UploadsClient(transport, options);
   }
 
   /** Creates a base client with default builder options. */
@@ -46,7 +49,7 @@ public class BaseClient implements AutoCloseable {
     return new Builder();
   }
 
-  /** File upload operations. */
+  /** Persistent File lifecycle and temporary URL upload operations. */
   public final FilesClient files() {
     return files;
   }
@@ -58,6 +61,9 @@ public class BaseClient implements AutoCloseable {
 
   /** Live Price Schedule and Price Quote operations. */
   public final PricingResource pricing() { return pricing; }
+
+  /** Multipart Upload lifecycle operations. */
+  public final UploadsClient uploads() { return uploads; }
 
   /** Shared HTTP transport for subclasses. */
   protected final HttpTransport transport() {

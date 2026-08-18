@@ -4,8 +4,10 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
@@ -14,12 +16,12 @@ import org.jspecify.annotations.Nullable;
 /** Multipart form-data body that streams file parts from disk. */
 public final class MultipartRequestBody implements RequestBody {
   private final String boundary;
-  private final Map<String, String> fields;
+  private final List<FieldPart> fields;
   private final Map<String, FilePart> files;
 
   private MultipartRequestBody(Builder builder) {
     this.boundary = "runapi-" + UUID.randomUUID().toString();
-    this.fields = Collections.unmodifiableMap(new LinkedHashMap<String, String>(builder.fields));
+    this.fields = Collections.unmodifiableList(new ArrayList<FieldPart>(builder.fields));
     this.files = Collections.unmodifiableMap(new LinkedHashMap<String, FilePart>(builder.files));
   }
 
@@ -54,10 +56,10 @@ public final class MultipartRequestBody implements RequestBody {
   @Override
   public void writeTo(OutputStream out) throws IOException {
     byte[] newline = "\r\n".getBytes("UTF-8");
-    for (Map.Entry<String, String> field : fields.entrySet()) {
+    for (FieldPart field : fields) {
       writeHeaderLine(out, "--" + boundary + "\r\n");
-      writeHeaderLine(out, "Content-Disposition: form-data; name=\"" + escape(field.getKey()) + "\"\r\n\r\n");
-      out.write(field.getValue().getBytes("UTF-8"));
+      writeHeaderLine(out, "Content-Disposition: form-data; name=\"" + escape(field.name) + "\"\r\n\r\n");
+      out.write(field.value.getBytes("UTF-8"));
       out.write(newline);
     }
     for (Map.Entry<String, FilePart> entry : files.entrySet()) {
@@ -93,14 +95,14 @@ public final class MultipartRequestBody implements RequestBody {
 
   /** Builder for {@link MultipartRequestBody}. */
   public static final class Builder {
-    private final Map<String, String> fields = new LinkedHashMap<String, String>();
+    private final List<FieldPart> fields = new ArrayList<FieldPart>();
     private final Map<String, FilePart> files = new LinkedHashMap<String, FilePart>();
 
     private Builder() {}
 
     /** Adds a string form field. */
     public Builder field(String name, String value) {
-      fields.put(requireName(name), Objects.requireNonNull(value, "value"));
+      fields.add(new FieldPart(requireName(name), Objects.requireNonNull(value, "value")));
       return this;
     }
 
@@ -113,6 +115,16 @@ public final class MultipartRequestBody implements RequestBody {
     /** Builds a multipart body. */
     public MultipartRequestBody build() {
       return new MultipartRequestBody(this);
+    }
+  }
+
+  private static final class FieldPart {
+    private final String name;
+    private final String value;
+
+    private FieldPart(String name, String value) {
+      this.name = name;
+      this.value = value;
     }
   }
 

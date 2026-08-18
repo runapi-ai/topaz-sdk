@@ -29,7 +29,7 @@ public final class ApiRequestExecutor {
     Objects.requireNonNull(responseType, "responseType");
     HttpResponse response = send(request);
     try {
-      return Json.mapper().readValue(response.getBody(), responseType);
+      return Json.mapper().readValue(response.getBodyBytes(), responseType);
     } catch (IOException e) {
       throw new RunApiException("Failed to decode response", "decode_error", response.getStatusCode(), null, response.getBody(), e);
     }

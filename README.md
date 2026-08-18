@@ -57,7 +57,7 @@ Use the Java BOM when installing multiple RunAPI Java modules:
 
 ```kotlin
 dependencies {
-  implementation(platform("ai.runapi:runapi-bom:0.2.8"))
+  implementation(platform("ai.runapi:runapi-bom:0.5.0"))
   implementation("ai.runapi:runapi-topaz")
 }
 ```

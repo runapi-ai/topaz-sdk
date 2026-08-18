@@ -24,6 +24,24 @@ class ErrorMapperTest {
   }
 
   @Test
+  void doesNotUseLegacyErrorsArrayAsMessage() {
+    RunApiException error =
+        ErrorMapper.fromResponse(400, name -> null, "{\"errors\":[\"First error\"]}", null);
+
+    assertEquals("Bad request", error.getMessage());
+  }
+
+  @Test
+  void keepsResourceValidationSummaryAndResponseBody() {
+    String responseBody =
+        "{\"error\":\"Validation failed\",\"errors\":{\"prompt\":[\"is required\"]}}";
+    RunApiException error = ErrorMapper.fromResponse(422, name -> null, responseBody, null);
+
+    assertEquals("Validation failed", error.getMessage());
+    assertEquals(responseBody, error.getResponseBody());
+  }
+
+  @Test
   void preservesExplicitHttpCodeAndLeavesMissingCodeNull() {
     RunApiException explicit =
         ErrorMapper.fromResponse(

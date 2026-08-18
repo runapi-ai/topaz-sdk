@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 
 import ai.runapi.core.ClientOptions;
 import ai.runapi.core.RequestOptions;
@@ -134,6 +135,25 @@ class FilesClientTest {
     assertFalse(transport.closed);
   }
 
+  @Test
+  void protocolFileLifecyclePreservesBinaryContent() throws Exception {
+    ProtocolTransport transport = new ProtocolTransport();
+    FilesClient client = new FilesClient(transport, options(), false);
+    Path path = Files.createTempFile("runapi-protocol-file", ".bin");
+    Files.write(path, new byte[] {0, (byte) 255, 1});
+
+    assertEquals("file_123", client.createFile(path).getId());
+    assertFalse(client.list(null, 1, "asc", null).hasMore());
+    assertEquals("input.bin", client.retrieve("file_123").getFilename());
+    assertArrayEquals(new byte[] {0, (byte) 255, 1}, client.content("file_123"));
+    assertEquals(true, client.deleteFile("file_123").isDeleted());
+
+    assertEquals("/v1/files", transport.requests.get(0).getPath());
+    assertEquals("1", transport.requests.get(1).getQuery().get("limit"));
+    assertEquals("/v1/files/file_123/content", transport.requests.get(3).getPath());
+    assertEquals(HttpMethod.DELETE, transport.requests.get(4).getMethod());
+  }
+
   private static JsonNode bodyJson(JsonRequestBody body) throws Exception {
     ByteArrayOutputStream out = new ByteArrayOutputStream();
     body.writeTo(out);
@@ -190,6 +210,28 @@ class FilesClientTest {
       uploadUrl = url;
       uploadHeaders = headers;
       uploadBody = body;
+    }
+
+    @Override
+    public void close() {}
+  }
+
+  private static final class ProtocolTransport implements HttpTransport {
+    private final List<HttpRequest> requests = new ArrayList<HttpRequest>();
+
+    @Override
+    public HttpResponse send(HttpRequest request) {
+      requests.add(request);
+      if (request.getPath().endsWith("/content")) {
+        return new HttpResponse(200, new byte[] {0, (byte) 255, 1}, Collections.<String, java.util.List<String>>emptyMap());
+      }
+      if (request.getMethod() == HttpMethod.DELETE) {
+        return new HttpResponse(200, "{\"id\":\"file_123\",\"object\":\"file\",\"deleted\":true}", Collections.<String, java.util.List<String>>emptyMap());
+      }
+      if (request.getMethod() == HttpMethod.GET && request.getPath().equals("/v1/files")) {
+        return new HttpResponse(200, "{\"object\":\"list\",\"data\":[],\"has_more\":false}", Collections.<String, java.util.List<String>>emptyMap());
+      }
+      return new HttpResponse(200, "{\"id\":\"file_123\",\"object\":\"file\",\"bytes\":3,\"created_at\":1,\"filename\":\"input.bin\",\"purpose\":\"user_data\"}", Collections.<String, java.util.List<String>>emptyMap());
     }
 
     @Override

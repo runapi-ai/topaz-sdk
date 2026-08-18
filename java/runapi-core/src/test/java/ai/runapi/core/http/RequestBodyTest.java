@@ -37,6 +37,8 @@ class RequestBodyTest {
     MultipartRequestBody body =
         MultipartRequestBody.builder()
             .field("file_name", "input.txt")
+            .field("languages[]", "en")
+            .field("languages[]", "zh")
             .file("file", file, "input.txt", "text/plain")
             .build();
 
@@ -45,6 +47,7 @@ class RequestBodyTest {
     String multipart = new String(out.toByteArray(), StandardCharsets.UTF_8);
 
     assertTrue(multipart.contains("name=\"file_name\""));
+    assertEquals(2, occurrences(multipart, "name=\"languages[]\""));
     assertTrue(multipart.contains("filename=\"input.txt\""));
     assertTrue(multipart.contains("Content-Type: text/plain"));
     assertTrue(multipart.contains("hello"));
@@ -72,5 +75,9 @@ class RequestBodyTest {
     // With US-ASCII header encoding these would have been mangled to '?'.
     assertTrue(multipart.contains("filename=\"" + fileName + "\""));
     assertTrue(multipart.contains("name=\"" + fieldName + "\""));
+  }
+
+  private static int occurrences(String value, String needle) {
+    return (value.length() - value.replace(needle, "").length()) / needle.length();
   }
 }

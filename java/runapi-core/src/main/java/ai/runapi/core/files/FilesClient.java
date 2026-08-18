@@ -9,6 +9,7 @@ import ai.runapi.core.http.HttpMethod;
 import ai.runapi.core.http.HttpRequest;
 import ai.runapi.core.http.HttpTransport;
 import ai.runapi.core.http.JsonRequestBody;
+import ai.runapi.core.http.MultipartRequestBody;
 import java.io.IOException;
 import java.net.URI;
 import java.nio.file.Files;
@@ -21,12 +22,14 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.net.URLEncoder;
 
-/** File upload client. */
+/** Persistent File lifecycle and temporary URL upload client. */
 public final class FilesClient implements AutoCloseable {
   private static final String ENDPOINT = "/api/v1/files";
   private static final String PREPARE_ENDPOINT = ENDPOINT + "/prepare";
   private static final String CONFIRM_ENDPOINT = ENDPOINT + "/confirm";
+  private static final String PROTOCOL_ENDPOINT = "/v1/files";
 
   private final HttpTransport transport;
   private final ApiRequestExecutor executor;
@@ -62,6 +65,57 @@ public final class FilesClient implements AutoCloseable {
             .body(new JsonRequestBody(params.toJsonBody()))
             .build();
     return executor.send(request, FileUploadResponse.class);
+  }
+
+  /** Uploads an OpenAI-compatible File without changing the legacy create contract. */
+  public FileObject createFile(Path path) {
+    return createFile(path, path.getFileName().toString(), "user_data", RequestOptions.none());
+  }
+
+  /** Uploads an OpenAI-compatible File with explicit metadata and options. */
+  public FileObject createFile(Path path, String fileName, String purpose, RequestOptions options) {
+    MultipartRequestBody body = MultipartRequestBody.builder()
+        .field("purpose", purpose)
+        .file("file", path, fileName, null)
+        .build();
+    HttpRequest request = HttpRequest.builder(HttpMethod.POST, PROTOCOL_ENDPOINT)
+        .options(options).body(body).build();
+    return executor.send(request, FileObject.class);
+  }
+
+  /** Lists Files with optional cursor filters. */
+  public FileListResponse list(String after, Integer limit, String order, String purpose) {
+    HttpRequest.Builder builder = HttpRequest.builder(HttpMethod.GET, PROTOCOL_ENDPOINT);
+    if (after != null) builder.query("after", after);
+    if (limit != null) builder.query("limit", String.valueOf(limit));
+    if (order != null) builder.query("order", order);
+    if (purpose != null) builder.query("purpose", purpose);
+    return executor.send(builder.build(), FileListResponse.class);
+  }
+
+  /** Retrieves File metadata. */
+  public FileObject retrieve(String fileId) {
+    return executor.send(HttpRequest.builder(HttpMethod.GET, protocolFilePath(fileId)).build(), FileObject.class);
+  }
+
+  /** Downloads exact File bytes. */
+  public byte[] content(String fileId) {
+    return executor.send(HttpRequest.builder(HttpMethod.GET, protocolFilePath(fileId) + "/content").build()).getBodyBytes();
+  }
+
+  /** Deletes a File. */
+  public DeletedFile deleteFile(String fileId) {
+    return executor.send(HttpRequest.builder(HttpMethod.DELETE, protocolFilePath(fileId)).build(), DeletedFile.class);
+  }
+
+  private static String protocolFilePath(String fileId) {
+    String checked = Objects.requireNonNull(fileId, "fileId").trim();
+    if (checked.isEmpty()) throw new IllegalArgumentException("fileId must not be blank");
+    try {
+      return PROTOCOL_ENDPOINT + "/" + URLEncoder.encode(checked, "UTF-8").replace("+", "%20");
+    } catch (java.io.UnsupportedEncodingException e) {
+      throw new IllegalStateException(e);
+    }
   }
 
   // Local files upload straight to storage: ask for a pre-authorized target, PUT

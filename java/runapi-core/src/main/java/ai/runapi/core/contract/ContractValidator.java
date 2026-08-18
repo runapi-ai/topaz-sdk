@@ -139,23 +139,63 @@ public final class ContractValidator {
       if (!conditionsMet(rule.getConditions(), params, selectedModel)) {
         continue;
       }
+      // An unconditional rule has nothing to append.
       String context = conditionDescription(rule.getConditions());
+      String qualifier = context.isEmpty() ? "" : " when " + context;
+
       for (String field : rule.getRequired()) {
         if (isBlank(params.get(field))) {
-          throw new ValidationException(field + " is required when " + context);
+          throw new ValidationException(field + " is required" + qualifier);
         }
       }
+
+      List<String> requiredAny = rule.getRequiredAny();
+      if (!requiredAny.isEmpty()) {
+        boolean satisfied = false;
+        for (String field : requiredAny) {
+          if (!isBlank(params.get(field))) {
+            satisfied = true;
+            break;
+          }
+        }
+        if (!satisfied) {
+          throw new ValidationException(
+              "one of " + join(new ArrayList<Object>(requiredAny)) + " is required" + qualifier);
+        }
+      }
+
       for (String field : rule.getForbidden()) {
         if (!isBlank(params.get(field))) {
-          throw new ValidationException(field + " is not allowed when " + context);
+          throw new ValidationException(field + " is not allowed" + qualifier);
         }
+      }
+
+      for (Map.Entry<String, List<Object>> entry : rule.getNarrowedEnums().entrySet()) {
+        Object value = params.get(entry.getKey());
+        if (isBlank(value) || containsEnumValue(entry.getValue(), value)) {
+          continue;
+        }
+        throw new ValidationException(
+            entry.getKey() + " must be one of: " + join(entry.getValue()) + qualifier);
       }
     }
   }
 
+  /**
+   * A condition is either {@code {present=Boolean}} or a scalar the supplied
+   * value must equal. Rules never resolve declared defaults.
+   */
   private static boolean conditionsMet(
       Map<String, Object> conditions, Map<String, Object> params, String selectedModel) {
     for (Map.Entry<String, Object> entry : conditions.entrySet()) {
+      Boolean presence = presenceCondition(entry.getValue());
+      if (presence != null) {
+        if (isBlank(params.get(entry.getKey())) == presence.booleanValue()) {
+          return false;
+        }
+        continue;
+      }
+
       Object value = params.get(entry.getKey());
       if (value == null && "model".equals(entry.getKey())) {
         value = selectedModel;
@@ -165,6 +205,18 @@ public final class ContractValidator {
       }
     }
     return true;
+  }
+
+  @SuppressWarnings("unchecked")
+  private static Boolean presenceCondition(Object condition) {
+    if (!(condition instanceof Map)) {
+      return null;
+    }
+    Map<String, Object> entry = (Map<String, Object>) condition;
+    if (!entry.containsKey("present")) {
+      return null;
+    }
+    return Boolean.valueOf(Boolean.TRUE.equals(entry.get("present")));
   }
 
   private static String conditionDescription(Map<String, Object> conditions) {
@@ -178,7 +230,12 @@ public final class ContractValidator {
         builder.append(" and ");
       }
       String key = keys.get(i);
-      builder.append(key).append(" is ").append(conditions.get(key));
+      Boolean presence = presenceCondition(conditions.get(key));
+      if (presence != null) {
+        builder.append(key).append(presence.booleanValue() ? " is present" : " is absent");
+      } else {
+        builder.append(key).append(" is ").append(conditions.get(key));
+      }
     }
     return builder.toString();
   }

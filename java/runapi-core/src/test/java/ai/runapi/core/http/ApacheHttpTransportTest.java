@@ -1,6 +1,7 @@
 package ai.runapi.core.http;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
@@ -62,6 +63,16 @@ class ApacheHttpTransportTest {
         exchange -> {
           captured = CapturedRequest.from(exchange);
           write(exchange, 200, "{\"as_of\":\"2026-07-23T12:00:00.000000Z\",\"price_schedules\":[]}");
+        });
+    server.createContext(
+        "/v1/files/file_123/content",
+        exchange -> {
+          byte[] bytes = new byte[] {0, (byte) 255, 1};
+          exchange.getResponseHeaders().set("Content-Type", "application/octet-stream");
+          exchange.sendResponseHeaders(200, bytes.length);
+          try (OutputStream out = exchange.getResponseBody()) {
+            out.write(bytes);
+          }
         });
     server.start();
   }
@@ -136,6 +147,22 @@ class ApacheHttpTransportTest {
       assertEquals(200, response.getStatusCode());
       // "café" must round-trip; a hardcoded UTF-8 decode would yield a replacement char.
       assertTrue(response.getBody().contains("caf" + new String(Character.toChars(0x00E9))));
+    }
+  }
+
+  @Test
+  void preservesBinaryResponsesWithoutRequiringTextDecoding() {
+    ClientOptions options =
+        ClientOptions.builder()
+            .apiKey("sk-test")
+            .baseUrl("http://127.0.0.1:" + server.getAddress().getPort())
+            .build();
+
+    try (ApacheHttpTransport transport = new ApacheHttpTransport(options)) {
+      HttpResponse response =
+          transport.send(HttpRequest.builder(HttpMethod.GET, "/v1/files/file_123/content").build());
+
+      assertArrayEquals(new byte[] {0, (byte) 255, 1}, response.getBodyBytes());
     }
   }
 

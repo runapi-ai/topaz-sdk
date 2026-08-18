@@ -37,6 +37,9 @@ public final class ContractGen {
     addActions13(contract);
     addActions14(contract);
     addActions15(contract);
+    addActions16(contract);
+    addActions17(contract);
+    addActions18(contract);
     return Collections.unmodifiableMap(contract);
   }
 
@@ -115,21 +118,69 @@ contract.put("elevenlabs/text-to-speech", new ContractAction(
             })},
           }),
           rulesByModel(new Object[][] {
-{"text-to-speech-multilingual-v2", rules(rule(conditions(new Object[][] {{"model", "text-to-speech-multilingual-v2"}}), list("voice"), list()))},
+{"text-to-speech-multilingual-v2", rules(rule(conditions(new Object[][] {{"model", "text-to-speech-multilingual-v2"}}), list("voice"), list(), list(), narrowedEnums(new Object[][] {})))},
           })));
+contract.put("fish-audio/create-voice", new ContractAction(
+    list(),
+          fieldsByModel(new Object[][] {
+            {"_", fields(new Object[][] {
+                    {"name", field(required())},
+                    {"source_audio_url", field(required())},
+            })},
+          })));
+contract.put("fish-audio/get-voice", new ContractAction(
+    list(),
+          fieldsByModel(new Object[][] {
+            {"_", fields(new Object[][] {
+                    {"voice_id", field(required())},
+            })},
+          })));
+contract.put("fish-audio/list-voices", new ContractAction(
+    list(),
+          fieldsByModel(new Object[][] {
+            {"_", fields(new Object[][] {
+                    {"page_number", field(min(Double.valueOf(1.0)))},
+                    {"page_size", field(min(Double.valueOf(1.0)), max(Double.valueOf(100.0)))},
+            })},
+          })));
+  }
+
+  private static void addActions1(Map<String, ContractAction> contract) {
 contract.put("fish-audio/text-to-speech", new ContractAction(
-    list("s1", "s2-pro"),
+    list("s1", "s2-pro", "s2.1-pro"),
           fieldsByModel(new Object[][] {
             {"s1", fields(new Object[][] {
+                    {"bitrate_kbps", field(enumValues(Integer.valueOf(64), Integer.valueOf(128), Integer.valueOf(192)))},
                     {"model", field(required())},
+                    {"output_format", field(enumValues("mp3", "wav"))},
                     {"references", field()},
+                    {"sample_rate_hz", field(enumValues(Integer.valueOf(8000), Integer.valueOf(16000), Integer.valueOf(24000), Integer.valueOf(32000), Integer.valueOf(44100)))},
                     {"text", field(required())},
+                    {"voice_id", field()},
             })},
             {"s2-pro", fields(new Object[][] {
+                    {"bitrate_kbps", field(enumValues(Integer.valueOf(64), Integer.valueOf(128), Integer.valueOf(192)))},
                     {"model", field(required())},
+                    {"output_format", field(enumValues("mp3", "wav"))},
                     {"references", field()},
+                    {"sample_rate_hz", field(enumValues(Integer.valueOf(8000), Integer.valueOf(16000), Integer.valueOf(24000), Integer.valueOf(32000), Integer.valueOf(44100)))},
                     {"text", field(required())},
+                    {"voice_id", field()},
             })},
+            {"s2.1-pro", fields(new Object[][] {
+                    {"bitrate_kbps", field(enumValues(Integer.valueOf(64), Integer.valueOf(128), Integer.valueOf(192)))},
+                    {"model", field(required())},
+                    {"output_format", field(enumValues("mp3", "wav"))},
+                    {"references", field()},
+                    {"sample_rate_hz", field(enumValues(Integer.valueOf(8000), Integer.valueOf(16000), Integer.valueOf(24000), Integer.valueOf(32000), Integer.valueOf(44100)))},
+                    {"text", field(required())},
+                    {"voice_id", field()},
+            })},
+          }),
+          rulesByModel(new Object[][] {
+{"s1", rules(rule(conditions(new Object[][] {{"output_format", "wav"}}), list(), list(), list("bitrate_kbps"), narrowedEnums(new Object[][] {})), rule(conditions(new Object[][] {{"output_format", "mp3"}}), list(), list(), list(), narrowedEnums(new Object[][] {{"sample_rate_hz", values(Integer.valueOf(32000), Integer.valueOf(44100))}})), rule(conditions(new Object[][] {{"output_format", presence(false)}}), list(), list(), list(), narrowedEnums(new Object[][] {{"sample_rate_hz", values(Integer.valueOf(32000), Integer.valueOf(44100))}})))},
+{"s2-pro", rules(rule(conditions(new Object[][] {{"output_format", "wav"}}), list(), list(), list("bitrate_kbps"), narrowedEnums(new Object[][] {})), rule(conditions(new Object[][] {{"output_format", "mp3"}}), list(), list(), list(), narrowedEnums(new Object[][] {{"sample_rate_hz", values(Integer.valueOf(32000), Integer.valueOf(44100))}})), rule(conditions(new Object[][] {{"output_format", presence(false)}}), list(), list(), list(), narrowedEnums(new Object[][] {{"sample_rate_hz", values(Integer.valueOf(32000), Integer.valueOf(44100))}})))},
+{"s2.1-pro", rules(rule(conditions(new Object[][] {{"output_format", "wav"}}), list(), list(), list("bitrate_kbps"), narrowedEnums(new Object[][] {})), rule(conditions(new Object[][] {{"output_format", "mp3"}}), list(), list(), list(), narrowedEnums(new Object[][] {{"sample_rate_hz", values(Integer.valueOf(32000), Integer.valueOf(44100))}})), rule(conditions(new Object[][] {{"output_format", presence(false)}}), list(), list(), list(), narrowedEnums(new Object[][] {{"sample_rate_hz", values(Integer.valueOf(32000), Integer.valueOf(44100))}})))},
           })));
 contract.put("flux-2/remix-image", new ContractAction(
     list("flux-2-flex-remix-image", "flux-2-max-remix-image", "flux-2-pro-remix-image"),
@@ -163,9 +214,9 @@ contract.put("flux-2/remix-image", new ContractAction(
             })},
           }),
           rulesByModel(new Object[][] {
-{"flux-2-flex-remix-image", rules(rule(conditions(new Object[][] {{"model", "flux-2-flex-remix-image"}}), list(), list("output_count")))},
-{"flux-2-max-remix-image", rules(rule(conditions(new Object[][] {{"model", "flux-2-max-remix-image"}}), list(), list("enable_safety_checker")))},
-{"flux-2-pro-remix-image", rules(rule(conditions(new Object[][] {{"model", "flux-2-pro-remix-image"}}), list(), list("output_count")))},
+{"flux-2-flex-remix-image", rules(rule(conditions(new Object[][] {{"model", "flux-2-flex-remix-image"}}), list(), list(), list("output_count"), narrowedEnums(new Object[][] {})))},
+{"flux-2-max-remix-image", rules(rule(conditions(new Object[][] {{"model", "flux-2-max-remix-image"}}), list(), list(), list("enable_safety_checker"), narrowedEnums(new Object[][] {})))},
+{"flux-2-pro-remix-image", rules(rule(conditions(new Object[][] {{"model", "flux-2-pro-remix-image"}}), list(), list(), list("output_count"), narrowedEnums(new Object[][] {})))},
           })));
 contract.put("flux-2/text-to-image", new ContractAction(
     list("flux-2-flex-text-to-image", "flux-2-max-text-to-image", "flux-2-pro-text-to-image"),
@@ -196,13 +247,10 @@ contract.put("flux-2/text-to-image", new ContractAction(
             })},
           }),
           rulesByModel(new Object[][] {
-{"flux-2-flex-text-to-image", rules(rule(conditions(new Object[][] {{"model", "flux-2-flex-text-to-image"}}), list(), list("output_count")))},
-{"flux-2-max-text-to-image", rules(rule(conditions(new Object[][] {{"model", "flux-2-max-text-to-image"}}), list(), list("enable_safety_checker")))},
-{"flux-2-pro-text-to-image", rules(rule(conditions(new Object[][] {{"model", "flux-2-pro-text-to-image"}}), list(), list("output_count")))},
+{"flux-2-flex-text-to-image", rules(rule(conditions(new Object[][] {{"model", "flux-2-flex-text-to-image"}}), list(), list(), list("output_count"), narrowedEnums(new Object[][] {})))},
+{"flux-2-max-text-to-image", rules(rule(conditions(new Object[][] {{"model", "flux-2-max-text-to-image"}}), list(), list(), list("enable_safety_checker"), narrowedEnums(new Object[][] {})))},
+{"flux-2-pro-text-to-image", rules(rule(conditions(new Object[][] {{"model", "flux-2-pro-text-to-image"}}), list(), list(), list("output_count"), narrowedEnums(new Object[][] {})))},
           })));
-  }
-
-  private static void addActions1(Map<String, ContractAction> contract) {
 contract.put("flux-kontext/text-to-image", new ContractAction(
     list("flux-kontext-max", "flux-kontext-pro"),
           fieldsByModel(new Object[][] {
@@ -296,6 +344,9 @@ contract.put("gemini-omni/create-character", new ContractAction(
                     {"reference_image_url", field(required())},
             })},
           })));
+  }
+
+  private static void addActions2(Map<String, ContractAction> contract) {
 contract.put("gemini-omni/text-to-video", new ContractAction(
     list("gemini-omni-flash-preview", "gemini-omni-text-to-video"),
           fieldsByModel(new Object[][] {
@@ -327,7 +378,7 @@ contract.put("gemini-omni/text-to-video", new ContractAction(
             })},
           }),
           rulesByModel(new Object[][] {
-{"gemini-omni-flash-preview", rules(rule(conditions(new Object[][] {{"model", "gemini-omni-flash-preview"}}), list(), list("reference_image_urls", "audio_ids", "video_list", "character_ids", "duration_seconds", "seed")))},
+{"gemini-omni-flash-preview", rules(rule(conditions(new Object[][] {{"model", "gemini-omni-flash-preview"}}), list(), list(), list("reference_image_urls", "audio_ids", "video_list", "character_ids", "duration_seconds", "seed"), narrowedEnums(new Object[][] {})))},
           })));
 contract.put("gemini-tts/text-to-speech", new ContractAction(
     list("gemini-2.5-pro-tts", "gemini-3.1-flash-tts"),
@@ -365,9 +416,6 @@ contract.put("gpt-4o-image/text-to-image", new ContractAction(
                     {"source_image_urls", field(maxItems(5))},
             })},
           })));
-  }
-
-  private static void addActions2(Map<String, ContractAction> contract) {
 contract.put("gpt-image-2/edit-image", new ContractAction(
     list("gpt-image-2"),
           fieldsByModel(new Object[][] {
@@ -425,6 +473,9 @@ contract.put("grok-imagine/edit-image", new ContractAction(
                     {"source_image_url", field(required())},
             })},
           })));
+  }
+
+  private static void addActions3(Map<String, ContractAction> contract) {
 contract.put("grok-imagine/extend", new ContractAction(
     list(),
           fieldsByModel(new Object[][] {
@@ -475,17 +526,17 @@ contract.put("grok-imagine/image-to-video", new ContractAction(
                     {"index", field()},
                     {"model", field(required())},
                     {"motion_style", field()},
-                    {"output_resolution", field(enumValues("480p", "720p"))},
+                    {"output_resolution", field(enumValues("480p", "720p", "1080p"))},
                     {"prompt", field(min(Double.valueOf(1.0)), max(Double.valueOf(4096.0)), length())},
-                    {"reference_image_urls", field()},
+                    {"reference_image_urls", field(maxItems(6))},
                     {"source_image_url", field(required())},
                     {"source_task_id", field()},
             })},
           }),
           rulesByModel(new Object[][] {
-{"grok-imagine-image-to-video", rules(rule(conditions(new Object[][] {{"model", "grok-imagine-image-to-video"}}), list(), list("reference_image_urls")))},
-{"grok-imagine-video-1.5-fast", rules(rule(conditions(new Object[][] {{"model", "grok-imagine-video-1.5-fast"}}), list(), list("source_task_id", "index", "motion_style", "enable_safety_checker")))},
-{"grok-imagine-video-1.5-preview", rules(rule(conditions(new Object[][] {{"model", "grok-imagine-video-1.5-preview"}}), list(), list("source_task_id", "index", "reference_image_urls", "motion_style", "enable_safety_checker")))},
+{"grok-imagine-image-to-video", rules(rule(conditions(new Object[][] {{"model", "grok-imagine-image-to-video"}}), list(), list(), list("reference_image_urls"), narrowedEnums(new Object[][] {})))},
+{"grok-imagine-video-1.5-fast", rules(rule(conditions(new Object[][] {{"model", "grok-imagine-video-1.5-fast"}}), list(), list(), list("source_task_id", "index", "motion_style", "enable_safety_checker"), narrowedEnums(new Object[][] {})))},
+{"grok-imagine-video-1.5-preview", rules(rule(conditions(new Object[][] {{"model", "grok-imagine-video-1.5-preview"}}), list(), list(), list("source_task_id", "index", "motion_style", "enable_safety_checker"), narrowedEnums(new Object[][] {})))},
           })));
 contract.put("grok-imagine/text-to-image", new ContractAction(
     list("grok-imagine-text-to-image"),
@@ -499,9 +550,6 @@ contract.put("grok-imagine/text-to-image", new ContractAction(
                     {"prompt", field(required(), max(Double.valueOf(5000.0)), length())},
             })},
           })));
-  }
-
-  private static void addActions3(Map<String, ContractAction> contract) {
 contract.put("grok-imagine/text-to-video", new ContractAction(
     list("grok-imagine-text-to-video", "grok-imagine-video-1.5-fast", "grok-imagine-video-1.5-preview"),
           fieldsByModel(new Object[][] {
@@ -534,15 +582,15 @@ contract.put("grok-imagine/text-to-video", new ContractAction(
                     {"enable_safety_checker", field()},
                     {"model", field(required())},
                     {"motion_style", field()},
-                    {"output_resolution", field(enumValues("480p", "720p"))},
+                    {"output_resolution", field(enumValues("480p", "720p", "1080p"))},
                     {"prompt", field(required(), min(Double.valueOf(1.0)), max(Double.valueOf(4096.0)), length())},
-                    {"reference_image_urls", field()},
+                    {"reference_image_urls", field(maxItems(7))},
             })},
           }),
           rulesByModel(new Object[][] {
-{"grok-imagine-text-to-video", rules(rule(conditions(new Object[][] {{"model", "grok-imagine-text-to-video"}}), list(), list("reference_image_urls")))},
-{"grok-imagine-video-1.5-fast", rules(rule(conditions(new Object[][] {{"model", "grok-imagine-video-1.5-fast"}}), list(), list("motion_style", "enable_safety_checker")))},
-{"grok-imagine-video-1.5-preview", rules(rule(conditions(new Object[][] {{"model", "grok-imagine-video-1.5-preview"}}), list(), list("reference_image_urls", "motion_style", "enable_safety_checker")))},
+{"grok-imagine-text-to-video", rules(rule(conditions(new Object[][] {{"model", "grok-imagine-text-to-video"}}), list(), list(), list("reference_image_urls"), narrowedEnums(new Object[][] {})))},
+{"grok-imagine-video-1.5-fast", rules(rule(conditions(new Object[][] {{"model", "grok-imagine-video-1.5-fast"}}), list(), list(), list("motion_style", "enable_safety_checker"), narrowedEnums(new Object[][] {})))},
+{"grok-imagine-video-1.5-preview", rules(rule(conditions(new Object[][] {{"model", "grok-imagine-video-1.5-preview"}}), list(), list(), list("motion_style", "enable_safety_checker"), narrowedEnums(new Object[][] {})))},
           })));
 contract.put("grok-imagine/upscale-image", new ContractAction(
     list(),
@@ -634,6 +682,9 @@ contract.put("happyhorse/edit-video", new ContractAction(
                     {"source_video_url", field(required())},
             })},
           })));
+  }
+
+  private static void addActions4(Map<String, ContractAction> contract) {
 contract.put("happyhorse/image-to-video", new ContractAction(
     list("happyhorse-1.0-i2v", "happyhorse-image-to-video"),
           fieldsByModel(new Object[][] {
@@ -730,9 +781,6 @@ contract.put("ideogram-v3/edit-image", new ContractAction(
                     {"style", field()},
             })},
           })));
-  }
-
-  private static void addActions4(Map<String, ContractAction> contract) {
 contract.put("ideogram-v3/reframe-image", new ContractAction(
     list("ideogram-v3-reframe"),
           fieldsByModel(new Object[][] {
@@ -856,6 +904,9 @@ contract.put("imagen-4/text-to-image", new ContractAction(
                     {"seed", field()},
             })},
           })));
+  }
+
+  private static void addActions5(Map<String, ContractAction> contract) {
 contract.put("infinitetalk/audio-to-video", new ContractAction(
     list("infinitetalk-from-audio"),
           fieldsByModel(new Object[][] {
@@ -917,9 +968,6 @@ contract.put("kling/extend-video", new ContractAction(
                     {"source_task_id", field(required())},
             })},
           })));
-  }
-
-  private static void addActions5(Map<String, ContractAction> contract) {
 contract.put("kling/image-to-video", new ContractAction(
     list("kling-o1", "kling-v2.1-master-image-to-video", "kling-v2.1-pro", "kling-v2.1-standard", "kling-v2.5-turbo-image-to-video-pro", "kling-v2.6", "kling-v3-omni", "kling-v3-turbo-image-to-video"),
           fieldsByModel(new Object[][] {
@@ -1014,14 +1062,14 @@ contract.put("kling/image-to-video", new ContractAction(
             })},
           }),
           rulesByModel(new Object[][] {
-{"kling-o1", rules(rule(conditions(new Object[][] {{"model", "kling-o1"}}), list(), list("output_resolution", "negative_prompt", "cfg_scale")))},
-{"kling-v2.1-master-image-to-video", rules(rule(conditions(new Object[][] {{"model", "kling-v2.1-master-image-to-video"}}), list(), list("output_resolution", "enable_sound", "reference_image_urls", "reference_video_url", "reference_video_type", "preserve_reference_video_audio")))},
-{"kling-v2.1-pro", rules(rule(conditions(new Object[][] {{"model", "kling-v2.1-pro"}}), list(), list("output_resolution", "enable_sound", "reference_image_urls", "reference_video_url", "reference_video_type", "preserve_reference_video_audio")))},
-{"kling-v2.1-standard", rules(rule(conditions(new Object[][] {{"model", "kling-v2.1-standard"}}), list(), list("output_resolution", "enable_sound", "reference_image_urls", "reference_video_url", "reference_video_type", "preserve_reference_video_audio")))},
-{"kling-v2.5-turbo-image-to-video-pro", rules(rule(conditions(new Object[][] {{"model", "kling-v2.5-turbo-image-to-video-pro"}}), list(), list("output_resolution", "enable_sound", "reference_image_urls", "reference_video_url", "reference_video_type", "preserve_reference_video_audio")))},
-{"kling-v2.6", rules(rule(conditions(new Object[][] {{"model", "kling-v2.6"}}), list(), list("output_resolution", "negative_prompt", "cfg_scale", "reference_image_urls", "reference_video_url", "reference_video_type", "preserve_reference_video_audio")))},
-{"kling-v3-omni", rules(rule(conditions(new Object[][] {{"model", "kling-v3-omni"}}), list(), list("negative_prompt", "cfg_scale", "reference_image_urls", "reference_video_url", "reference_video_type", "preserve_reference_video_audio")))},
-{"kling-v3-turbo-image-to-video", rules(rule(conditions(new Object[][] {{"model", "kling-v3-turbo-image-to-video"}}), list(), list("enable_sound", "aspect_ratio", "negative_prompt", "cfg_scale", "last_frame_image_url", "reference_image_urls", "reference_video_url", "reference_video_type", "preserve_reference_video_audio")))},
+{"kling-o1", rules(rule(conditions(new Object[][] {{"model", "kling-o1"}}), list(), list(), list("output_resolution", "negative_prompt", "cfg_scale"), narrowedEnums(new Object[][] {})))},
+{"kling-v2.1-master-image-to-video", rules(rule(conditions(new Object[][] {{"model", "kling-v2.1-master-image-to-video"}}), list(), list(), list("output_resolution", "enable_sound", "reference_image_urls", "reference_video_url", "reference_video_type", "preserve_reference_video_audio"), narrowedEnums(new Object[][] {})))},
+{"kling-v2.1-pro", rules(rule(conditions(new Object[][] {{"model", "kling-v2.1-pro"}}), list(), list(), list("output_resolution", "enable_sound", "reference_image_urls", "reference_video_url", "reference_video_type", "preserve_reference_video_audio"), narrowedEnums(new Object[][] {})))},
+{"kling-v2.1-standard", rules(rule(conditions(new Object[][] {{"model", "kling-v2.1-standard"}}), list(), list(), list("output_resolution", "enable_sound", "reference_image_urls", "reference_video_url", "reference_video_type", "preserve_reference_video_audio"), narrowedEnums(new Object[][] {})))},
+{"kling-v2.5-turbo-image-to-video-pro", rules(rule(conditions(new Object[][] {{"model", "kling-v2.5-turbo-image-to-video-pro"}}), list(), list(), list("output_resolution", "enable_sound", "reference_image_urls", "reference_video_url", "reference_video_type", "preserve_reference_video_audio"), narrowedEnums(new Object[][] {})))},
+{"kling-v2.6", rules(rule(conditions(new Object[][] {{"model", "kling-v2.6"}}), list(), list(), list("output_resolution", "negative_prompt", "cfg_scale", "reference_image_urls", "reference_video_url", "reference_video_type", "preserve_reference_video_audio"), narrowedEnums(new Object[][] {})))},
+{"kling-v3-omni", rules(rule(conditions(new Object[][] {{"model", "kling-v3-omni"}}), list(), list(), list("negative_prompt", "cfg_scale", "reference_image_urls", "reference_video_url", "reference_video_type", "preserve_reference_video_audio"), narrowedEnums(new Object[][] {})))},
+{"kling-v3-turbo-image-to-video", rules(rule(conditions(new Object[][] {{"model", "kling-v3-turbo-image-to-video"}}), list(), list(), list("enable_sound", "aspect_ratio", "negative_prompt", "cfg_scale", "last_frame_image_url", "reference_image_urls", "reference_video_url", "reference_video_type", "preserve_reference_video_audio"), narrowedEnums(new Object[][] {})))},
           })));
 contract.put("kling/motion-control", new ContractAction(
     list("kling-3.0", "kling-v2.6"),
@@ -1047,7 +1095,7 @@ contract.put("kling/motion-control", new ContractAction(
             })},
           }),
           rulesByModel(new Object[][] {
-{"kling-v2.6", rules(rule(conditions(new Object[][] {{"model", "kling-v2.6"}}), list(), list("background_source")))},
+{"kling-v2.6", rules(rule(conditions(new Object[][] {{"model", "kling-v2.6"}}), list(), list(), list("background_source"), narrowedEnums(new Object[][] {})))},
           })));
   }
 
@@ -1132,13 +1180,13 @@ contract.put("kling/text-to-video", new ContractAction(
             })},
           }),
           rulesByModel(new Object[][] {
-{"kling-3.0", rules(rule(conditions(new Object[][] {{"model", "kling-3.0"}}), list(), list("reference_image_urls", "reference_video_url", "reference_video_type", "preserve_reference_video_audio")))},
-{"kling-o1", rules(rule(conditions(new Object[][] {{"model", "kling-o1"}}), list(), list("output_resolution", "negative_prompt", "cfg_scale", "multi_shots", "multi_prompt", "first_frame_image_url", "last_frame_image_url", "kling_elements")))},
-{"kling-v2.1-master-text-to-video", rules(rule(conditions(new Object[][] {{"model", "kling-v2.1-master-text-to-video"}}), list(), list("mode", "reference_image_urls", "reference_video_url", "reference_video_type", "preserve_reference_video_audio")))},
-{"kling-v2.5-turbo-text-to-video-pro", rules(rule(conditions(new Object[][] {{"model", "kling-v2.5-turbo-text-to-video-pro"}}), list(), list("mode", "reference_image_urls", "reference_video_url", "reference_video_type", "preserve_reference_video_audio")))},
-{"kling-v2.6", rules(rule(conditions(new Object[][] {{"model", "kling-v2.6"}}), list(), list("output_resolution", "negative_prompt", "cfg_scale", "multi_shots", "multi_prompt", "first_frame_image_url", "last_frame_image_url", "kling_elements", "reference_image_urls", "reference_video_url", "reference_video_type", "preserve_reference_video_audio")))},
-{"kling-v3-omni", rules(rule(conditions(new Object[][] {{"model", "kling-v3-omni"}}), list(), list("negative_prompt", "cfg_scale", "multi_shots", "multi_prompt", "first_frame_image_url", "last_frame_image_url", "kling_elements", "reference_image_urls", "reference_video_url", "reference_video_type", "preserve_reference_video_audio")))},
-{"kling-v3-turbo-text-to-video", rules(rule(conditions(new Object[][] {{"model", "kling-v3-turbo-text-to-video"}}), list(), list("enable_sound", "negative_prompt", "cfg_scale", "multi_shots", "multi_prompt", "first_frame_image_url", "last_frame_image_url", "kling_elements", "reference_image_urls", "reference_video_url", "reference_video_type", "preserve_reference_video_audio")))},
+{"kling-3.0", rules(rule(conditions(new Object[][] {{"model", "kling-3.0"}}), list(), list(), list("reference_image_urls", "reference_video_url", "reference_video_type", "preserve_reference_video_audio"), narrowedEnums(new Object[][] {})))},
+{"kling-o1", rules(rule(conditions(new Object[][] {{"model", "kling-o1"}}), list(), list(), list("output_resolution", "negative_prompt", "cfg_scale", "multi_shots", "multi_prompt", "first_frame_image_url", "last_frame_image_url", "kling_elements"), narrowedEnums(new Object[][] {})))},
+{"kling-v2.1-master-text-to-video", rules(rule(conditions(new Object[][] {{"model", "kling-v2.1-master-text-to-video"}}), list(), list(), list("mode", "reference_image_urls", "reference_video_url", "reference_video_type", "preserve_reference_video_audio"), narrowedEnums(new Object[][] {})))},
+{"kling-v2.5-turbo-text-to-video-pro", rules(rule(conditions(new Object[][] {{"model", "kling-v2.5-turbo-text-to-video-pro"}}), list(), list(), list("mode", "reference_image_urls", "reference_video_url", "reference_video_type", "preserve_reference_video_audio"), narrowedEnums(new Object[][] {})))},
+{"kling-v2.6", rules(rule(conditions(new Object[][] {{"model", "kling-v2.6"}}), list(), list(), list("output_resolution", "negative_prompt", "cfg_scale", "multi_shots", "multi_prompt", "first_frame_image_url", "last_frame_image_url", "kling_elements", "reference_image_urls", "reference_video_url", "reference_video_type", "preserve_reference_video_audio"), narrowedEnums(new Object[][] {})))},
+{"kling-v3-omni", rules(rule(conditions(new Object[][] {{"model", "kling-v3-omni"}}), list(), list(), list("negative_prompt", "cfg_scale", "multi_shots", "multi_prompt", "first_frame_image_url", "last_frame_image_url", "kling_elements", "reference_image_urls", "reference_video_url", "reference_video_type", "preserve_reference_video_audio"), narrowedEnums(new Object[][] {})))},
+{"kling-v3-turbo-text-to-video", rules(rule(conditions(new Object[][] {{"model", "kling-v3-turbo-text-to-video"}}), list(), list(), list("enable_sound", "negative_prompt", "cfg_scale", "multi_shots", "multi_prompt", "first_frame_image_url", "last_frame_image_url", "kling_elements", "reference_image_urls", "reference_video_url", "reference_video_type", "preserve_reference_video_audio"), narrowedEnums(new Object[][] {})))},
           })));
 contract.put("luma/modify-video", new ContractAction(
     list("luma-modify-video"),
@@ -1220,6 +1268,40 @@ contract.put("midjourney/text-to-image", new ContractAction(
                     {"prompt", field(required())},
             })},
           })));
+contract.put("minimax-h3/image-to-video", new ContractAction(
+    list("minimax-h3"),
+          fieldsByModel(new Object[][] {
+            {"minimax-h3", fields(new Object[][] {
+                    {"callback_url", field()},
+                    {"duration_seconds", field(enumValues(Integer.valueOf(4), Integer.valueOf(5), Integer.valueOf(6), Integer.valueOf(7), Integer.valueOf(8), Integer.valueOf(9), Integer.valueOf(10), Integer.valueOf(11), Integer.valueOf(12), Integer.valueOf(13), Integer.valueOf(14), Integer.valueOf(15)))},
+                    {"first_frame_image_url", field()},
+                    {"last_frame_image_url", field()},
+                    {"model", field(required())},
+                    {"output_resolution", field(enumValues("768p", "2k"))},
+                    {"prompt", field(required(), min(Double.valueOf(1.0)), max(Double.valueOf(7000.0)), length())},
+            })},
+          }),
+          rulesByModel(new Object[][] {
+{"minimax-h3", rules(rule(conditions(new Object[][] {}), list(), list("first_frame_image_url", "last_frame_image_url"), list(), narrowedEnums(new Object[][] {})))},
+          })));
+contract.put("minimax-h3/text-to-video", new ContractAction(
+    list("minimax-h3"),
+          fieldsByModel(new Object[][] {
+            {"minimax-h3", fields(new Object[][] {
+                    {"aspect_ratio", field(enumValues("adaptive", "21:9", "16:9", "4:3", "1:1", "3:4", "9:16"))},
+                    {"callback_url", field()},
+                    {"duration_seconds", field(enumValues(Integer.valueOf(4), Integer.valueOf(5), Integer.valueOf(6), Integer.valueOf(7), Integer.valueOf(8), Integer.valueOf(9), Integer.valueOf(10), Integer.valueOf(11), Integer.valueOf(12), Integer.valueOf(13), Integer.valueOf(14), Integer.valueOf(15)))},
+                    {"model", field(required())},
+                    {"output_resolution", field(enumValues("768p", "2k"))},
+                    {"prompt", field(required(), min(Double.valueOf(1.0)), max(Double.valueOf(7000.0)), length())},
+                    {"reference_audio_urls", field(maxItems(3))},
+                    {"reference_image_urls", field(maxItems(9))},
+                    {"reference_video_urls", field(maxItems(3))},
+            })},
+          }),
+          rulesByModel(new Object[][] {
+{"minimax-h3", rules(rule(conditions(new Object[][] {{"reference_audio_urls", presence(true)}}), list(), list("reference_image_urls", "reference_video_urls"), list(), narrowedEnums(new Object[][] {})), rule(conditions(new Object[][] {{"reference_image_urls", presence(false)}, {"reference_video_urls", presence(false)}}), list("aspect_ratio"), list(), list(), narrowedEnums(new Object[][] {{"aspect_ratio", values("21:9", "16:9", "4:3", "1:1", "3:4", "9:16")}})))},
+          })));
 contract.put("nano-banana/edit-image", new ContractAction(
     list("nano-banana-2-lite", "nano-banana-edit"),
           fieldsByModel(new Object[][] {
@@ -1240,7 +1322,7 @@ contract.put("nano-banana/edit-image", new ContractAction(
             })},
           }),
           rulesByModel(new Object[][] {
-{"nano-banana-2-lite", rules(rule(conditions(new Object[][] {{"model", "nano-banana-2-lite"}}), list(), list("output_format")))},
+{"nano-banana-2-lite", rules(rule(conditions(new Object[][] {{"model", "nano-banana-2-lite"}}), list(), list(), list("output_format"), narrowedEnums(new Object[][] {})))},
           })));
 contract.put("nano-banana/text-to-image", new ContractAction(
     list("nano-banana", "nano-banana-2", "nano-banana-2-lite", "nano-banana-pro"),
@@ -1281,7 +1363,7 @@ contract.put("nano-banana/text-to-image", new ContractAction(
             })},
           }),
           rulesByModel(new Object[][] {
-{"nano-banana-2-lite", rules(rule(conditions(new Object[][] {{"model", "nano-banana-2-lite"}}), list(), list("output_resolution", "output_format")))},
+{"nano-banana-2-lite", rules(rule(conditions(new Object[][] {{"model", "nano-banana-2-lite"}}), list(), list(), list("output_resolution", "output_format"), narrowedEnums(new Object[][] {})))},
           })));
 contract.put("omnihuman/audio-to-video", new ContractAction(
     list("omnihuman-1.5"),
@@ -1292,7 +1374,7 @@ contract.put("omnihuman/audio-to-video", new ContractAction(
                     {"mask_urls", field(maxItems(5))},
                     {"model", field()},
                     {"output_resolution", field(enumValues("720p", "1080p"))},
-                    {"prompt", field(max(Double.valueOf(1000.0)), length())},
+                    {"prompt", field(max(Double.valueOf(300.0)), length())},
                     {"seed", field()},
                     {"source_audio_url", field(required())},
                     {"source_image_url", field(required())},
@@ -1316,6 +1398,34 @@ contract.put("omnihuman/subject-detection", new ContractAction(
                     {"source_image_url", field(required())},
             })},
           })));
+  }
+
+  private static void addActions8(Map<String, ContractAction> contract) {
+contract.put("openai-transcription/speech-to-text", new ContractAction(
+    list("gpt-transcribe", "whisper-1"),
+          fieldsByModel(new Object[][] {
+            {"gpt-transcribe", fields(new Object[][] {
+                    {"file", field(required())},
+                    {"keywords", field()},
+                    {"language", field()},
+                    {"languages", field()},
+                    {"model", field(enumValues("gpt-transcribe"))},
+                    {"prompt", field()},
+                    {"response_format", field(enumValues("json", "text"))},
+                    {"stream", field()},
+                    {"temperature", field(min(Double.valueOf(0.0)), max(Double.valueOf(1.0)))},
+            })},
+            {"whisper-1", fields(new Object[][] {
+                    {"file", field(required())},
+                    {"language", field()},
+                    {"model", field(enumValues("whisper-1"))},
+                    {"prompt", field()},
+                    {"response_format", field(enumValues("json", "text", "srt", "verbose_json", "vtt"))},
+                    {"stream", field()},
+                    {"temperature", field(min(Double.valueOf(0.0)), max(Double.valueOf(1.0)))},
+                    {"timestamp_granularities", field(maxItems(2))},
+            })},
+          })));
 contract.put("openai-tts/text-to-speech", new ContractAction(
     list("tts-1", "tts-1-hd"),
           fieldsByModel(new Object[][] {
@@ -1326,6 +1436,80 @@ contract.put("openai-tts/text-to-speech", new ContractAction(
             {"tts-1-hd", fields(new Object[][] {
                     {"model", field(required())},
                     {"text", field(required(), max(Double.valueOf(4096.0)), length())},
+            })},
+          })));
+contract.put("pixverse/edit-video", new ContractAction(
+    list("pixverse-v6"),
+          fieldsByModel(new Object[][] {
+            {"pixverse-v6", fields(new Object[][] {
+                    {"aspect_ratio", field(required(), enumValues("16:9", "4:3", "1:1", "3:4", "9:16", "2:3", "3:2", "21:9"))},
+                    {"callback_url", field()},
+                    {"duration_seconds", field(required(), min(Double.valueOf(1.0)), max(Double.valueOf(15.0)))},
+                    {"enable_audio", field(enumValues(true, false))},
+                    {"model", field(required())},
+                    {"output_resolution", field(required(), enumValues("360p", "540p", "720p", "1080p"))},
+                    {"prompt", field(required(), min(Double.valueOf(3.0)), max(Double.valueOf(5000.0)), length())},
+                    {"reference_image_urls", field(required(), minItems(1), maxItems(7))},
+                    {"seed", field(min(Double.valueOf(0.0)), max(Double.valueOf(2147483647.0)))},
+            })},
+          })));
+contract.put("pixverse/extend-video", new ContractAction(
+    list("pixverse-v6"),
+          fieldsByModel(new Object[][] {
+            {"pixverse-v6", fields(new Object[][] {
+                    {"callback_url", field()},
+                    {"duration_seconds", field(required(), min(Double.valueOf(1.0)), max(Double.valueOf(15.0)))},
+                    {"enable_audio", field(enumValues(true, false))},
+                    {"model", field(required())},
+                    {"output_resolution", field(required(), enumValues("360p", "540p", "720p", "1080p"))},
+                    {"prompt", field(required(), min(Double.valueOf(3.0)), max(Double.valueOf(5000.0)), length())},
+                    {"seed", field(min(Double.valueOf(0.0)), max(Double.valueOf(2147483647.0)))},
+                    {"source_task_id", field(required())},
+            })},
+          })));
+contract.put("pixverse/image-to-video", new ContractAction(
+    list("pixverse-v6"),
+          fieldsByModel(new Object[][] {
+            {"pixverse-v6", fields(new Object[][] {
+                    {"callback_url", field()},
+                    {"duration_seconds", field(required(), min(Double.valueOf(1.0)), max(Double.valueOf(15.0)))},
+                    {"enable_audio", field(enumValues(true, false))},
+                    {"enable_multi_clip", field()},
+                    {"first_frame_image_url", field(required())},
+                    {"model", field(required())},
+                    {"output_resolution", field(required(), enumValues("360p", "540p", "720p", "1080p"))},
+                    {"prompt", field(required(), min(Double.valueOf(3.0)), max(Double.valueOf(5000.0)), length())},
+                    {"seed", field(min(Double.valueOf(0.0)), max(Double.valueOf(2147483647.0)))},
+            })},
+          })));
+contract.put("pixverse/text-to-video", new ContractAction(
+    list("pixverse-v6"),
+          fieldsByModel(new Object[][] {
+            {"pixverse-v6", fields(new Object[][] {
+                    {"aspect_ratio", field(required(), enumValues("16:9", "4:3", "1:1", "3:4", "9:16", "2:3", "3:2", "21:9"))},
+                    {"callback_url", field()},
+                    {"duration_seconds", field(required(), min(Double.valueOf(1.0)), max(Double.valueOf(15.0)))},
+                    {"enable_audio", field(enumValues(true, false))},
+                    {"enable_multi_clip", field()},
+                    {"model", field(required())},
+                    {"output_resolution", field(required(), enumValues("360p", "540p", "720p", "1080p"))},
+                    {"prompt", field(required(), min(Double.valueOf(3.0)), max(Double.valueOf(5000.0)), length())},
+                    {"seed", field(min(Double.valueOf(0.0)), max(Double.valueOf(2147483647.0)))},
+            })},
+          })));
+contract.put("pixverse/transition-video", new ContractAction(
+    list("pixverse-v6"),
+          fieldsByModel(new Object[][] {
+            {"pixverse-v6", fields(new Object[][] {
+                    {"callback_url", field()},
+                    {"duration_seconds", field(required(), min(Double.valueOf(1.0)), max(Double.valueOf(15.0)))},
+                    {"enable_audio", field(enumValues(true, false))},
+                    {"first_frame_image_url", field(required())},
+                    {"last_frame_image_url", field(required())},
+                    {"model", field(required())},
+                    {"output_resolution", field(required(), enumValues("360p", "540p", "720p", "1080p"))},
+                    {"prompt", field(required(), min(Double.valueOf(3.0)), max(Double.valueOf(5000.0)), length())},
+                    {"seed", field(min(Double.valueOf(0.0)), max(Double.valueOf(2147483647.0)))},
             })},
           })));
 contract.put("producer/text-to-music", new ContractAction(
@@ -1397,18 +1581,18 @@ contract.put("producer/text-to-music", new ContractAction(
             })},
           }),
           rulesByModel(new Object[][] {
-{"fuzz-0.8", rules(rule(conditions(new Object[][] {{"vocal_mode", "exact_lyrics"}}), list("lyrics"), list()), rule(conditions(new Object[][] {{"vocal_mode", "instrumental"}}), list(), list("lyrics")))},
-{"fuzz-1.0", rules(rule(conditions(new Object[][] {{"vocal_mode", "exact_lyrics"}}), list("lyrics"), list()), rule(conditions(new Object[][] {{"vocal_mode", "instrumental"}}), list(), list("lyrics")))},
-{"fuzz-1.0-pro", rules(rule(conditions(new Object[][] {{"vocal_mode", "exact_lyrics"}}), list("lyrics"), list()), rule(conditions(new Object[][] {{"vocal_mode", "instrumental"}}), list(), list("lyrics")))},
-{"fuzz-1.1", rules(rule(conditions(new Object[][] {{"vocal_mode", "exact_lyrics"}}), list("lyrics"), list()), rule(conditions(new Object[][] {{"vocal_mode", "instrumental"}}), list(), list("lyrics")))},
-{"fuzz-1.1-pro", rules(rule(conditions(new Object[][] {{"vocal_mode", "exact_lyrics"}}), list("lyrics"), list()), rule(conditions(new Object[][] {{"vocal_mode", "instrumental"}}), list(), list("lyrics")))},
-{"fuzz-2.0", rules(rule(conditions(new Object[][] {{"vocal_mode", "exact_lyrics"}}), list("lyrics"), list()), rule(conditions(new Object[][] {{"vocal_mode", "instrumental"}}), list(), list("lyrics")))},
-{"fuzz-2.0-pro", rules(rule(conditions(new Object[][] {{"vocal_mode", "exact_lyrics"}}), list("lyrics"), list()), rule(conditions(new Object[][] {{"vocal_mode", "instrumental"}}), list(), list("lyrics")))},
-{"fuzz-2.0-raw", rules(rule(conditions(new Object[][] {{"vocal_mode", "exact_lyrics"}}), list("lyrics"), list()), rule(conditions(new Object[][] {{"vocal_mode", "instrumental"}}), list(), list("lyrics")))},
+{"fuzz-0.8", rules(rule(conditions(new Object[][] {{"vocal_mode", "exact_lyrics"}}), list("lyrics"), list(), list(), narrowedEnums(new Object[][] {})), rule(conditions(new Object[][] {{"vocal_mode", "instrumental"}}), list(), list(), list("lyrics"), narrowedEnums(new Object[][] {})))},
+{"fuzz-1.0", rules(rule(conditions(new Object[][] {{"vocal_mode", "exact_lyrics"}}), list("lyrics"), list(), list(), narrowedEnums(new Object[][] {})), rule(conditions(new Object[][] {{"vocal_mode", "instrumental"}}), list(), list(), list("lyrics"), narrowedEnums(new Object[][] {})))},
+{"fuzz-1.0-pro", rules(rule(conditions(new Object[][] {{"vocal_mode", "exact_lyrics"}}), list("lyrics"), list(), list(), narrowedEnums(new Object[][] {})), rule(conditions(new Object[][] {{"vocal_mode", "instrumental"}}), list(), list(), list("lyrics"), narrowedEnums(new Object[][] {})))},
+{"fuzz-1.1", rules(rule(conditions(new Object[][] {{"vocal_mode", "exact_lyrics"}}), list("lyrics"), list(), list(), narrowedEnums(new Object[][] {})), rule(conditions(new Object[][] {{"vocal_mode", "instrumental"}}), list(), list(), list("lyrics"), narrowedEnums(new Object[][] {})))},
+{"fuzz-1.1-pro", rules(rule(conditions(new Object[][] {{"vocal_mode", "exact_lyrics"}}), list("lyrics"), list(), list(), narrowedEnums(new Object[][] {})), rule(conditions(new Object[][] {{"vocal_mode", "instrumental"}}), list(), list(), list("lyrics"), narrowedEnums(new Object[][] {})))},
+{"fuzz-2.0", rules(rule(conditions(new Object[][] {{"vocal_mode", "exact_lyrics"}}), list("lyrics"), list(), list(), narrowedEnums(new Object[][] {})), rule(conditions(new Object[][] {{"vocal_mode", "instrumental"}}), list(), list(), list("lyrics"), narrowedEnums(new Object[][] {})))},
+{"fuzz-2.0-pro", rules(rule(conditions(new Object[][] {{"vocal_mode", "exact_lyrics"}}), list("lyrics"), list(), list(), narrowedEnums(new Object[][] {})), rule(conditions(new Object[][] {{"vocal_mode", "instrumental"}}), list(), list(), list("lyrics"), narrowedEnums(new Object[][] {})))},
+{"fuzz-2.0-raw", rules(rule(conditions(new Object[][] {{"vocal_mode", "exact_lyrics"}}), list("lyrics"), list(), list(), narrowedEnums(new Object[][] {})), rule(conditions(new Object[][] {{"vocal_mode", "instrumental"}}), list(), list(), list("lyrics"), narrowedEnums(new Object[][] {})))},
           })));
   }
 
-  private static void addActions8(Map<String, ContractAction> contract) {
+  private static void addActions9(Map<String, ContractAction> contract) {
 contract.put("qwen-2/edit-image", new ContractAction(
     list("qwen-2-edit-image"),
           fieldsByModel(new Object[][] {
@@ -1434,6 +1618,64 @@ contract.put("qwen-2/text-to-image", new ContractAction(
                     {"output_format", field(enumValues("png", "jpeg"))},
                     {"prompt", field(required())},
                     {"seed", field()},
+            })},
+          })));
+contract.put("qwen-3/edit-image", new ContractAction(
+    list("qwen-3-edit-image", "qwen-3-pro-edit-image"),
+          fieldsByModel(new Object[][] {
+            {"qwen-3-edit-image", fields(new Object[][] {
+                    {"aspect_ratio", field(enumValues("1:1", "3:2", "2:3", "4:3", "3:4", "16:9", "9:16", "21:9"))},
+                    {"callback_url", field()},
+                    {"enable_prompt_expansion", field()},
+                    {"enable_safety_checker", field()},
+                    {"model", field(required())},
+                    {"negative_prompt", field(min(Double.valueOf(0.0)), max(Double.valueOf(5000.0)), length())},
+                    {"output_format", field(enumValues("png", "jpeg"))},
+                    {"output_resolution", field(enumValues("1k", "2k"))},
+                    {"prompt", field(required(), min(Double.valueOf(1.0)), max(Double.valueOf(800.0)), length())},
+                    {"seed", field(min(Double.valueOf(0.0)), max(Double.valueOf(2147483647.0)))},
+                    {"source_image_urls", field(required(), minItems(1), maxItems(3))},
+            })},
+            {"qwen-3-pro-edit-image", fields(new Object[][] {
+                    {"aspect_ratio", field(enumValues("1:1", "3:2", "2:3", "4:3", "3:4", "16:9", "9:16", "21:9"))},
+                    {"callback_url", field()},
+                    {"enable_prompt_expansion", field()},
+                    {"enable_safety_checker", field()},
+                    {"model", field(required())},
+                    {"negative_prompt", field(min(Double.valueOf(0.0)), max(Double.valueOf(5000.0)), length())},
+                    {"output_format", field(enumValues("png", "jpeg"))},
+                    {"output_resolution", field(enumValues("1k", "2k"))},
+                    {"prompt", field(required(), min(Double.valueOf(1.0)), max(Double.valueOf(800.0)), length())},
+                    {"seed", field(min(Double.valueOf(0.0)), max(Double.valueOf(2147483647.0)))},
+                    {"source_image_urls", field(required(), minItems(1), maxItems(3))},
+            })},
+          })));
+contract.put("qwen-3/text-to-image", new ContractAction(
+    list("qwen-3-pro-text-to-image", "qwen-3-text-to-image"),
+          fieldsByModel(new Object[][] {
+            {"qwen-3-pro-text-to-image", fields(new Object[][] {
+                    {"aspect_ratio", field(enumValues("1:1", "3:2", "2:3", "4:3", "3:4", "16:9", "9:16", "21:9"))},
+                    {"callback_url", field()},
+                    {"enable_prompt_expansion", field()},
+                    {"enable_safety_checker", field()},
+                    {"model", field(required())},
+                    {"negative_prompt", field(min(Double.valueOf(0.0)), max(Double.valueOf(5000.0)), length())},
+                    {"output_format", field(enumValues("png", "jpeg"))},
+                    {"output_resolution", field(enumValues("1k", "2k"))},
+                    {"prompt", field(required(), min(Double.valueOf(1.0)), max(Double.valueOf(800.0)), length())},
+                    {"seed", field(min(Double.valueOf(0.0)), max(Double.valueOf(2147483647.0)))},
+            })},
+            {"qwen-3-text-to-image", fields(new Object[][] {
+                    {"aspect_ratio", field(enumValues("1:1", "3:2", "2:3", "4:3", "3:4", "16:9", "9:16", "21:9"))},
+                    {"callback_url", field()},
+                    {"enable_prompt_expansion", field()},
+                    {"enable_safety_checker", field()},
+                    {"model", field(required())},
+                    {"negative_prompt", field(min(Double.valueOf(0.0)), max(Double.valueOf(5000.0)), length())},
+                    {"output_format", field(enumValues("png", "jpeg"))},
+                    {"output_resolution", field(enumValues("1k", "2k"))},
+                    {"prompt", field(required(), min(Double.valueOf(1.0)), max(Double.valueOf(800.0)), length())},
+                    {"seed", field(min(Double.valueOf(0.0)), max(Double.valueOf(2147483647.0)))},
             })},
           })));
 contract.put("qwen-image/edit-image", new ContractAction(
@@ -1483,6 +1725,9 @@ contract.put("recraft/remove-background", new ContractAction(
                     {"source_image_url", field(required())},
             })},
           })));
+  }
+
+  private static void addActions10(Map<String, ContractAction> contract) {
 contract.put("recraft/upscale-image", new ContractAction(
     list("recraft-crisp-upscale"),
           fieldsByModel(new Object[][] {
@@ -1506,9 +1751,6 @@ contract.put("runway-aleph/edit-video", new ContractAction(
                     {"watermark", field()},
             })},
           })));
-  }
-
-  private static void addActions9(Map<String, ContractAction> contract) {
 contract.put("runway/extend-video", new ContractAction(
     list("runway"),
           fieldsByModel(new Object[][] {
@@ -1534,9 +1776,12 @@ contract.put("runway/text-to-video", new ContractAction(
                     {"prompt", field(required())},
                     {"watermark", field()},
             })},
+          }),
+          rulesByModel(new Object[][] {
+{"runway", rules(rule(conditions(new Object[][] {{"first_frame_image_url", presence(false)}}), list("aspect_ratio"), list(), list(), narrowedEnums(new Object[][] {})), rule(conditions(new Object[][] {{"first_frame_image_url", presence(true)}}), list(), list(), list("aspect_ratio"), narrowedEnums(new Object[][] {})))},
           })));
 contract.put("seedance/text-to-video", new ContractAction(
-    list("seedance-1.5-pro", "seedance-2-mini", "seedance-2.0", "seedance-2.0-fast", "seedance-v1-lite", "seedance-v1-pro", "seedance-v1-pro-fast"),
+    list("seedance-1.5-pro", "seedance-2-mini", "seedance-2.0", "seedance-2.0-fast", "seedance-2.5", "seedance-v1-pro", "seedance-v1-pro-fast"),
           fieldsByModel(new Object[][] {
             {"seedance-1.5-pro", fields(new Object[][] {
                     {"aspect_ratio", field(enumValues("1:1", "4:3", "3:4", "16:9", "9:16", "21:9"))},
@@ -1598,18 +1843,23 @@ contract.put("seedance/text-to-video", new ContractAction(
                     {"reference_video_urls", field(maxItems(3))},
                     {"web_search", field()},
             })},
-            {"seedance-v1-lite", fields(new Object[][] {
-                    {"aspect_ratio", field(enumValues("1:1", "4:3", "3:4", "16:9", "9:16", "9:21"))},
+            {"seedance-2.5", fields(new Object[][] {
+                    {"aspect_ratio", field(enumValues("1:1", "4:3", "3:4", "16:9", "9:16", "21:9", "auto"))},
                     {"callback_url", field()},
-                    {"duration_seconds", field(required(), enumValues(Integer.valueOf(5), Integer.valueOf(10)))},
+                    {"duration_seconds", field(enumValues(Integer.valueOf(-1), Integer.valueOf(4), Integer.valueOf(5), Integer.valueOf(6), Integer.valueOf(7), Integer.valueOf(8), Integer.valueOf(9), Integer.valueOf(10), Integer.valueOf(11), Integer.valueOf(12), Integer.valueOf(13), Integer.valueOf(14), Integer.valueOf(15), Integer.valueOf(16), Integer.valueOf(17), Integer.valueOf(18), Integer.valueOf(19), Integer.valueOf(20), Integer.valueOf(21), Integer.valueOf(22), Integer.valueOf(23), Integer.valueOf(24), Integer.valueOf(25), Integer.valueOf(26), Integer.valueOf(27), Integer.valueOf(28), Integer.valueOf(29), Integer.valueOf(30)))},
                     {"enable_safety_checker", field()},
                     {"first_frame_image_url", field()},
+                    {"generate_audio", field()},
                     {"last_frame_image_url", field()},
-                    {"lock_camera", field()},
-                    {"model", field()},
-                    {"output_resolution", field(enumValues("480p", "720p", "1080p"))},
-                    {"prompt", field()},
-                    {"seed", field()},
+                    {"model", field(required())},
+                    {"output_format", field(enumValues("mp4", "mov"))},
+                    {"output_resolution", field(enumValues("480p", "720p"))},
+                    {"prompt", field(required(), min(Double.valueOf(3.0)), max(Double.valueOf(30000.0)), length())},
+                    {"reference_audio_urls", field(maxItems(10))},
+                    {"reference_image_urls", field(maxItems(30))},
+                    {"reference_video_urls", field(maxItems(10))},
+                    {"return_last_frame", field()},
+                    {"web_search", field()},
             })},
             {"seedance-v1-pro", fields(new Object[][] {
                     {"aspect_ratio", field(enumValues("1:1", "4:3", "3:4", "16:9", "9:16", "21:9"))},
@@ -1635,14 +1885,29 @@ contract.put("seedance/text-to-video", new ContractAction(
             })},
           }),
           rulesByModel(new Object[][] {
-{"seedance-1.5-pro", rules(rule(conditions(new Object[][] {{"model", "seedance-1.5-pro"}}), list(), list("first_frame_image_url", "last_frame_image_url", "reference_image_urls", "reference_video_urls", "reference_audio_urls", "web_search")))},
-{"seedance-2-mini", rules(rule(conditions(new Object[][] {{"model", "seedance-2-mini"}}), list(), list("source_image_urls", "lock_camera", "seed", "enable_safety_checker")))},
-{"seedance-2.0", rules(rule(conditions(new Object[][] {{"model", "seedance-2.0"}}), list(), list("source_image_urls", "lock_camera", "seed")))},
-{"seedance-2.0-fast", rules(rule(conditions(new Object[][] {{"model", "seedance-2.0-fast"}}), list(), list("source_image_urls", "lock_camera", "seed")))},
-{"seedance-v1-lite", rules(rule(conditions(new Object[][] {{"model", "seedance-v1-lite"}}), list(), list("source_image_urls", "reference_image_urls", "reference_video_urls", "reference_audio_urls", "web_search", "generate_audio")))},
-{"seedance-v1-pro", rules(rule(conditions(new Object[][] {{"model", "seedance-v1-pro"}}), list(), list("source_image_urls", "last_frame_image_url", "reference_image_urls", "reference_video_urls", "reference_audio_urls", "web_search", "generate_audio")))},
-{"seedance-v1-pro-fast", rules(rule(conditions(new Object[][] {{"model", "seedance-v1-pro-fast"}}), list(), list("aspect_ratio", "source_image_urls", "lock_camera", "last_frame_image_url", "reference_image_urls", "reference_video_urls", "reference_audio_urls", "web_search", "generate_audio")))},
+{"seedance-1.5-pro", rules(rule(conditions(new Object[][] {{"model", "seedance-1.5-pro"}}), list(), list(), list("first_frame_image_url", "last_frame_image_url", "reference_image_urls", "reference_video_urls", "reference_audio_urls", "web_search", "return_last_frame", "output_format"), narrowedEnums(new Object[][] {})))},
+{"seedance-2-mini", rules(rule(conditions(new Object[][] {{"model", "seedance-2-mini"}}), list(), list(), list("source_image_urls", "lock_camera", "seed", "enable_safety_checker", "return_last_frame", "output_format"), narrowedEnums(new Object[][] {})))},
+{"seedance-2.0", rules(rule(conditions(new Object[][] {{"model", "seedance-2.0"}}), list(), list(), list("source_image_urls", "lock_camera", "seed", "return_last_frame", "output_format"), narrowedEnums(new Object[][] {})))},
+{"seedance-2.0-fast", rules(rule(conditions(new Object[][] {{"model", "seedance-2.0-fast"}}), list(), list(), list("source_image_urls", "lock_camera", "seed", "return_last_frame", "output_format"), narrowedEnums(new Object[][] {})))},
+{"seedance-2.5", rules(rule(conditions(new Object[][] {{"first_frame_image_url", presence(true)}, {"model", "seedance-2.5"}}), list(), list(), list("reference_image_urls", "reference_video_urls", "reference_audio_urls"), narrowedEnums(new Object[][] {})), rule(conditions(new Object[][] {{"last_frame_image_url", presence(true)}, {"model", "seedance-2.5"}}), list("first_frame_image_url"), list(), list("reference_image_urls", "reference_video_urls", "reference_audio_urls"), narrowedEnums(new Object[][] {})), rule(conditions(new Object[][] {{"model", "seedance-2.5"}}), list(), list(), list("source_image_urls", "lock_camera", "seed"), narrowedEnums(new Object[][] {})))},
+{"seedance-v1-pro", rules(rule(conditions(new Object[][] {{"model", "seedance-v1-pro"}}), list(), list(), list("source_image_urls", "last_frame_image_url", "reference_image_urls", "reference_video_urls", "reference_audio_urls", "web_search", "generate_audio", "return_last_frame", "output_format"), narrowedEnums(new Object[][] {})))},
+{"seedance-v1-pro-fast", rules(rule(conditions(new Object[][] {{"model", "seedance-v1-pro-fast"}}), list(), list(), list("aspect_ratio", "source_image_urls", "lock_camera", "last_frame_image_url", "reference_image_urls", "reference_video_urls", "reference_audio_urls", "web_search", "generate_audio", "return_last_frame", "output_format"), narrowedEnums(new Object[][] {})))},
           })));
+contract.put("seedream/decompose-layers", new ContractAction(
+    list("seedream-5-pro-layer-decomposition"),
+          fieldsByModel(new Object[][] {
+            {"seedream-5-pro-layer-decomposition", fields(new Object[][] {
+                    {"callback_url", field()},
+                    {"image_url", field(required())},
+                    {"model", field()},
+                    {"output_format", field(enumValues("png", "jpeg"))},
+                    {"prompt", field(max(Double.valueOf(5000.0)), length())},
+                    {"size", field(enumValues("auto", "1K", "1.5K", "2K"))},
+            })},
+          })));
+  }
+
+  private static void addActions11(Map<String, ContractAction> contract) {
 contract.put("seedream/edit-image", new ContractAction(
     list("seedream-4.5-edit", "seedream-5-lite-edit", "seedream-5-pro-edit", "seedream-v4-edit"),
           fieldsByModel(new Object[][] {
@@ -1666,7 +1931,7 @@ contract.put("seedream/edit-image", new ContractAction(
                     {"model", field()},
                     {"output_count", field()},
                     {"output_format", field(enumValues("png", "jpeg"))},
-                    {"output_quality", field(required(), enumValues("basic", "high"))},
+                    {"output_quality", field(required(), enumValues("basic", "high", "ultra"))},
                     {"output_resolution", field()},
                     {"prompt", field()},
                     {"seed", field()},
@@ -1697,13 +1962,10 @@ contract.put("seedream/edit-image", new ContractAction(
             })},
           }),
           rulesByModel(new Object[][] {
-{"seedream-4.5-edit", rules(rule(conditions(new Object[][] {{"model", "seedream-4.5-edit"}}), list(), list("output_format")))},
-{"seedream-5-pro-edit", rules(rule(conditions(new Object[][] {{"model", "seedream-5-pro-edit"}}), list(), list("output_resolution", "output_count", "seed")))},
-{"seedream-v4-edit", rules(rule(conditions(new Object[][] {{"model", "seedream-v4-edit"}}), list(), list("output_format")))},
+{"seedream-4.5-edit", rules(rule(conditions(new Object[][] {{"model", "seedream-4.5-edit"}}), list(), list(), list("output_format"), narrowedEnums(new Object[][] {})))},
+{"seedream-5-pro-edit", rules(rule(conditions(new Object[][] {{"model", "seedream-5-pro-edit"}}), list(), list(), list("output_resolution", "output_count", "seed"), narrowedEnums(new Object[][] {})))},
+{"seedream-v4-edit", rules(rule(conditions(new Object[][] {{"model", "seedream-v4-edit"}}), list(), list(), list("output_format"), narrowedEnums(new Object[][] {})))},
           })));
-  }
-
-  private static void addActions10(Map<String, ContractAction> contract) {
 contract.put("seedream/text-to-image", new ContractAction(
     list("seedream-4.5-text-to-image", "seedream-5-lite-text-to-image", "seedream-5-pro-text-to-image", "seedream-v4-text-to-image"),
           fieldsByModel(new Object[][] {
@@ -1726,7 +1988,7 @@ contract.put("seedream/text-to-image", new ContractAction(
                     {"model", field()},
                     {"output_count", field()},
                     {"output_format", field(enumValues("png", "jpeg"))},
-                    {"output_quality", field(required(), enumValues("basic", "high"))},
+                    {"output_quality", field(required(), enumValues("basic", "high", "ultra"))},
                     {"output_resolution", field()},
                     {"prompt", field()},
                     {"seed", field()},
@@ -1754,9 +2016,9 @@ contract.put("seedream/text-to-image", new ContractAction(
             })},
           }),
           rulesByModel(new Object[][] {
-{"seedream-4.5-text-to-image", rules(rule(conditions(new Object[][] {{"model", "seedream-4.5-text-to-image"}}), list(), list("output_format")))},
-{"seedream-5-pro-text-to-image", rules(rule(conditions(new Object[][] {{"model", "seedream-5-pro-text-to-image"}}), list(), list("output_resolution", "output_count", "seed")))},
-{"seedream-v4-text-to-image", rules(rule(conditions(new Object[][] {{"model", "seedream-v4-text-to-image"}}), list(), list("output_format")))},
+{"seedream-4.5-text-to-image", rules(rule(conditions(new Object[][] {{"model", "seedream-4.5-text-to-image"}}), list(), list(), list("output_format"), narrowedEnums(new Object[][] {})))},
+{"seedream-5-pro-text-to-image", rules(rule(conditions(new Object[][] {{"model", "seedream-5-pro-text-to-image"}}), list(), list(), list("output_resolution", "output_count", "seed"), narrowedEnums(new Object[][] {})))},
+{"seedream-v4-text-to-image", rules(rule(conditions(new Object[][] {{"model", "seedream-v4-text-to-image"}}), list(), list(), list("output_format"), narrowedEnums(new Object[][] {})))},
           })));
 contract.put("suno/add-instrumental", new ContractAction(
     list("suno-v4.5-plus", "suno-v5", "suno-v5.5"),
@@ -1796,6 +2058,45 @@ contract.put("suno/add-instrumental", new ContractAction(
                     {"upload_url", field(required())},
                     {"vocal_gender", field(enumValues("male", "female"))},
                     {"weirdness_constraint", field()},
+            })},
+          })));
+contract.put("suno/add-samples", new ContractAction(
+    list("suno-v4", "suno-v4.5", "suno-v4.5-plus", "suno-v5", "suno-v5.5"),
+          fieldsByModel(new Object[][] {
+            {"suno-v4", fields(new Object[][] {
+                    {"audio_url", field(required())},
+                    {"callback_url", field()},
+                    {"end_seconds", field(required(), min(Double.valueOf(0.0)))},
+                    {"model", field(required())},
+                    {"start_seconds", field(required(), min(Double.valueOf(0.0)))},
+            })},
+            {"suno-v4.5", fields(new Object[][] {
+                    {"audio_url", field(required())},
+                    {"callback_url", field()},
+                    {"end_seconds", field(required(), min(Double.valueOf(0.0)))},
+                    {"model", field(required())},
+                    {"start_seconds", field(required(), min(Double.valueOf(0.0)))},
+            })},
+            {"suno-v4.5-plus", fields(new Object[][] {
+                    {"audio_url", field(required())},
+                    {"callback_url", field()},
+                    {"end_seconds", field(required(), min(Double.valueOf(0.0)))},
+                    {"model", field(required())},
+                    {"start_seconds", field(required(), min(Double.valueOf(0.0)))},
+            })},
+            {"suno-v5", fields(new Object[][] {
+                    {"audio_url", field(required())},
+                    {"callback_url", field()},
+                    {"end_seconds", field(required(), min(Double.valueOf(0.0)))},
+                    {"model", field(required())},
+                    {"start_seconds", field(required(), min(Double.valueOf(0.0)))},
+            })},
+            {"suno-v5.5", fields(new Object[][] {
+                    {"audio_url", field(required())},
+                    {"callback_url", field()},
+                    {"end_seconds", field(required(), min(Double.valueOf(0.0)))},
+                    {"model", field(required())},
+                    {"start_seconds", field(required(), min(Double.valueOf(0.0)))},
             })},
           })));
 contract.put("suno/add-vocals", new ContractAction(
@@ -1851,6 +2152,9 @@ contract.put("suno/check-voice", new ContractAction(
                     {"task_id", field(required())},
             })},
           })));
+  }
+
+  private static void addActions12(Map<String, ContractAction> contract) {
 contract.put("suno/convert-audio", new ContractAction(
     list(),
           fieldsByModel(new Object[][] {
@@ -1967,16 +2271,16 @@ contract.put("suno/cover-audio", new ContractAction(
             })},
           }),
           rulesByModel(new Object[][] {
-{"suno-v4", rules(rule(conditions(new Object[][] {{"vocal_mode", "auto_lyrics"}}), list("prompt"), list("lyrics", "style", "title")), rule(conditions(new Object[][] {{"vocal_mode", "exact_lyrics"}}), list("lyrics", "style", "title"), list("prompt")), rule(conditions(new Object[][] {{"vocal_mode", "instrumental"}}), list("style", "title"), list("prompt", "lyrics")))},
-{"suno-v4.5", rules(rule(conditions(new Object[][] {{"vocal_mode", "auto_lyrics"}}), list("prompt"), list("lyrics", "style", "title")), rule(conditions(new Object[][] {{"vocal_mode", "exact_lyrics"}}), list("lyrics", "style", "title"), list("prompt")), rule(conditions(new Object[][] {{"vocal_mode", "instrumental"}}), list("style", "title"), list("prompt", "lyrics")))},
-{"suno-v4.5-all", rules(rule(conditions(new Object[][] {{"vocal_mode", "auto_lyrics"}}), list("prompt"), list("lyrics", "style", "title")), rule(conditions(new Object[][] {{"vocal_mode", "exact_lyrics"}}), list("lyrics", "style", "title"), list("prompt")), rule(conditions(new Object[][] {{"vocal_mode", "instrumental"}}), list("style", "title"), list("prompt", "lyrics")))},
-{"suno-v4.5-plus", rules(rule(conditions(new Object[][] {{"vocal_mode", "auto_lyrics"}}), list("prompt"), list("lyrics", "style", "title")), rule(conditions(new Object[][] {{"vocal_mode", "exact_lyrics"}}), list("lyrics", "style", "title"), list("prompt")), rule(conditions(new Object[][] {{"vocal_mode", "instrumental"}}), list("style", "title"), list("prompt", "lyrics")))},
-{"suno-v5", rules(rule(conditions(new Object[][] {{"vocal_mode", "auto_lyrics"}}), list("prompt"), list("lyrics", "style", "title")), rule(conditions(new Object[][] {{"vocal_mode", "exact_lyrics"}}), list("lyrics", "style", "title"), list("prompt")), rule(conditions(new Object[][] {{"vocal_mode", "instrumental"}}), list("style", "title"), list("prompt", "lyrics")))},
-{"suno-v5.5", rules(rule(conditions(new Object[][] {{"vocal_mode", "auto_lyrics"}}), list("prompt"), list("lyrics", "style", "title")), rule(conditions(new Object[][] {{"vocal_mode", "exact_lyrics"}}), list("lyrics", "style", "title"), list("prompt")), rule(conditions(new Object[][] {{"vocal_mode", "instrumental"}}), list("style", "title"), list("prompt", "lyrics")))},
+{"suno-v4", rules(rule(conditions(new Object[][] {{"vocal_mode", "auto_lyrics"}}), list("prompt"), list(), list("lyrics", "style", "title"), narrowedEnums(new Object[][] {})), rule(conditions(new Object[][] {{"vocal_mode", "exact_lyrics"}}), list("lyrics", "style", "title"), list(), list("prompt"), narrowedEnums(new Object[][] {})), rule(conditions(new Object[][] {{"vocal_mode", "instrumental"}}), list("style", "title"), list(), list("prompt", "lyrics"), narrowedEnums(new Object[][] {})))},
+{"suno-v4.5", rules(rule(conditions(new Object[][] {{"vocal_mode", "auto_lyrics"}}), list("prompt"), list(), list("lyrics", "style", "title"), narrowedEnums(new Object[][] {})), rule(conditions(new Object[][] {{"vocal_mode", "exact_lyrics"}}), list("lyrics", "style", "title"), list(), list("prompt"), narrowedEnums(new Object[][] {})), rule(conditions(new Object[][] {{"vocal_mode", "instrumental"}}), list("style", "title"), list(), list("prompt", "lyrics"), narrowedEnums(new Object[][] {})))},
+{"suno-v4.5-all", rules(rule(conditions(new Object[][] {{"vocal_mode", "auto_lyrics"}}), list("prompt"), list(), list("lyrics", "style", "title"), narrowedEnums(new Object[][] {})), rule(conditions(new Object[][] {{"vocal_mode", "exact_lyrics"}}), list("lyrics", "style", "title"), list(), list("prompt"), narrowedEnums(new Object[][] {})), rule(conditions(new Object[][] {{"vocal_mode", "instrumental"}}), list("style", "title"), list(), list("prompt", "lyrics"), narrowedEnums(new Object[][] {})))},
+{"suno-v4.5-plus", rules(rule(conditions(new Object[][] {{"vocal_mode", "auto_lyrics"}}), list("prompt"), list(), list("lyrics", "style", "title"), narrowedEnums(new Object[][] {})), rule(conditions(new Object[][] {{"vocal_mode", "exact_lyrics"}}), list("lyrics", "style", "title"), list(), list("prompt"), narrowedEnums(new Object[][] {})), rule(conditions(new Object[][] {{"vocal_mode", "instrumental"}}), list("style", "title"), list(), list("prompt", "lyrics"), narrowedEnums(new Object[][] {})))},
+{"suno-v5", rules(rule(conditions(new Object[][] {{"vocal_mode", "auto_lyrics"}}), list("prompt"), list(), list("lyrics", "style", "title"), narrowedEnums(new Object[][] {})), rule(conditions(new Object[][] {{"vocal_mode", "exact_lyrics"}}), list("lyrics", "style", "title"), list(), list("prompt"), narrowedEnums(new Object[][] {})), rule(conditions(new Object[][] {{"vocal_mode", "instrumental"}}), list("style", "title"), list(), list("prompt", "lyrics"), narrowedEnums(new Object[][] {})))},
+{"suno-v5.5", rules(rule(conditions(new Object[][] {{"vocal_mode", "auto_lyrics"}}), list("prompt"), list(), list("lyrics", "style", "title"), narrowedEnums(new Object[][] {})), rule(conditions(new Object[][] {{"vocal_mode", "exact_lyrics"}}), list("lyrics", "style", "title"), list(), list("prompt"), narrowedEnums(new Object[][] {})), rule(conditions(new Object[][] {{"vocal_mode", "instrumental"}}), list("style", "title"), list(), list("prompt", "lyrics"), narrowedEnums(new Object[][] {})))},
           })));
   }
 
-  private static void addActions11(Map<String, ContractAction> contract) {
+  private static void addActions13(Map<String, ContractAction> contract) {
 contract.put("suno/create-mashup", new ContractAction(
     list("suno-v4", "suno-v4.5", "suno-v4.5-all", "suno-v4.5-plus", "suno-v5", "suno-v5.5"),
           fieldsByModel(new Object[][] {
@@ -2078,12 +2382,12 @@ contract.put("suno/create-mashup", new ContractAction(
             })},
           }),
           rulesByModel(new Object[][] {
-{"suno-v4", rules(rule(conditions(new Object[][] {{"vocal_mode", "auto_lyrics"}}), list("prompt"), list("lyrics", "style", "title")), rule(conditions(new Object[][] {{"vocal_mode", "exact_lyrics"}}), list("lyrics", "style", "title"), list("prompt")), rule(conditions(new Object[][] {{"vocal_mode", "instrumental"}}), list("style", "title"), list("prompt", "lyrics")))},
-{"suno-v4.5", rules(rule(conditions(new Object[][] {{"vocal_mode", "auto_lyrics"}}), list("prompt"), list("lyrics", "style", "title")), rule(conditions(new Object[][] {{"vocal_mode", "exact_lyrics"}}), list("lyrics", "style", "title"), list("prompt")), rule(conditions(new Object[][] {{"vocal_mode", "instrumental"}}), list("style", "title"), list("prompt", "lyrics")))},
-{"suno-v4.5-all", rules(rule(conditions(new Object[][] {{"vocal_mode", "auto_lyrics"}}), list("prompt"), list("lyrics", "style", "title")), rule(conditions(new Object[][] {{"vocal_mode", "exact_lyrics"}}), list("lyrics", "style", "title"), list("prompt")), rule(conditions(new Object[][] {{"vocal_mode", "instrumental"}}), list("style", "title"), list("prompt", "lyrics")))},
-{"suno-v4.5-plus", rules(rule(conditions(new Object[][] {{"vocal_mode", "auto_lyrics"}}), list("prompt"), list("lyrics", "style", "title")), rule(conditions(new Object[][] {{"vocal_mode", "exact_lyrics"}}), list("lyrics", "style", "title"), list("prompt")), rule(conditions(new Object[][] {{"vocal_mode", "instrumental"}}), list("style", "title"), list("prompt", "lyrics")))},
-{"suno-v5", rules(rule(conditions(new Object[][] {{"vocal_mode", "auto_lyrics"}}), list("prompt"), list("lyrics", "style", "title")), rule(conditions(new Object[][] {{"vocal_mode", "exact_lyrics"}}), list("lyrics", "style", "title"), list("prompt")), rule(conditions(new Object[][] {{"vocal_mode", "instrumental"}}), list("style", "title"), list("prompt", "lyrics")))},
-{"suno-v5.5", rules(rule(conditions(new Object[][] {{"vocal_mode", "auto_lyrics"}}), list("prompt"), list("lyrics", "style", "title")), rule(conditions(new Object[][] {{"vocal_mode", "exact_lyrics"}}), list("lyrics", "style", "title"), list("prompt")), rule(conditions(new Object[][] {{"vocal_mode", "instrumental"}}), list("style", "title"), list("prompt", "lyrics")))},
+{"suno-v4", rules(rule(conditions(new Object[][] {{"vocal_mode", "auto_lyrics"}}), list("prompt"), list(), list("lyrics", "style", "title"), narrowedEnums(new Object[][] {})), rule(conditions(new Object[][] {{"vocal_mode", "exact_lyrics"}}), list("lyrics", "style", "title"), list(), list("prompt"), narrowedEnums(new Object[][] {})), rule(conditions(new Object[][] {{"vocal_mode", "instrumental"}}), list("style", "title"), list(), list("prompt", "lyrics"), narrowedEnums(new Object[][] {})))},
+{"suno-v4.5", rules(rule(conditions(new Object[][] {{"vocal_mode", "auto_lyrics"}}), list("prompt"), list(), list("lyrics", "style", "title"), narrowedEnums(new Object[][] {})), rule(conditions(new Object[][] {{"vocal_mode", "exact_lyrics"}}), list("lyrics", "style", "title"), list(), list("prompt"), narrowedEnums(new Object[][] {})), rule(conditions(new Object[][] {{"vocal_mode", "instrumental"}}), list("style", "title"), list(), list("prompt", "lyrics"), narrowedEnums(new Object[][] {})))},
+{"suno-v4.5-all", rules(rule(conditions(new Object[][] {{"vocal_mode", "auto_lyrics"}}), list("prompt"), list(), list("lyrics", "style", "title"), narrowedEnums(new Object[][] {})), rule(conditions(new Object[][] {{"vocal_mode", "exact_lyrics"}}), list("lyrics", "style", "title"), list(), list("prompt"), narrowedEnums(new Object[][] {})), rule(conditions(new Object[][] {{"vocal_mode", "instrumental"}}), list("style", "title"), list(), list("prompt", "lyrics"), narrowedEnums(new Object[][] {})))},
+{"suno-v4.5-plus", rules(rule(conditions(new Object[][] {{"vocal_mode", "auto_lyrics"}}), list("prompt"), list(), list("lyrics", "style", "title"), narrowedEnums(new Object[][] {})), rule(conditions(new Object[][] {{"vocal_mode", "exact_lyrics"}}), list("lyrics", "style", "title"), list(), list("prompt"), narrowedEnums(new Object[][] {})), rule(conditions(new Object[][] {{"vocal_mode", "instrumental"}}), list("style", "title"), list(), list("prompt", "lyrics"), narrowedEnums(new Object[][] {})))},
+{"suno-v5", rules(rule(conditions(new Object[][] {{"vocal_mode", "auto_lyrics"}}), list("prompt"), list(), list("lyrics", "style", "title"), narrowedEnums(new Object[][] {})), rule(conditions(new Object[][] {{"vocal_mode", "exact_lyrics"}}), list("lyrics", "style", "title"), list(), list("prompt"), narrowedEnums(new Object[][] {})), rule(conditions(new Object[][] {{"vocal_mode", "instrumental"}}), list("style", "title"), list(), list("prompt", "lyrics"), narrowedEnums(new Object[][] {})))},
+{"suno-v5.5", rules(rule(conditions(new Object[][] {{"vocal_mode", "auto_lyrics"}}), list("prompt"), list(), list("lyrics", "style", "title"), narrowedEnums(new Object[][] {})), rule(conditions(new Object[][] {{"vocal_mode", "exact_lyrics"}}), list("lyrics", "style", "title"), list(), list("prompt"), narrowedEnums(new Object[][] {})), rule(conditions(new Object[][] {{"vocal_mode", "instrumental"}}), list("style", "title"), list(), list("prompt", "lyrics"), narrowedEnums(new Object[][] {})))},
           })));
 contract.put("suno/extend-music", new ContractAction(
     list("suno-v4", "suno-v4.5", "suno-v4.5-all", "suno-v4.5-plus", "suno-v5", "suno-v5.5"),
@@ -2245,6 +2549,9 @@ contract.put("suno/generate-midi", new ContractAction(
                     {"task_id", field(required())},
             })},
           })));
+  }
+
+  private static void addActions14(Map<String, ContractAction> contract) {
 contract.put("suno/generate-persona", new ContractAction(
     list(),
           fieldsByModel(new Object[][] {
@@ -2255,9 +2562,6 @@ contract.put("suno/generate-persona", new ContractAction(
                     {"task_id", field(required())},
             })},
           })));
-  }
-
-  private static void addActions12(Map<String, ContractAction> contract) {
 contract.put("suno/generate-voice", new ContractAction(
     list(),
           fieldsByModel(new Object[][] {
@@ -2279,12 +2583,75 @@ contract.put("suno/get-timestamped-lyrics", new ContractAction(
                     {"task_id", field(required())},
             })},
           })));
+contract.put("suno/inspire-music", new ContractAction(
+    list("suno-v4", "suno-v4.5", "suno-v4.5-plus", "suno-v5", "suno-v5.5"),
+          fieldsByModel(new Object[][] {
+            {"suno-v4", fields(new Object[][] {
+                    {"audio_urls", field(required(), minItems(1), maxItems(4))},
+                    {"callback_url", field()},
+                    {"model", field(required())},
+            })},
+            {"suno-v4.5", fields(new Object[][] {
+                    {"audio_urls", field(required(), minItems(1), maxItems(4))},
+                    {"callback_url", field()},
+                    {"model", field(required())},
+            })},
+            {"suno-v4.5-plus", fields(new Object[][] {
+                    {"audio_urls", field(required(), minItems(1), maxItems(4))},
+                    {"callback_url", field()},
+                    {"model", field(required())},
+            })},
+            {"suno-v5", fields(new Object[][] {
+                    {"audio_urls", field(required(), minItems(1), maxItems(4))},
+                    {"callback_url", field()},
+                    {"model", field(required())},
+            })},
+            {"suno-v5.5", fields(new Object[][] {
+                    {"audio_urls", field(required(), minItems(1), maxItems(4))},
+                    {"callback_url", field()},
+                    {"model", field(required())},
+            })},
+          })));
 contract.put("suno/regenerate-validation-phrase", new ContractAction(
     list(),
           fieldsByModel(new Object[][] {
             {"_", fields(new Object[][] {
                     {"callback_url", field()},
                     {"task_id", field(required())},
+            })},
+          })));
+contract.put("suno/remaster-audio", new ContractAction(
+    list("suno-v4", "suno-v4.5", "suno-v4.5-plus", "suno-v5", "suno-v5.5"),
+          fieldsByModel(new Object[][] {
+            {"suno-v4", fields(new Object[][] {
+                    {"audio_id", field(required())},
+                    {"callback_url", field()},
+                    {"model", field(required())},
+                    {"source_task_id", field(required())},
+            })},
+            {"suno-v4.5", fields(new Object[][] {
+                    {"audio_id", field(required())},
+                    {"callback_url", field()},
+                    {"model", field(required())},
+                    {"source_task_id", field(required())},
+            })},
+            {"suno-v4.5-plus", fields(new Object[][] {
+                    {"audio_id", field(required())},
+                    {"callback_url", field()},
+                    {"model", field(required())},
+                    {"source_task_id", field(required())},
+            })},
+            {"suno-v5", fields(new Object[][] {
+                    {"audio_id", field(required())},
+                    {"callback_url", field()},
+                    {"model", field(required())},
+                    {"source_task_id", field(required())},
+            })},
+            {"suno-v5.5", fields(new Object[][] {
+                    {"audio_id", field(required())},
+                    {"callback_url", field()},
+                    {"model", field(required())},
+                    {"source_task_id", field(required())},
             })},
           })));
 contract.put("suno/replace-section", new ContractAction(
@@ -2317,7 +2684,44 @@ contract.put("suno/separate-audio-stems", new ContractAction(
             })},
           }),
           rulesByModel(new Object[][] {
-{"_", rules(rule(conditions(new Object[][] {{"type", "split_stem_advanced"}}), list("stem_name"), list()))},
+{"_", rules(rule(conditions(new Object[][] {{"type", "split_stem_advanced"}}), list("stem_name"), list(), list(), narrowedEnums(new Object[][] {})))},
+          })));
+  }
+
+  private static void addActions15(Map<String, ContractAction> contract) {
+contract.put("suno/stitch-audio", new ContractAction(
+    list("suno-v4", "suno-v4.5", "suno-v4.5-plus", "suno-v5", "suno-v5.5"),
+          fieldsByModel(new Object[][] {
+            {"suno-v4", fields(new Object[][] {
+                    {"audio_id", field(required())},
+                    {"callback_url", field()},
+                    {"model", field(required())},
+                    {"source_task_id", field(required())},
+            })},
+            {"suno-v4.5", fields(new Object[][] {
+                    {"audio_id", field(required())},
+                    {"callback_url", field()},
+                    {"model", field(required())},
+                    {"source_task_id", field(required())},
+            })},
+            {"suno-v4.5-plus", fields(new Object[][] {
+                    {"audio_id", field(required())},
+                    {"callback_url", field()},
+                    {"model", field(required())},
+                    {"source_task_id", field(required())},
+            })},
+            {"suno-v5", fields(new Object[][] {
+                    {"audio_id", field(required())},
+                    {"callback_url", field()},
+                    {"model", field(required())},
+                    {"source_task_id", field(required())},
+            })},
+            {"suno-v5.5", fields(new Object[][] {
+                    {"audio_id", field(required())},
+                    {"callback_url", field()},
+                    {"model", field(required())},
+                    {"source_task_id", field(required())},
+            })},
           })));
 contract.put("suno/text-to-music", new ContractAction(
     list("suno-v4", "suno-v4.5", "suno-v4.5-all", "suno-v4.5-plus", "suno-v5", "suno-v5.5"),
@@ -2326,13 +2730,13 @@ contract.put("suno/text-to-music", new ContractAction(
                     {"audio_weight", field()},
                     {"callback_url", field()},
                     {"continue_at", field()},
-                    {"duration_seconds", field()},
+                    {"duration_seconds", field(min(Double.valueOf(10.0)), max(Double.valueOf(360.0)))},
                     {"lyrics", field()},
                     {"model", field(required())},
                     {"negative_tags", field()},
                     {"persona_id", field()},
                     {"persona_type", field(enumValues("style", "voice"))},
-                    {"prompt", field()},
+                    {"prompt", field(max(Double.valueOf(3000.0)), length())},
                     {"style", field()},
                     {"style_weight", field()},
                     {"title", field()},
@@ -2344,13 +2748,13 @@ contract.put("suno/text-to-music", new ContractAction(
                     {"audio_weight", field()},
                     {"callback_url", field()},
                     {"continue_at", field()},
-                    {"duration_seconds", field()},
+                    {"duration_seconds", field(min(Double.valueOf(10.0)), max(Double.valueOf(360.0)))},
                     {"lyrics", field()},
                     {"model", field(required())},
                     {"negative_tags", field()},
                     {"persona_id", field()},
                     {"persona_type", field(enumValues("style", "voice"))},
-                    {"prompt", field()},
+                    {"prompt", field(max(Double.valueOf(3000.0)), length())},
                     {"style", field()},
                     {"style_weight", field()},
                     {"title", field()},
@@ -2362,13 +2766,13 @@ contract.put("suno/text-to-music", new ContractAction(
                     {"audio_weight", field()},
                     {"callback_url", field()},
                     {"continue_at", field()},
-                    {"duration_seconds", field()},
+                    {"duration_seconds", field(min(Double.valueOf(10.0)), max(Double.valueOf(360.0)))},
                     {"lyrics", field()},
                     {"model", field(required())},
                     {"negative_tags", field()},
                     {"persona_id", field()},
                     {"persona_type", field(enumValues("style", "voice"))},
-                    {"prompt", field()},
+                    {"prompt", field(max(Double.valueOf(3000.0)), length())},
                     {"style", field()},
                     {"style_weight", field()},
                     {"title", field()},
@@ -2380,13 +2784,13 @@ contract.put("suno/text-to-music", new ContractAction(
                     {"audio_weight", field()},
                     {"callback_url", field()},
                     {"continue_at", field()},
-                    {"duration_seconds", field()},
+                    {"duration_seconds", field(min(Double.valueOf(10.0)), max(Double.valueOf(360.0)))},
                     {"lyrics", field()},
                     {"model", field(required())},
                     {"negative_tags", field()},
                     {"persona_id", field()},
                     {"persona_type", field(enumValues("style", "voice"))},
-                    {"prompt", field()},
+                    {"prompt", field(max(Double.valueOf(3000.0)), length())},
                     {"style", field()},
                     {"style_weight", field()},
                     {"title", field()},
@@ -2398,13 +2802,13 @@ contract.put("suno/text-to-music", new ContractAction(
                     {"audio_weight", field()},
                     {"callback_url", field()},
                     {"continue_at", field()},
-                    {"duration_seconds", field()},
+                    {"duration_seconds", field(min(Double.valueOf(10.0)), max(Double.valueOf(360.0)))},
                     {"lyrics", field()},
                     {"model", field(required())},
                     {"negative_tags", field()},
                     {"persona_id", field()},
                     {"persona_type", field(enumValues("style", "voice"))},
-                    {"prompt", field()},
+                    {"prompt", field(max(Double.valueOf(3000.0)), length())},
                     {"style", field()},
                     {"style_weight", field()},
                     {"title", field()},
@@ -2416,13 +2820,13 @@ contract.put("suno/text-to-music", new ContractAction(
                     {"audio_weight", field()},
                     {"callback_url", field()},
                     {"continue_at", field()},
-                    {"duration_seconds", field()},
+                    {"duration_seconds", field(min(Double.valueOf(10.0)), max(Double.valueOf(360.0)))},
                     {"lyrics", field()},
                     {"model", field(required())},
                     {"negative_tags", field()},
                     {"persona_id", field()},
                     {"persona_type", field(enumValues("style", "voice"))},
-                    {"prompt", field()},
+                    {"prompt", field(max(Double.valueOf(3000.0)), length())},
                     {"style", field()},
                     {"style_weight", field()},
                     {"title", field()},
@@ -2432,12 +2836,12 @@ contract.put("suno/text-to-music", new ContractAction(
             })},
           }),
           rulesByModel(new Object[][] {
-{"suno-v4", rules(rule(conditions(new Object[][] {{"vocal_mode", "auto_lyrics"}}), list("prompt"), list("lyrics", "style", "title")), rule(conditions(new Object[][] {{"vocal_mode", "exact_lyrics"}}), list("lyrics", "style", "title"), list("prompt")), rule(conditions(new Object[][] {{"vocal_mode", "instrumental"}}), list("style", "title"), list("prompt", "lyrics")))},
-{"suno-v4.5", rules(rule(conditions(new Object[][] {{"vocal_mode", "auto_lyrics"}}), list("prompt"), list("lyrics", "style", "title")), rule(conditions(new Object[][] {{"vocal_mode", "exact_lyrics"}}), list("lyrics", "style", "title"), list("prompt")), rule(conditions(new Object[][] {{"vocal_mode", "instrumental"}}), list("style", "title"), list("prompt", "lyrics")))},
-{"suno-v4.5-all", rules(rule(conditions(new Object[][] {{"vocal_mode", "auto_lyrics"}}), list("prompt"), list("lyrics", "style", "title")), rule(conditions(new Object[][] {{"vocal_mode", "exact_lyrics"}}), list("lyrics", "style", "title"), list("prompt")), rule(conditions(new Object[][] {{"vocal_mode", "instrumental"}}), list("style", "title"), list("prompt", "lyrics")))},
-{"suno-v4.5-plus", rules(rule(conditions(new Object[][] {{"vocal_mode", "auto_lyrics"}}), list("prompt"), list("lyrics", "style", "title")), rule(conditions(new Object[][] {{"vocal_mode", "exact_lyrics"}}), list("lyrics", "style", "title"), list("prompt")), rule(conditions(new Object[][] {{"vocal_mode", "instrumental"}}), list("style", "title"), list("prompt", "lyrics")))},
-{"suno-v5", rules(rule(conditions(new Object[][] {{"vocal_mode", "auto_lyrics"}}), list("prompt"), list("lyrics", "style", "title")), rule(conditions(new Object[][] {{"vocal_mode", "exact_lyrics"}}), list("lyrics", "style", "title"), list("prompt")), rule(conditions(new Object[][] {{"vocal_mode", "instrumental"}}), list("style", "title"), list("prompt", "lyrics")))},
-{"suno-v5.5", rules(rule(conditions(new Object[][] {{"vocal_mode", "auto_lyrics"}}), list("prompt"), list("lyrics", "style", "title")), rule(conditions(new Object[][] {{"vocal_mode", "exact_lyrics"}}), list("lyrics", "style", "title"), list("prompt")), rule(conditions(new Object[][] {{"vocal_mode", "instrumental"}}), list("style", "title"), list("prompt", "lyrics")))},
+{"suno-v4", rules(rule(conditions(new Object[][] {{"vocal_mode", "auto_lyrics"}}), list("prompt"), list(), list("lyrics", "style", "title", "negative_tags", "vocal_gender", "duration_seconds"), narrowedEnums(new Object[][] {})), rule(conditions(new Object[][] {{"vocal_mode", "exact_lyrics"}}), list("lyrics", "style", "title"), list(), list("prompt"), narrowedEnums(new Object[][] {})), rule(conditions(new Object[][] {{"vocal_mode", "instrumental"}}), list("style", "title"), list(), list("prompt", "lyrics", "vocal_gender"), narrowedEnums(new Object[][] {})), rule(conditions(new Object[][] {{"model", "suno-v4"}}), list(), list(), list("duration_seconds"), narrowedEnums(new Object[][] {})))},
+{"suno-v4.5", rules(rule(conditions(new Object[][] {{"vocal_mode", "auto_lyrics"}}), list("prompt"), list(), list("lyrics", "style", "title", "negative_tags", "vocal_gender", "duration_seconds"), narrowedEnums(new Object[][] {})), rule(conditions(new Object[][] {{"vocal_mode", "exact_lyrics"}}), list("lyrics", "style", "title"), list(), list("prompt"), narrowedEnums(new Object[][] {})), rule(conditions(new Object[][] {{"vocal_mode", "instrumental"}}), list("style", "title"), list(), list("prompt", "lyrics", "vocal_gender"), narrowedEnums(new Object[][] {})), rule(conditions(new Object[][] {{"model", "suno-v4.5"}}), list(), list(), list("duration_seconds"), narrowedEnums(new Object[][] {})))},
+{"suno-v4.5-all", rules(rule(conditions(new Object[][] {{"vocal_mode", "auto_lyrics"}}), list("prompt"), list(), list("lyrics", "style", "title", "negative_tags", "vocal_gender", "duration_seconds"), narrowedEnums(new Object[][] {})), rule(conditions(new Object[][] {{"vocal_mode", "exact_lyrics"}}), list("lyrics", "style", "title"), list(), list("prompt"), narrowedEnums(new Object[][] {})), rule(conditions(new Object[][] {{"vocal_mode", "instrumental"}}), list("style", "title"), list(), list("prompt", "lyrics", "vocal_gender"), narrowedEnums(new Object[][] {})), rule(conditions(new Object[][] {{"model", "suno-v4.5-all"}}), list(), list(), list("duration_seconds"), narrowedEnums(new Object[][] {})))},
+{"suno-v4.5-plus", rules(rule(conditions(new Object[][] {{"vocal_mode", "auto_lyrics"}}), list("prompt"), list(), list("lyrics", "style", "title", "negative_tags", "vocal_gender", "duration_seconds"), narrowedEnums(new Object[][] {})), rule(conditions(new Object[][] {{"vocal_mode", "exact_lyrics"}}), list("lyrics", "style", "title"), list(), list("prompt"), narrowedEnums(new Object[][] {})), rule(conditions(new Object[][] {{"vocal_mode", "instrumental"}}), list("style", "title"), list(), list("prompt", "lyrics", "vocal_gender"), narrowedEnums(new Object[][] {})), rule(conditions(new Object[][] {{"model", "suno-v4.5-plus"}}), list(), list(), list("duration_seconds"), narrowedEnums(new Object[][] {})))},
+{"suno-v5", rules(rule(conditions(new Object[][] {{"vocal_mode", "auto_lyrics"}}), list("prompt"), list(), list("lyrics", "style", "title", "negative_tags", "vocal_gender", "duration_seconds"), narrowedEnums(new Object[][] {})), rule(conditions(new Object[][] {{"vocal_mode", "exact_lyrics"}}), list("lyrics", "style", "title"), list(), list("prompt"), narrowedEnums(new Object[][] {})), rule(conditions(new Object[][] {{"vocal_mode", "instrumental"}}), list("style", "title"), list(), list("prompt", "lyrics", "vocal_gender"), narrowedEnums(new Object[][] {})), rule(conditions(new Object[][] {{"model", "suno-v5"}}), list(), list(), list("duration_seconds"), narrowedEnums(new Object[][] {})))},
+{"suno-v5.5", rules(rule(conditions(new Object[][] {{"vocal_mode", "auto_lyrics"}}), list("prompt"), list(), list("lyrics", "style", "title", "negative_tags", "vocal_gender", "duration_seconds"), narrowedEnums(new Object[][] {})), rule(conditions(new Object[][] {{"vocal_mode", "exact_lyrics"}}), list("lyrics", "style", "title"), list(), list("prompt"), narrowedEnums(new Object[][] {})), rule(conditions(new Object[][] {{"vocal_mode", "instrumental"}}), list("style", "title"), list(), list("prompt", "lyrics", "vocal_gender"), narrowedEnums(new Object[][] {})))},
           })));
 contract.put("suno/text-to-sound", new ContractAction(
     list("suno-v5", "suno-v5.5"),
@@ -2472,9 +2876,6 @@ contract.put("suno/visualize-music", new ContractAction(
                     {"task_id", field(required())},
             })},
           })));
-  }
-
-  private static void addActions13(Map<String, ContractAction> contract) {
 contract.put("suno/voice-to-validation-phrase", new ContractAction(
     list(),
           fieldsByModel(new Object[][] {
@@ -2517,6 +2918,9 @@ contract.put("veo-3-1/extend-video", new ContractAction(
                     {"watermark", field()},
             })},
           })));
+  }
+
+  private static void addActions16(Map<String, ContractAction> contract) {
 contract.put("veo-3-1/text-to-video", new ContractAction(
     list("veo-3.1", "veo-3.1-fast", "veo-3.1-lite"),
           fieldsByModel(new Object[][] {
@@ -2564,7 +2968,7 @@ contract.put("veo-3-1/text-to-video", new ContractAction(
             })},
           }),
           rulesByModel(new Object[][] {
-{"veo-3.1-lite", rules(rule(conditions(new Object[][] {{"model", "veo-3.1-lite"}}), list(), list("seeds", "output_resolution")), rule(conditions(new Object[][] {{"duration_seconds", Integer.valueOf(4)}, {"input_mode", "reference"}, {"model", "veo-3.1-lite"}}), list(), list("duration_seconds")), rule(conditions(new Object[][] {{"duration_seconds", Integer.valueOf(6)}, {"input_mode", "reference"}, {"model", "veo-3.1-lite"}}), list(), list("duration_seconds")))},
+{"veo-3.1-lite", rules(rule(conditions(new Object[][] {{"model", "veo-3.1-lite"}}), list(), list(), list("seeds", "output_resolution"), narrowedEnums(new Object[][] {})), rule(conditions(new Object[][] {{"duration_seconds", Integer.valueOf(4)}, {"input_mode", "reference"}, {"model", "veo-3.1-lite"}}), list(), list(), list("duration_seconds"), narrowedEnums(new Object[][] {})), rule(conditions(new Object[][] {{"duration_seconds", Integer.valueOf(6)}, {"input_mode", "reference"}, {"model", "veo-3.1-lite"}}), list(), list(), list("duration_seconds"), narrowedEnums(new Object[][] {})))},
           })));
 contract.put("veo-3-1/upscale-video", new ContractAction(
     list(),
@@ -2593,7 +2997,7 @@ contract.put("volcengine-lip-sync/lip-sync-video", new ContractAction(
             })},
           }),
           rulesByModel(new Object[][] {
-{"volcengine-lip-sync", rules(rule(conditions(new Object[][] {{"mode", "lite"}}), list(), list("enable_scene_detection")), rule(conditions(new Object[][] {{"mode", "basic"}}), list(), list("align_audio", "align_audio_reverse", "template_start_seconds")), rule(conditions(new Object[][] {{"align_audio_reverse", true}}), list("align_audio"), list()))},
+{"volcengine-lip-sync", rules(rule(conditions(new Object[][] {{"mode", "lite"}}), list(), list(), list("enable_scene_detection"), narrowedEnums(new Object[][] {})), rule(conditions(new Object[][] {{"mode", "basic"}}), list(), list(), list("align_audio", "align_audio_reverse", "template_start_seconds"), narrowedEnums(new Object[][] {})), rule(conditions(new Object[][] {{"align_audio_reverse", true}}), list("align_audio"), list(), list(), narrowedEnums(new Object[][] {})))},
           })));
 contract.put("wan/animate", new ContractAction(
     list("wan-2.2-animate-move", "wan-2.2-animate-replace"),
@@ -2615,9 +3019,6 @@ contract.put("wan/animate", new ContractAction(
                     {"source_image_url", field(required())},
             })},
           })));
-  }
-
-  private static void addActions14(Map<String, ContractAction> contract) {
 contract.put("wan/edit-video", new ContractAction(
     list("wan-2.6-edit-video", "wan-2.6-flash-edit-video", "wan-2.7-edit-video"),
           fieldsByModel(new Object[][] {
@@ -2678,7 +3079,13 @@ contract.put("wan/edit-video", new ContractAction(
                     {"source_video_urls", field()},
                     {"watermark", field()},
             })},
+          }),
+          rulesByModel(new Object[][] {
+{"wan-2.7-edit-video", rules(rule(conditions(new Object[][] {{"model", "wan-2.7-edit-video"}}), list(), list(), list("multi_shots"), narrowedEnums(new Object[][] {})))},
           })));
+  }
+
+  private static void addActions17(Map<String, ContractAction> contract) {
 contract.put("wan/image-to-video", new ContractAction(
     list("wan-2.2-a14b-image-to-video-turbo", "wan-2.5-image-to-video", "wan-2.6-flash-image-to-video", "wan-2.6-image-to-video", "wan-2.7-image-to-video"),
           fieldsByModel(new Object[][] {
@@ -2792,8 +3199,11 @@ contract.put("wan/image-to-video", new ContractAction(
             })},
           }),
           rulesByModel(new Object[][] {
-{"wan-2.6-flash-image-to-video", rules(rule(conditions(new Object[][] {{"model", "wan-2.6-flash-image-to-video"}}), list(), list("seed")))},
-{"wan-2.6-image-to-video", rules(rule(conditions(new Object[][] {{"model", "wan-2.6-image-to-video"}}), list(), list("seed")))},
+{"wan-2.2-a14b-image-to-video-turbo", rules(rule(conditions(new Object[][] {{"model", "wan-2.2-a14b-image-to-video-turbo"}}), list(), list(), list("multi_shots"), narrowedEnums(new Object[][] {})))},
+{"wan-2.5-image-to-video", rules(rule(conditions(new Object[][] {{"model", "wan-2.5-image-to-video"}}), list(), list(), list("multi_shots"), narrowedEnums(new Object[][] {})))},
+{"wan-2.6-flash-image-to-video", rules(rule(conditions(new Object[][] {{"model", "wan-2.6-flash-image-to-video"}}), list(), list(), list("seed"), narrowedEnums(new Object[][] {})))},
+{"wan-2.6-image-to-video", rules(rule(conditions(new Object[][] {{"model", "wan-2.6-image-to-video"}}), list(), list(), list("seed"), narrowedEnums(new Object[][] {})))},
+{"wan-2.7-image-to-video", rules(rule(conditions(new Object[][] {{"model", "wan-2.7-image-to-video"}}), list(), list(), list("multi_shots"), narrowedEnums(new Object[][] {})))},
           })));
 contract.put("wan/speech-to-video", new ContractAction(
     list("wan-2.2-a14b-speech-to-video-turbo"),
@@ -2851,9 +3261,6 @@ contract.put("wan/text-to-image", new ContractAction(
                     {"watermark", field()},
             })},
           })));
-  }
-
-  private static void addActions15(Map<String, ContractAction> contract) {
 contract.put("wan/text-to-video", new ContractAction(
     list("wan-2.2-a14b-text-to-video-turbo", "wan-2.5-text-to-video", "wan-2.6-text-to-video", "wan-2.7-r2v", "wan-2.7-text-to-video"),
           fieldsByModel(new Object[][] {
@@ -2867,6 +3274,7 @@ contract.put("wan/text-to-video", new ContractAction(
                     {"enable_safety_checker", field()},
                     {"first_frame_image_url", field()},
                     {"model", field()},
+                    {"multi_shots", field()},
                     {"negative_prompt", field()},
                     {"output_resolution", field(enumValues("480p", "580p", "720p"))},
                     {"prompt", field()},
@@ -2887,6 +3295,7 @@ contract.put("wan/text-to-video", new ContractAction(
                     {"enable_safety_checker", field()},
                     {"first_frame_image_url", field()},
                     {"model", field()},
+                    {"multi_shots", field()},
                     {"negative_prompt", field()},
                     {"output_resolution", field(enumValues("720p", "1080p"))},
                     {"prompt", field()},
@@ -2907,6 +3316,7 @@ contract.put("wan/text-to-video", new ContractAction(
                     {"enable_safety_checker", field()},
                     {"first_frame_image_url", field()},
                     {"model", field()},
+                    {"multi_shots", field()},
                     {"negative_prompt", field()},
                     {"output_resolution", field(enumValues("720p", "1080p"))},
                     {"prompt", field()},
@@ -2926,6 +3336,7 @@ contract.put("wan/text-to-video", new ContractAction(
                     {"enable_safety_checker", field()},
                     {"first_frame_image_url", field()},
                     {"model", field()},
+                    {"multi_shots", field()},
                     {"negative_prompt", field()},
                     {"output_resolution", field(enumValues("720p", "1080p"))},
                     {"prompt", field()},
@@ -2946,6 +3357,7 @@ contract.put("wan/text-to-video", new ContractAction(
                     {"enable_safety_checker", field()},
                     {"first_frame_image_url", field()},
                     {"model", field()},
+                    {"multi_shots", field()},
                     {"negative_prompt", field()},
                     {"output_resolution", field(enumValues("720p", "1080p"))},
                     {"prompt", field()},
@@ -2958,8 +3370,15 @@ contract.put("wan/text-to-video", new ContractAction(
             })},
           }),
           rulesByModel(new Object[][] {
-{"wan-2.6-text-to-video", rules(rule(conditions(new Object[][] {{"model", "wan-2.6-text-to-video"}}), list(), list("seed")))},
+{"wan-2.2-a14b-text-to-video-turbo", rules(rule(conditions(new Object[][] {{"model", "wan-2.2-a14b-text-to-video-turbo"}}), list(), list(), list("multi_shots"), narrowedEnums(new Object[][] {})))},
+{"wan-2.5-text-to-video", rules(rule(conditions(new Object[][] {{"model", "wan-2.5-text-to-video"}}), list(), list(), list("multi_shots"), narrowedEnums(new Object[][] {})))},
+{"wan-2.6-text-to-video", rules(rule(conditions(new Object[][] {{"model", "wan-2.6-text-to-video"}}), list(), list(), list("seed"), narrowedEnums(new Object[][] {})))},
+{"wan-2.7-r2v", rules(rule(conditions(new Object[][] {{"model", "wan-2.7-r2v"}}), list(), list(), list("multi_shots"), narrowedEnums(new Object[][] {})))},
+{"wan-2.7-text-to-video", rules(rule(conditions(new Object[][] {{"model", "wan-2.7-text-to-video"}}), list(), list(), list("multi_shots"), narrowedEnums(new Object[][] {})))},
           })));
+  }
+
+  private static void addActions18(Map<String, ContractAction> contract) {
 contract.put("z-image/text-to-image", new ContractAction(
     list("z-image"),
           fieldsByModel(new Object[][] {
