@@ -40,6 +40,7 @@ public final class ContractGen {
     addActions16(contract);
     addActions17(contract);
     addActions18(contract);
+    addActions19(contract);
     return Collections.unmodifiableMap(contract);
   }
 
@@ -463,15 +464,34 @@ contract.put("gpt-image/text-to-image", new ContractAction(
             })},
           })));
 contract.put("grok-imagine/edit-image", new ContractAction(
-    list("grok-imagine-edit-image"),
+    list("grok-imagine-edit-image", "grok-imagine-image-2-0"),
           fieldsByModel(new Object[][] {
             {"grok-imagine-edit-image", fields(new Object[][] {
+                    {"aspect_ratio", field()},
                     {"callback_url", field()},
                     {"enable_safety_checker", field()},
+                    {"mask_indices", field()},
                     {"model", field(required())},
                     {"prompt", field()},
                     {"source_image_url", field(required())},
+                    {"source_image_urls", field()},
+                    {"source_task_id", field()},
             })},
+            {"grok-imagine-image-2-0", fields(new Object[][] {
+                    {"aspect_ratio", field(required(), enumValues("1:1", "2:3", "3:2", "16:9", "9:16", "auto"))},
+                    {"callback_url", field()},
+                    {"enable_safety_checker", field()},
+                    {"mask_indices", field()},
+                    {"model", field(required())},
+                    {"prompt", field(max(Double.valueOf(390000.0)), length())},
+                    {"source_image_url", field()},
+                    {"source_image_urls", field(required(), minItems(1), maxItems(5))},
+                    {"source_task_id", field()},
+            })},
+          }),
+          rulesByModel(new Object[][] {
+{"grok-imagine-edit-image", rules(rule(conditions(new Object[][] {{"model", "grok-imagine-edit-image"}}), list(), list(), list("source_task_id", "mask_indices", "source_image_urls", "aspect_ratio"), narrowedEnums(new Object[][] {})))},
+{"grok-imagine-image-2-0", rules(rule(conditions(new Object[][] {{"model", "grok-imagine-image-2-0"}}), list(), list(), list("source_image_url", "source_task_id", "mask_indices", "enable_safety_checker"), narrowedEnums(new Object[][] {})))},
           })));
   }
 
@@ -538,9 +558,30 @@ contract.put("grok-imagine/image-to-video", new ContractAction(
 {"grok-imagine-video-1.5-fast", rules(rule(conditions(new Object[][] {{"model", "grok-imagine-video-1.5-fast"}}), list(), list(), list("source_task_id", "index", "motion_style", "enable_safety_checker"), narrowedEnums(new Object[][] {})))},
 {"grok-imagine-video-1.5-preview", rules(rule(conditions(new Object[][] {{"model", "grok-imagine-video-1.5-preview"}}), list(), list(), list("source_task_id", "index", "motion_style", "enable_safety_checker"), narrowedEnums(new Object[][] {})))},
           })));
-contract.put("grok-imagine/text-to-image", new ContractAction(
-    list("grok-imagine-text-to-image"),
+contract.put("grok-imagine/segment-map", new ContractAction(
+    list("grok-imagine-image-2-0"),
           fieldsByModel(new Object[][] {
+            {"grok-imagine-image-2-0", fields(new Object[][] {
+                    {"callback_url", field()},
+                    {"image_url", field()},
+                    {"model", field(required())},
+                    {"source_task_id", field()},
+            })},
+          }),
+          rulesByModel(new Object[][] {
+{"grok-imagine-image-2-0", rules(rule(conditions(new Object[][] {}), list(), list("image_url", "source_task_id"), list(), narrowedEnums(new Object[][] {})), rule(conditions(new Object[][] {{"image_url", presence(true)}}), list(), list(), list("source_task_id"), narrowedEnums(new Object[][] {})), rule(conditions(new Object[][] {{"source_task_id", presence(true)}}), list(), list(), list("image_url"), narrowedEnums(new Object[][] {})))},
+          })));
+contract.put("grok-imagine/text-to-image", new ContractAction(
+    list("grok-imagine-image-2-0", "grok-imagine-text-to-image"),
+          fieldsByModel(new Object[][] {
+            {"grok-imagine-image-2-0", fields(new Object[][] {
+                    {"aspect_ratio", field(required(), enumValues("1:1", "2:3", "3:2", "16:9", "9:16"))},
+                    {"callback_url", field()},
+                    {"enable_pro", field()},
+                    {"enable_safety_checker", field()},
+                    {"model", field(required())},
+                    {"prompt", field(required())},
+            })},
             {"grok-imagine-text-to-image", fields(new Object[][] {
                     {"aspect_ratio", field(enumValues("2:3", "3:2", "1:1", "16:9", "9:16"))},
                     {"callback_url", field()},
@@ -549,6 +590,9 @@ contract.put("grok-imagine/text-to-image", new ContractAction(
                     {"model", field(required())},
                     {"prompt", field(required(), max(Double.valueOf(5000.0)), length())},
             })},
+          }),
+          rulesByModel(new Object[][] {
+{"grok-imagine-image-2-0", rules(rule(conditions(new Object[][] {{"model", "grok-imagine-image-2-0"}}), list(), list(), list("enable_safety_checker", "enable_pro"), narrowedEnums(new Object[][] {})))},
           })));
 contract.put("grok-imagine/text-to-video", new ContractAction(
     list("grok-imagine-text-to-video", "grok-imagine-video-1.5-fast", "grok-imagine-video-1.5-preview"),
@@ -668,6 +712,9 @@ contract.put("hailuo/text-to-video", new ContractAction(
                     {"prompt_optimizer", field()},
             })},
           })));
+  }
+
+  private static void addActions4(Map<String, ContractAction> contract) {
 contract.put("happyhorse/edit-video", new ContractAction(
     list("happyhorse-edit-video"),
           fieldsByModel(new Object[][] {
@@ -682,9 +729,6 @@ contract.put("happyhorse/edit-video", new ContractAction(
                     {"source_video_url", field(required())},
             })},
           })));
-  }
-
-  private static void addActions4(Map<String, ContractAction> contract) {
 contract.put("happyhorse/image-to-video", new ContractAction(
     list("happyhorse-1.0-i2v", "happyhorse-image-to-video"),
           fieldsByModel(new Object[][] {
@@ -876,6 +920,9 @@ contract.put("imagen-4/remix-image", new ContractAction(
                     {"source_image_urls", field(required(), minItems(1), maxItems(8))},
             })},
           })));
+  }
+
+  private static void addActions5(Map<String, ContractAction> contract) {
 contract.put("imagen-4/text-to-image", new ContractAction(
     list("imagen-4", "imagen-4-fast", "imagen-4-ultra"),
           fieldsByModel(new Object[][] {
@@ -904,9 +951,6 @@ contract.put("imagen-4/text-to-image", new ContractAction(
                     {"seed", field()},
             })},
           })));
-  }
-
-  private static void addActions5(Map<String, ContractAction> contract) {
 contract.put("infinitetalk/audio-to-video", new ContractAction(
     list("infinitetalk-from-audio"),
           fieldsByModel(new Object[][] {
@@ -952,6 +996,38 @@ contract.put("kling/avatar", new ContractAction(
                     {"source_image_url", field(required())},
             })},
           })));
+contract.put("kling/edit-video", new ContractAction(
+    list("kling-v3-omni-edit", "kling-v3-omni-reference"),
+          fieldsByModel(new Object[][] {
+            {"kling-v3-omni-edit", fields(new Object[][] {
+                    {"aspect_ratio", field(enumValues("auto", "16:9", "9:16", "1:1"))},
+                    {"callback_url", field()},
+                    {"duration_seconds", field(enumValues(Integer.valueOf(3), Integer.valueOf(4), Integer.valueOf(5), Integer.valueOf(6), Integer.valueOf(7), Integer.valueOf(8), Integer.valueOf(9), Integer.valueOf(10), Integer.valueOf(11), Integer.valueOf(12), Integer.valueOf(13), Integer.valueOf(14), Integer.valueOf(15)))},
+                    {"enable_sound", field()},
+                    {"model", field(required())},
+                    {"output_resolution", field(enumValues("720p", "1080p", "4k"))},
+                    {"prompt", field(required(), min(Double.valueOf(1.0)), max(Double.valueOf(2500.0)), length())},
+                    {"reference_image_urls", field(minItems(1), maxItems(4))},
+                    {"source_task_id", field()},
+                    {"source_video_url", field()},
+            })},
+            {"kling-v3-omni-reference", fields(new Object[][] {
+                    {"aspect_ratio", field(enumValues("auto", "16:9", "9:16", "1:1"))},
+                    {"callback_url", field()},
+                    {"duration_seconds", field(enumValues(Integer.valueOf(3), Integer.valueOf(4), Integer.valueOf(5), Integer.valueOf(6), Integer.valueOf(7), Integer.valueOf(8), Integer.valueOf(9), Integer.valueOf(10), Integer.valueOf(11), Integer.valueOf(12), Integer.valueOf(13), Integer.valueOf(14), Integer.valueOf(15)))},
+                    {"enable_sound", field()},
+                    {"model", field(required())},
+                    {"output_resolution", field(enumValues("720p", "1080p", "4k"))},
+                    {"prompt", field(required(), min(Double.valueOf(1.0)), max(Double.valueOf(2500.0)), length())},
+                    {"reference_image_urls", field(minItems(1), maxItems(4))},
+                    {"source_task_id", field()},
+                    {"source_video_url", field()},
+            })},
+          }),
+          rulesByModel(new Object[][] {
+{"kling-v3-omni-edit", rules(rule(conditions(new Object[][] {{"model", "kling-v3-omni-edit"}, {"source_task_id", presence(false)}, {"source_video_url", presence(false)}}), list(), list("source_video_url", "source_task_id"), list(), narrowedEnums(new Object[][] {})), rule(conditions(new Object[][] {{"model", "kling-v3-omni-edit"}, {"source_video_url", presence(true)}}), list(), list(), list("source_task_id"), narrowedEnums(new Object[][] {})), rule(conditions(new Object[][] {{"model", "kling-v3-omni-edit"}, {"source_task_id", presence(true)}}), list(), list(), list("source_video_url"), narrowedEnums(new Object[][] {})), rule(conditions(new Object[][] {{"model", "kling-v3-omni-edit"}, {"reference_image_urls", presence(false)}, {"source_video_url", presence(true)}}), list("aspect_ratio"), list(), list(), narrowedEnums(new Object[][] {{"aspect_ratio", values("auto")}, {"duration_seconds", values(Integer.valueOf(5))}})), rule(conditions(new Object[][] {{"model", "kling-v3-omni-edit"}, {"reference_image_urls", presence(false)}, {"source_task_id", presence(true)}}), list("aspect_ratio"), list(), list(), narrowedEnums(new Object[][] {{"aspect_ratio", values("auto")}, {"duration_seconds", values(Integer.valueOf(5))}})), rule(conditions(new Object[][] {{"model", "kling-v3-omni-edit"}, {"reference_image_urls", presence(true)}, {"source_video_url", presence(true)}}), list("aspect_ratio"), list(), list(), narrowedEnums(new Object[][] {{"aspect_ratio", values("16:9", "9:16", "1:1")}})), rule(conditions(new Object[][] {{"model", "kling-v3-omni-edit"}, {"reference_image_urls", presence(true)}, {"source_task_id", presence(true)}}), list("aspect_ratio"), list(), list(), narrowedEnums(new Object[][] {{"aspect_ratio", values("16:9", "9:16", "1:1")}})))},
+{"kling-v3-omni-reference", rules(rule(conditions(new Object[][] {{"model", "kling-v3-omni-reference"}, {"source_task_id", presence(false)}, {"source_video_url", presence(false)}}), list(), list("source_video_url", "source_task_id"), list(), narrowedEnums(new Object[][] {})), rule(conditions(new Object[][] {{"model", "kling-v3-omni-reference"}, {"source_video_url", presence(true)}}), list(), list(), list("source_task_id"), narrowedEnums(new Object[][] {})), rule(conditions(new Object[][] {{"model", "kling-v3-omni-reference"}, {"source_task_id", presence(true)}}), list(), list(), list("source_video_url"), narrowedEnums(new Object[][] {})), rule(conditions(new Object[][] {{"model", "kling-v3-omni-reference"}, {"reference_image_urls", presence(false)}, {"source_video_url", presence(true)}}), list("aspect_ratio"), list(), list(), narrowedEnums(new Object[][] {{"aspect_ratio", values("auto")}, {"duration_seconds", values(Integer.valueOf(5))}, {"enable_sound", values(false)}})), rule(conditions(new Object[][] {{"model", "kling-v3-omni-reference"}, {"reference_image_urls", presence(false)}, {"source_task_id", presence(true)}}), list("aspect_ratio"), list(), list(), narrowedEnums(new Object[][] {{"aspect_ratio", values("auto")}, {"duration_seconds", values(Integer.valueOf(5))}, {"enable_sound", values(false)}})), rule(conditions(new Object[][] {{"model", "kling-v3-omni-reference"}, {"reference_image_urls", presence(true)}, {"source_video_url", presence(true)}}), list("aspect_ratio"), list(), list(), narrowedEnums(new Object[][] {{"aspect_ratio", values("16:9", "9:16", "1:1")}, {"enable_sound", values(false)}})), rule(conditions(new Object[][] {{"model", "kling-v3-omni-reference"}, {"reference_image_urls", presence(true)}, {"source_task_id", presence(true)}}), list("aspect_ratio"), list(), list(), narrowedEnums(new Object[][] {{"aspect_ratio", values("16:9", "9:16", "1:1")}, {"enable_sound", values(false)}})))},
+          })));
 contract.put("kling/extend-video", new ContractAction(
     list("kling-v2.5-turbo-image-to-video-pro", "kling-v2.5-turbo-text-to-video-pro"),
           fieldsByModel(new Object[][] {
@@ -968,6 +1044,9 @@ contract.put("kling/extend-video", new ContractAction(
                     {"source_task_id", field(required())},
             })},
           })));
+  }
+
+  private static void addActions6(Map<String, ContractAction> contract) {
 contract.put("kling/image-to-video", new ContractAction(
     list("kling-o1", "kling-v2.1-master-image-to-video", "kling-v2.1-pro", "kling-v2.1-standard", "kling-v2.5-turbo-image-to-video-pro", "kling-v2.6", "kling-v3-omni", "kling-v3-turbo-image-to-video"),
           fieldsByModel(new Object[][] {
@@ -1099,9 +1178,9 @@ contract.put("kling/motion-control", new ContractAction(
           })));
   }
 
-  private static void addActions6(Map<String, ContractAction> contract) {
+  private static void addActions7(Map<String, ContractAction> contract) {
 contract.put("kling/text-to-video", new ContractAction(
-    list("kling-3.0", "kling-o1", "kling-v2.1-master-text-to-video", "kling-v2.5-turbo-text-to-video-pro", "kling-v2.6", "kling-v3-omni", "kling-v3-turbo-text-to-video"),
+    list("kling-3.0", "kling-o1", "kling-v2.1-master-text-to-video", "kling-v2.5-turbo-text-to-video-pro", "kling-v2.6", "kling-v3-omni", "kling-v3-omni-reference", "kling-v3-turbo-text-to-video"),
           fieldsByModel(new Object[][] {
             {"kling-3.0", fields(new Object[][] {
                     {"aspect_ratio", field(enumValues("16:9", "9:16", "1:1"))},
@@ -1169,6 +1248,16 @@ contract.put("kling/text-to-video", new ContractAction(
                     {"model", field(required())},
                     {"output_resolution", field(enumValues("720p", "1080p", "4k"))},
                     {"prompt", field(required(), min(Double.valueOf(1.0)), max(Double.valueOf(2500.0)), length())},
+            })},
+            {"kling-v3-omni-reference", fields(new Object[][] {
+                    {"aspect_ratio", field(required(), enumValues("16:9", "9:16", "1:1"))},
+                    {"callback_url", field()},
+                    {"duration_seconds", field(enumValues(Integer.valueOf(3), Integer.valueOf(4), Integer.valueOf(5), Integer.valueOf(6), Integer.valueOf(7), Integer.valueOf(8), Integer.valueOf(9), Integer.valueOf(10), Integer.valueOf(11), Integer.valueOf(12), Integer.valueOf(13), Integer.valueOf(14), Integer.valueOf(15)))},
+                    {"enable_sound", field()},
+                    {"model", field(required())},
+                    {"output_resolution", field(enumValues("720p", "1080p", "4k"))},
+                    {"prompt", field(required(), min(Double.valueOf(1.0)), max(Double.valueOf(2500.0)), length())},
+                    {"reference_image_urls", field(required(), minItems(1), maxItems(7))},
             })},
             {"kling-v3-turbo-text-to-video", fields(new Object[][] {
                     {"aspect_ratio", field(enumValues("16:9", "9:16", "1:1"))},
@@ -1256,7 +1345,7 @@ contract.put("midjourney/shorten-prompt", new ContractAction(
           })));
   }
 
-  private static void addActions7(Map<String, ContractAction> contract) {
+  private static void addActions8(Map<String, ContractAction> contract) {
 contract.put("midjourney/text-to-image", new ContractAction(
     list("midjourney-v8.1"),
           fieldsByModel(new Object[][] {
@@ -1400,7 +1489,7 @@ contract.put("omnihuman/subject-detection", new ContractAction(
           })));
   }
 
-  private static void addActions8(Map<String, ContractAction> contract) {
+  private static void addActions9(Map<String, ContractAction> contract) {
 contract.put("openai-transcription/speech-to-text", new ContractAction(
     list("gpt-transcribe", "whisper-1"),
           fieldsByModel(new Object[][] {
@@ -1592,7 +1681,7 @@ contract.put("producer/text-to-music", new ContractAction(
           })));
   }
 
-  private static void addActions9(Map<String, ContractAction> contract) {
+  private static void addActions10(Map<String, ContractAction> contract) {
 contract.put("qwen-2/edit-image", new ContractAction(
     list("qwen-2-edit-image"),
           fieldsByModel(new Object[][] {
@@ -1727,7 +1816,7 @@ contract.put("recraft/remove-background", new ContractAction(
           })));
   }
 
-  private static void addActions10(Map<String, ContractAction> contract) {
+  private static void addActions11(Map<String, ContractAction> contract) {
 contract.put("recraft/upscale-image", new ContractAction(
     list("recraft-crisp-upscale"),
           fieldsByModel(new Object[][] {
@@ -1853,7 +1942,7 @@ contract.put("seedance/text-to-video", new ContractAction(
                     {"last_frame_image_url", field()},
                     {"model", field(required())},
                     {"output_format", field(enumValues("mp4", "mov"))},
-                    {"output_resolution", field(enumValues("480p", "720p"))},
+                    {"output_resolution", field(enumValues("480p", "720p", "1080p"))},
                     {"prompt", field(required(), min(Double.valueOf(3.0)), max(Double.valueOf(30000.0)), length())},
                     {"reference_audio_urls", field(maxItems(10))},
                     {"reference_image_urls", field(maxItems(30))},
@@ -1907,7 +1996,7 @@ contract.put("seedream/decompose-layers", new ContractAction(
           })));
   }
 
-  private static void addActions11(Map<String, ContractAction> contract) {
+  private static void addActions12(Map<String, ContractAction> contract) {
 contract.put("seedream/edit-image", new ContractAction(
     list("seedream-4.5-edit", "seedream-5-lite-edit", "seedream-5-pro-edit", "seedream-v4-edit"),
           fieldsByModel(new Object[][] {
@@ -2154,7 +2243,7 @@ contract.put("suno/check-voice", new ContractAction(
           })));
   }
 
-  private static void addActions12(Map<String, ContractAction> contract) {
+  private static void addActions13(Map<String, ContractAction> contract) {
 contract.put("suno/convert-audio", new ContractAction(
     list(),
           fieldsByModel(new Object[][] {
@@ -2280,7 +2369,7 @@ contract.put("suno/cover-audio", new ContractAction(
           })));
   }
 
-  private static void addActions13(Map<String, ContractAction> contract) {
+  private static void addActions14(Map<String, ContractAction> contract) {
 contract.put("suno/create-mashup", new ContractAction(
     list("suno-v4", "suno-v4.5", "suno-v4.5-all", "suno-v4.5-plus", "suno-v5", "suno-v5.5"),
           fieldsByModel(new Object[][] {
@@ -2551,7 +2640,7 @@ contract.put("suno/generate-midi", new ContractAction(
           })));
   }
 
-  private static void addActions14(Map<String, ContractAction> contract) {
+  private static void addActions15(Map<String, ContractAction> contract) {
 contract.put("suno/generate-persona", new ContractAction(
     list(),
           fieldsByModel(new Object[][] {
@@ -2688,7 +2777,7 @@ contract.put("suno/separate-audio-stems", new ContractAction(
           })));
   }
 
-  private static void addActions15(Map<String, ContractAction> contract) {
+  private static void addActions16(Map<String, ContractAction> contract) {
 contract.put("suno/stitch-audio", new ContractAction(
     list("suno-v4", "suno-v4.5", "suno-v4.5-plus", "suno-v5", "suno-v5.5"),
           fieldsByModel(new Object[][] {
@@ -2894,7 +2983,7 @@ contract.put("topaz/upscale-image", new ContractAction(
                     {"callback_url", field()},
                     {"model", field(required())},
                     {"source_image_url", field(required())},
-                    {"upscale_factor", field(required(), enumValues(Integer.valueOf(1), Integer.valueOf(2), Integer.valueOf(4), Integer.valueOf(8)))},
+                    {"upscale_factor", field(required(), enumValues(Integer.valueOf(1), Integer.valueOf(2), Integer.valueOf(4)))},
             })},
           })));
 contract.put("topaz/upscale-video", new ContractAction(
@@ -2920,7 +3009,7 @@ contract.put("veo-3-1/extend-video", new ContractAction(
           })));
   }
 
-  private static void addActions16(Map<String, ContractAction> contract) {
+  private static void addActions17(Map<String, ContractAction> contract) {
 contract.put("veo-3-1/text-to-video", new ContractAction(
     list("veo-3.1", "veo-3.1-fast", "veo-3.1-lite"),
           fieldsByModel(new Object[][] {
@@ -3085,7 +3174,7 @@ contract.put("wan/edit-video", new ContractAction(
           })));
   }
 
-  private static void addActions17(Map<String, ContractAction> contract) {
+  private static void addActions18(Map<String, ContractAction> contract) {
 contract.put("wan/image-to-video", new ContractAction(
     list("wan-2.2-a14b-image-to-video-turbo", "wan-2.5-image-to-video", "wan-2.6-flash-image-to-video", "wan-2.6-image-to-video", "wan-2.7-image-to-video"),
           fieldsByModel(new Object[][] {
@@ -3378,7 +3467,7 @@ contract.put("wan/text-to-video", new ContractAction(
           })));
   }
 
-  private static void addActions18(Map<String, ContractAction> contract) {
+  private static void addActions19(Map<String, ContractAction> contract) {
 contract.put("z-image/text-to-image", new ContractAction(
     list("z-image"),
           fieldsByModel(new Object[][] {

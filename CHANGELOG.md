@@ -1,5 +1,11 @@
 # Changelog
 
+## [js/v0.2.10](https://github.com/runapi-ai/topaz-sdk/releases/tag/js%2Fv0.2.10), [ruby/v0.2.11](https://github.com/runapi-ai/topaz-sdk/releases/tag/ruby%2Fv0.2.11), [go/v0.2.10](https://github.com/runapi-ai/topaz-sdk/releases/tag/go%2Fv0.2.10), [python/v0.2.2](https://github.com/runapi-ai/topaz-sdk/releases/tag/python%2Fv0.2.2), [java/v0.1.2](https://github.com/runapi-ai/topaz-sdk/releases/tag/java%2Fv0.1.2) - 2026-08-25
+
+### Fixed
+- Restrict image upscale requests to the supported 1x, 2x, and 4x factors.
+
+
 ## [ruby/v0.2.10](https://github.com/runapi-ai/topaz-sdk/releases/tag/ruby%2Fv0.2.10) - 2026-08-18
 
 ### Changed

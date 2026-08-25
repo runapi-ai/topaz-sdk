@@ -8,7 +8,7 @@ const ENDPOINT = '/api/v1/topaz/upscale_image';
 
 /**
  * Increases image resolution using AI enhancement.
- * Supports upscale factors of 1x, 2x, 4x, and 8x.
+ * Supports upscale factors of 1x, 2x, and 4x.
  */
 export class UpscaleImage {
   constructor(private readonly http: HttpClient) {}

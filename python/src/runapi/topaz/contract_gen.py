@@ -10,7 +10,7 @@ CONTRACT = {
                     "required": True
                 },
                 "upscale_factor": {
-                    "enum": [1, 2, 4, 8],
+                    "enum": [1, 2, 4],
                     "required": True,
                     "type": "integer"
                 }

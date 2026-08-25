@@ -6,7 +6,7 @@ import "github.com/runapi-ai/core-sdk/go/core"
 type TaskStatus string
 
 // UpscaleImageParams configures image upscaling.
-// UpscaleFactor is required and accepts 1, 2, 4, or 8.
+// UpscaleFactor is required and accepts 1, 2, or 4.
 type UpscaleImageParams struct {
 	Model          string `json:"model" help:"required; model slug"`
 	SourceImageURL string `json:"source_image_url" help:"required; public input image URL"`

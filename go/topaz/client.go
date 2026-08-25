@@ -49,7 +49,7 @@ func NewClientWithHTTP(httpClient core.HTTPClient) *Client {
 }
 
 // UpscaleImage increases image resolution using AI enhancement.
-// Supports upscale factors of 1x, 2x, 4x, and 8x.
+// Supports upscale factors of 1x, 2x, and 4x.
 type UpscaleImage struct{ http core.HTTPClient }
 
 // Create submits an image-upscale task and returns immediately with a task id.

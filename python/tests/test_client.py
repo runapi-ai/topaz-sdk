@@ -166,7 +166,7 @@ def test_image_requires_upscale_factor():
 
 def test_image_rejects_bad_factor():
     client = TopazClient(api_key="k", http_client=FakeHttp())
-    with pytest.raises(ValidationError, match="upscale_factor must be one of: 1, 2, 4, 8"):
+    with pytest.raises(ValidationError, match="upscale_factor must be one of: 1, 2, 4"):
         client.upscale_image.create(
             model="topaz-upscale-image", source_image_url="https://x/y.jpg", upscale_factor=3
         )

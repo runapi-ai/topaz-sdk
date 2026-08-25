@@ -13,7 +13,7 @@ module RunApi
     #   )
     #   puts result.images.first.url
     class Client < RunApi::Core::Client
-      # @return [Resources::UpscaleImage] AI-powered image upscaling (1x, 2x, 4x, 8x).
+      # @return [Resources::UpscaleImage] AI-powered image upscaling (1x, 2x, 4x).
       attr_reader :upscale_image
       # @return [Resources::UpscaleVideo] AI-powered video upscaling (1x, 2x, 4x).
       attr_reader :upscale_video

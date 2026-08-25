@@ -14,7 +14,7 @@ module RunApi
               "required" => true
             },
             "upscale_factor" => {
-              "enum" => [1, 2, 4, 8],
+              "enum" => [1, 2, 4],
               "required" => true,
               "type" => "integer"
             }

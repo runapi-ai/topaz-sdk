@@ -5,7 +5,7 @@ export type TopazUpscaleImageModel = 'topaz-upscale-image';
 /** Video upscaling model slug. */
 export type TopazUpscaleVideoModel = 'topaz-upscale-video';
 /** Image upscale factor. Higher factors produce larger output but take longer. */
-export type UpscaleImageFactor = 1 | 2 | 4 | 8;
+export type UpscaleImageFactor = 1 | 2 | 4;
 /** Video upscale factor. Max 4x (8x is not supported for video). */
 export type UpscaleVideoFactor = 1 | 2 | 4;
 
@@ -17,7 +17,7 @@ export interface UpscaleImageParams {
   model: TopazUpscaleImageModel;
   /** Public URL of the source image to upscale. */
   source_image_url: string;
-  /** Multiplier for the output resolution (1x, 2x, 4x, or 8x). */
+  /** Multiplier for the output resolution (1x, 2x, or 4x). */
   upscale_factor: UpscaleImageFactor;
   /** HTTPS callback URL for task completion notification. */
   callback_url?: string;

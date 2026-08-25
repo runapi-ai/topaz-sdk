@@ -18,7 +18,7 @@ import { UpscaleVideo } from './resources/upscale-video';
  * ```
  */
 export class TopazClient extends BaseClient {
-  /** AI-powered image upscaling; supports 1x, 2x, 4x, and 8x factors. */
+  /** AI-powered image upscaling; supports 1x, 2x, and 4x factors. */
   public readonly upscaleImage: UpscaleImage;
   /** AI-powered video upscaling; supports 1x, 2x, and 4x factors. */
   public readonly upscaleVideo: UpscaleVideo;
