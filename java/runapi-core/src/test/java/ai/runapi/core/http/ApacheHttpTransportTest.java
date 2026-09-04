@@ -3,6 +3,7 @@ package ai.runapi.core.http;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
@@ -80,6 +81,30 @@ class ApacheHttpTransportTest {
   @AfterEach
   void stopServer() {
     server.stop(0);
+  }
+
+  @Test
+  void rejectsCrossOriginAbsoluteUrlBeforeSendingCredentials() {
+    ClientOptions options = ClientOptions.builder()
+        .apiKey("sk-test")
+        .baseUrl("http://127.0.0.1:" + server.getAddress().getPort())
+        .build();
+
+    try (ApacheHttpTransport transport = new ApacheHttpTransport(options)) {
+      assertThrows(
+          ValidationException.class,
+          () -> transport.send(HttpRequest.builder(HttpMethod.GET, "https://attacker.example/tasks/task-1").build()));
+    }
+  }
+
+  @Test
+  void acceptsAbsoluteUrlOnConfiguredOrigin() {
+    String baseUrl = "http://127.0.0.1:" + server.getAddress().getPort();
+    ClientOptions options = ClientOptions.builder().apiKey("sk-test").baseUrl(baseUrl).build();
+
+    try (ApacheHttpTransport transport = new ApacheHttpTransport(options)) {
+      assertEquals(200, transport.send(HttpRequest.builder(HttpMethod.GET, baseUrl + "/api/v1/test").build()).getStatusCode());
+    }
   }
 
   @Test

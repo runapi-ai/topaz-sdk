@@ -77,13 +77,27 @@ public final class ApiRequestExecutor {
     if (attempt >= maxRetries) {
       return false;
     }
-    if (!RetryPolicy.isIdempotent(request.getMethod())) {
+    if (!RetryPolicy.isIdempotent(request.getMethod()) && !hasIdempotencyKey(request)) {
       return false;
     }
     if (error instanceof NetworkException || error instanceof TimeoutException) {
       return true;
     }
     return RetryPolicy.isRetryableStatus(error.getStatusCode());
+  }
+
+  private static boolean hasIdempotencyKey(HttpRequest request) {
+    for (String name : request.getHeaders().keySet()) {
+      if ("Idempotency-Key".equalsIgnoreCase(name)) {
+        return true;
+      }
+    }
+    for (String name : request.getOptions().getHeaders().keySet()) {
+      if ("Idempotency-Key".equalsIgnoreCase(name)) {
+        return true;
+      }
+    }
+    return false;
   }
 
   /**

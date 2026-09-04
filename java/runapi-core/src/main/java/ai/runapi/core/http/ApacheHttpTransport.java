@@ -6,6 +6,7 @@ import ai.runapi.core.RequestOptions;
 import ai.runapi.core.errors.ErrorMapper;
 import ai.runapi.core.errors.NetworkException;
 import ai.runapi.core.errors.TimeoutException;
+import ai.runapi.core.errors.ValidationException;
 import java.io.ByteArrayOutputStream;
 import java.io.FilterInputStream;
 import java.io.IOException;
@@ -134,6 +135,13 @@ public final class ApacheHttpTransport implements HttpTransport {
   }
 
   private URI buildUri(HttpRequest request) {
+    URI requested = URI.create(request.getPath());
+    if (requested.isAbsolute()) {
+      if (!sameOrigin(requested, options.getBaseUrl())) {
+        throw new ValidationException("Request URL must use the configured RunAPI origin");
+      }
+      return requested;
+    }
     String base = options.getBaseUrl().toString().replaceAll("/+$", "");
     String path = request.getPath().startsWith("/") ? request.getPath() : "/" + request.getPath();
     StringBuilder builder = new StringBuilder(base).append(path);
@@ -152,6 +160,17 @@ public final class ApacheHttpTransport implements HttpTransport {
       }
     }
     return URI.create(builder.toString());
+  }
+
+  private static boolean sameOrigin(URI requested, URI configured) {
+    return requested.getScheme().equalsIgnoreCase(configured.getScheme())
+        && requested.getHost().equalsIgnoreCase(configured.getHost())
+        && effectivePort(requested) == effectivePort(configured);
+  }
+
+  private static int effectivePort(URI uri) {
+    if (uri.getPort() >= 0) return uri.getPort();
+    return "https".equalsIgnoreCase(uri.getScheme()) ? 443 : 80;
   }
 
   private static String encode(String value) {

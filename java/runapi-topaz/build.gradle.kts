@@ -13,7 +13,7 @@ java {
 }
 
 dependencies {
-  api("ai.runapi:runapi-core:0.6.1")
+  api("ai.runapi:runapi-core:0.6.2")
 
   testImplementation(platform("org.junit:junit-bom:5.10.3"))
   testImplementation("org.junit.jupiter:junit-jupiter")
