@@ -30,8 +30,7 @@ func TestUpscaleImageCreate(t *testing.T) {
 	resp, err := client.UpscaleImage.Create(context.Background(), UpscaleImageParams{
 		Model:          "topaz-upscale-image",
 		SourceImageURL: "https://cdn.runapi.ai/public/samples/upscale.jpg",
-		UpscaleFactor:  4,
-	})
+		UpscaleFactor:  4})
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -51,7 +50,7 @@ func TestUpscaleImageCreate(t *testing.T) {
 }
 
 func TestUpscaleImageGet(t *testing.T) {
-	stub := &stubHTTPClient{response: json.RawMessage(`{"id":"img-task-123","status":"completed","images":[{"url":"https://tempfile.runapi.ai/topaz/result.png"}]}`)}
+	stub := &stubHTTPClient{response: json.RawMessage(`{"id":"img-task-123","status":"completed", "usage": {"cost": 0.05},"images":[{"url":"https://tempfile.runapi.ai/topaz/result.png"}]}`)}
 	client := NewClientWithHTTP(stub)
 	resp, err := client.UpscaleImage.Get(context.Background(), "img-task-123")
 	if err != nil {
@@ -70,8 +69,7 @@ func TestUpscaleVideoCreate(t *testing.T) {
 	client := NewClientWithHTTP(stub)
 	resp, err := client.UpscaleVideo.Create(context.Background(), UpscaleVideoParams{
 		Model:          "topaz-upscale-video",
-		SourceVideoURL: "https://cdn.runapi.ai/public/samples/video-lowres.mp4",
-	})
+		SourceVideoURL: "https://cdn.runapi.ai/public/samples/video-lowres.mp4"})
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -94,7 +92,7 @@ func TestUpscaleVideoCreate(t *testing.T) {
 }
 
 func TestUpscaleVideoGet(t *testing.T) {
-	stub := &stubHTTPClient{response: json.RawMessage(`{"id":"vid-task-123","status":"completed","videos":[{"url":"https://cdn-video.runapi.ai/topaz/result.mp4"}]}`)}
+	stub := &stubHTTPClient{response: json.RawMessage(`{"id":"vid-task-123","status":"completed", "usage": {"cost": 0.05},"videos":[{"url":"https://cdn-video.runapi.ai/topaz/result.mp4"}]}`)}
 	client := NewClientWithHTTP(stub)
 	resp, err := client.UpscaleVideo.Get(context.Background(), "vid-task-123")
 	if err != nil {

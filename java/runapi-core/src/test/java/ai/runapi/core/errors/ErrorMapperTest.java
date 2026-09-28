@@ -32,7 +32,16 @@ class ErrorMapperTest {
   }
 
   @Test
-  void keepsResourceValidationSummaryAndResponseBody() {
+  void extractsRunApiErrorString() {
+    String responseBody = "{\"error\":\"Bad input\"}";
+    RunApiException error = ErrorMapper.fromResponse(400, name -> null, responseBody, null);
+
+    assertEquals("Bad input", error.getMessage());
+    assertEquals(responseBody, error.getResponseBody());
+  }
+
+  @Test
+  void readsValidationSummaryAndKeepsFieldErrorsResponseBody() {
     String responseBody =
         "{\"error\":\"Validation failed\",\"errors\":{\"prompt\":[\"is required\"]}}";
     RunApiException error = ErrorMapper.fromResponse(422, name -> null, responseBody, null);
