@@ -1,6 +1,5 @@
 package ai.runapi.core.polling;
 
-import ai.runapi.core.billing.TaskBillingFacts;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -19,9 +18,6 @@ public final class TaskCreateResponse {
   @JsonProperty("task_replayed")
   private Boolean taskReplayed;
 
-  @JsonProperty("billing")
-  private TaskBillingFacts billing;
-
   private final Map<String, JsonNode> extraFields = new LinkedHashMap<String, JsonNode>();
 
   /** Task identifier. */
@@ -37,11 +33,6 @@ public final class TaskCreateResponse {
   /** Whether this idempotency key reused the original task, when returned. */
   public Boolean getTaskReplayed() {
     return taskReplayed;
-  }
-
-  /** Persisted billing facts recorded when the task was accepted. */
-  public TaskBillingFacts getBilling() {
-    return billing;
   }
 
   /** Unknown response fields preserved as JSON nodes. */
