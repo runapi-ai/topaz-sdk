@@ -1,5 +1,15 @@
 # Changelog
 
+## [js/v0.2.12](https://github.com/runapi-ai/topaz-sdk/releases/tag/js%2Fv0.2.12), [go/v0.2.12](https://github.com/runapi-ai/topaz-sdk/releases/tag/go%2Fv0.2.12) - 2026-09-28
+
+### Added
+- Return usage.cost as a float USD amount on completed async Task query and webhook envelopes.
+
+### Removed
+- Remove the public Task billing object from Task envelopes.
+  Migration: Read usage.cost on completed Task envelopes. Create, processing, and failed envelopes omit usage.
+
+
 ## [js/v0.2.11](https://github.com/runapi-ai/topaz-sdk/releases/tag/js%2Fv0.2.11), [ruby/v0.2.12](https://github.com/runapi-ai/topaz-sdk/releases/tag/ruby%2Fv0.2.12), [go/v0.2.11](https://github.com/runapi-ai/topaz-sdk/releases/tag/go%2Fv0.2.11), [python/v0.2.3](https://github.com/runapi-ai/topaz-sdk/releases/tag/python%2Fv0.2.3), [java/v0.1.3](https://github.com/runapi-ai/topaz-sdk/releases/tag/java%2Fv0.1.3) - 2026-09-04
 
 ### Fixed

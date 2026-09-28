@@ -1,4 +1,4 @@
-import type { AsyncTaskStatus, TaskBillingResponse, TaskResponse } from '@runapi.ai/core';
+import type { AsyncTaskStatus, TaskResponse } from '@runapi.ai/core';
 
 /** Image upscaling model slug. */
 export type TopazUpscaleImageModel = 'topaz-upscale-image';
@@ -37,7 +37,7 @@ export interface UpscaleVideoParams {
 }
 
 /** Acknowledgement returned by `create()` before the task starts processing. */
-export interface TaskCreateResponse extends TaskBillingResponse {
+export interface TaskCreateResponse {
   id: string;
   status: string;
 }

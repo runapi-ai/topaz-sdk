@@ -87,8 +87,7 @@ def test_create_posts_compacted_body():
             "post",
             "/api/v1/topaz/upscale_image",
             {"model": "topaz-upscale-image", "source_image_url": "https://x/y.jpg", "upscale_factor": 4},
-        ),
-    ]
+        )]
     assert isinstance(result, UpscaleImageResponse)
 
 
@@ -112,15 +111,14 @@ def test_video_create_posts_compacted_body():
             "post",
             "/api/v1/topaz/upscale_video",
             {"model": "topaz-upscale-video", "source_video_url": "https://x/y.mp4", "upscale_factor": 2},
-        ),
-    ]
+        )]
     assert isinstance(result, UpscaleVideoResponse)
 
 
 def test_run_narrows_completed_image_type():
     fake = FakeHttp(
         {"id": "t1", "status": "pending"},
-        {"id": "t1", "status": "completed", "images": [{"url": "https://x/y.png"}]},
+        {"id": "t1", "status": "completed", "usage": {"cost": 0.05}, "images": [{"url": "https://x/y.png"}]},
     )
     client = TopazClient(api_key="k", http_client=fake)
     result = client.upscale_image.run(
@@ -133,7 +131,7 @@ def test_run_narrows_completed_image_type():
 def test_run_narrows_completed_video_type():
     fake = FakeHttp(
         {"id": "t1", "status": "pending"},
-        {"id": "t1", "status": "completed", "videos": [{"url": "https://x/y.mp4"}]},
+        {"id": "t1", "status": "completed", "usage": {"cost": 0.05}, "videos": [{"url": "https://x/y.mp4"}]},
     )
     client = TopazClient(api_key="k", http_client=fake)
     result = client.upscale_video.run(

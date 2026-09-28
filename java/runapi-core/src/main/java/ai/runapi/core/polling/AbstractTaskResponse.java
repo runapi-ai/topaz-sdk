@@ -1,17 +1,16 @@
 package ai.runapi.core.polling;
 
-import ai.runapi.core.billing.TaskBillingFacts;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.jspecify.annotations.Nullable;
 
 /** Base class for SDK task responses. */
 public abstract class AbstractTaskResponse implements TaskResponse {
-  @JsonProperty("billing")
-  private TaskBillingFacts billing;
+  @JsonProperty("usage")
+  private TaskUsage usage;
 
-  /** Persisted billing facts for this task, when supplied by the API. */
-  public TaskBillingFacts getBilling() {
-    return billing;
+  /** Settled cost in USD. Present only on completed Task envelopes. */
+  public TaskUsage getUsage() {
+    return usage;
   }
   /** Returns the task ID. */
   @Override
