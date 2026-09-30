@@ -12,11 +12,7 @@ public abstract class RunApiValue {
   private final String value;
 
   protected RunApiValue(String value) {
-    String checked = Objects.requireNonNull(value, "value").trim();
-    if (checked.isEmpty()) {
-      throw new IllegalArgumentException("value must not be blank");
-    }
-    this.value = checked;
+    this.value = Objects.requireNonNull(value, "value");
   }
 
   /** Returns the raw string value sent to the RunAPI contract. */

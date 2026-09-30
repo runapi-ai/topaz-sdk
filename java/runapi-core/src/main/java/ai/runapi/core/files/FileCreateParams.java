@@ -123,11 +123,11 @@ public final class FileCreateParams {
     }
 
     private static Source url(String value) {
-      return new Source("url", requireNonBlank(value, "url"), null);
+      return new Source("url", value, null);
     }
 
     private static Source base64(String value) {
-      return new Source("base64", null, requireNonBlank(value, "data"));
+      return new Source("base64", null, value);
     }
 
     private Map<String, Object> toMap() {

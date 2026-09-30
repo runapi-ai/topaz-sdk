@@ -13,8 +13,8 @@ public final class UpscaleImageParams {
 
   private UpscaleImageParams(Builder builder) {
     this.model = builder.model;
-    this.sourceImageUrl = TopazParamUtils.requireNonBlank(builder.sourceImageUrl, "sourceImageUrl");
-    this.upscaleFactor = java.util.Objects.requireNonNull(builder.upscaleFactor, "upscaleFactor");
+    this.sourceImageUrl = builder.sourceImageUrl;
+    this.upscaleFactor = builder.upscaleFactor;
     this.callbackUrl = builder.callbackUrl;
   }
 
@@ -57,14 +57,14 @@ public final class UpscaleImageParams {
 
     /** Sets the model slug using a string value. */
     public Builder model(String value) {
-      this.model = TopazParamUtils.requireNonBlankTrim(value, "model");
+      this.model = value;
       return this;
     }
 
 
     /** Sets the source image URL. */
     public Builder sourceImageUrl(String value) {
-      this.sourceImageUrl = TopazParamUtils.requireNonBlank(value, "sourceImageUrl");
+      this.sourceImageUrl = value;
       return this;
     }
 
@@ -76,7 +76,7 @@ public final class UpscaleImageParams {
 
     /** Sets the webhook URL for task completion notifications. */
     public Builder callbackUrl(String value) {
-      this.callbackUrl = TopazParamUtils.requireNonBlank(value, "callbackUrl");
+      this.callbackUrl = value;
       return this;
     }
 

@@ -31,16 +31,6 @@ RSpec.describe RunApi::Topaz::Resources::UpscaleVideo do
     expect(result.id).to eq("vid-2")
   end
 
-  it "rejects an out-of-range upscale_factor" do
-    expect {
-      resource.create(
-        model: "topaz-upscale-video",
-        source_video_url: "https://cdn.runapi.ai/public/samples/video-lowres.mp4",
-        upscale_factor: 8
-      )
-    }.to raise_error(RunApi::Core::ValidationError, /upscale_factor must be one of: 1, 2, 4/)
-  end
-
   it "GETs video upscale results" do
     expect(http).to receive(:request).with(:get, "#{endpoint}/vid-1")
       .and_return("id" => "vid-1", "status" => "completed", "videos" => [{"url" => "https://cdn-video.runapi.ai/topaz/result.mp4"}])

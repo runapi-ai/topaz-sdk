@@ -109,10 +109,8 @@ class FilesClientTest {
   }
 
   @Test
-  void paramsRejectBlankInputs() {
+  void paramsRequireLocalPath() {
     assertThrows(NullPointerException.class, () -> FileCreateParams.fromPath(null));
-    assertThrows(IllegalArgumentException.class, () -> FileCreateParams.fromUrl(" "));
-    assertThrows(IllegalArgumentException.class, () -> FileCreateParams.fromBase64(""));
   }
 
   @Test

@@ -3,7 +3,6 @@ package ai.runapi.topaz.resources;
 import ai.runapi.core.ApiRequestExecutor;
 import ai.runapi.core.ClientOptions;
 import ai.runapi.core.RequestOptions;
-import ai.runapi.core.contract.ContractValidator;
 import ai.runapi.core.http.HttpMethod;
 import ai.runapi.core.http.HttpRequest;
 import ai.runapi.core.http.HttpTransport;
@@ -31,7 +30,6 @@ abstract class TopazResource {
     Objects.requireNonNull(action, "action");
     Objects.requireNonNull(body, "body");
     Objects.requireNonNull(requestOptions, "requestOptions");
-    ContractValidator.validate(action, body);
     return executor.send(
         HttpRequest.builder(HttpMethod.POST, endpoint).body(new JsonRequestBody(body)).options(requestOptions).build(),
         TaskCreateResponse.class);
@@ -41,7 +39,6 @@ abstract class TopazResource {
     Objects.requireNonNull(action, "action");
     Objects.requireNonNull(body, "body");
     Objects.requireNonNull(requestOptions, "requestOptions");
-    ContractValidator.validate(action, body);
     return executor.send(
         HttpRequest.builder(HttpMethod.POST, endpoint).body(new JsonRequestBody(body)).options(requestOptions).build(),
         responseType);

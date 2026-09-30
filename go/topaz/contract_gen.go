@@ -1,3 +1,0 @@
-package topaz
-
-var contractSchema = map[string]any{"upscale-image": map[string]any{"models": []any{"topaz-upscale-image"}, "fields_by_model": map[string]any{"topaz-upscale-image": map[string]any{"model": map[string]any{"required": true}, "source_image_url": map[string]any{"required": true}, "upscale_factor": map[string]any{"enum": []any{1, 2, 4}, "required": true, "type": "integer"}}}}, "upscale-video": map[string]any{"models": []any{"topaz-upscale-video"}, "fields_by_model": map[string]any{"topaz-upscale-video": map[string]any{"model": map[string]any{"required": true}, "source_video_url": map[string]any{"required": true}, "upscale_factor": map[string]any{"enum": []any{1, 2, 4}, "type": "integer"}}}}}

@@ -19,10 +19,4 @@ RSpec.describe RunApi::Topaz::Resources::UpscaleImage do
     expect(result).to be_a(RunApi::Topaz::Types::UpscaleImageResponse)
     expect(result.id).to eq("img-1")
   end
-
-  it "rejects missing upscale_factor" do
-    expect {
-      resource.create(model: "topaz-upscale-image", source_image_url: "https://cdn.runapi.ai/public/samples/upscale.jpg")
-    }.to raise_error(RunApi::Core::ValidationError, /upscale_factor is required/)
-  end
 end

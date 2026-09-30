@@ -13,7 +13,7 @@ public final class UpscaleVideoParams {
 
   private UpscaleVideoParams(Builder builder) {
     this.model = builder.model;
-    this.sourceVideoUrl = TopazParamUtils.requireNonBlank(builder.sourceVideoUrl, "sourceVideoUrl");
+    this.sourceVideoUrl = builder.sourceVideoUrl;
     this.upscaleFactor = builder.upscaleFactor;
     this.callbackUrl = builder.callbackUrl;
   }
@@ -57,14 +57,14 @@ public final class UpscaleVideoParams {
 
     /** Sets the model slug using a string value. */
     public Builder model(String value) {
-      this.model = TopazParamUtils.requireNonBlankTrim(value, "model");
+      this.model = value;
       return this;
     }
 
 
     /** Sets the source video URL. */
     public Builder sourceVideoUrl(String value) {
-      this.sourceVideoUrl = TopazParamUtils.requireNonBlank(value, "sourceVideoUrl");
+      this.sourceVideoUrl = value;
       return this;
     }
 
@@ -76,7 +76,7 @@ public final class UpscaleVideoParams {
 
     /** Sets the webhook URL for task completion notifications. */
     public Builder callbackUrl(String value) {
-      this.callbackUrl = TopazParamUtils.requireNonBlank(value, "callbackUrl");
+      this.callbackUrl = value;
       return this;
     }
 
